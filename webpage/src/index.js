@@ -6,7 +6,7 @@ class App extends React.Component {
 
 	onFileLoad = (archive) => {
 		//start unzipping archive and processing
-		console.log(archive);
+		//console.log(archive);
 	}
 
 	render() {
