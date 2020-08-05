@@ -20,6 +20,14 @@ class FileSelector extends React.Component {
 			'archiveName': localStorage.getItem('archiveName'),
 			'errorMessage':''
 		};
+
+		this.filesInArchive = {
+            'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
+            'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
+            'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
+            'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
+            'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
+        }
 	}
 
 
@@ -30,20 +38,27 @@ class FileSelector extends React.Component {
 
 	onFileSelection = (e) => {
 		//check the format of the archive loaded -> zip file containing the structure we want!
-
-
-		// create a promise to validate input
-		// if input validated, storeArchive and call onFileLoad
-		// else catch error
-
-		var isInputValid = this.validateInput(e.target.files);
-
-		if (isInputValid === true) {
-			this.storeArchive(e.target.files);
-			this.props.onFileLoad(e.target.files);
-		}
-		//console.log(isInputValid)
-
+		var loadFilePromise = new Promise((resolve, reject) => {
+			var archive = e.target.files;
+			var isInputValid = this.validateInputFormat(archive);
+			if (isInputValid) {
+				// we validate that the archive contains the target files we need
+				this.validateArchiveContent(archive).then(result => {
+					if (Object.keys(result).length === Object.keys(this.filesInArchive).length) {
+						// we store the archive
+						this.storeArchive(archive);
+						// we pass back to the App the dict containing the files to parse
+						this.props.onFileLoad(result);
+					} else {
+						var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
+						this.setState({'errorMessage': errorMessage });
+					}
+				})
+			} else {
+				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
+				this.setState({'errorMessage': errorMessage });
+			}
+		});
 	}
 
 	storeArchive = (archive) => {
@@ -56,25 +71,37 @@ class FileSelector extends React.Component {
 
 	}
 
-	validateInput = (input) => {
+	validateInputFormat = (input) => {
 		// as we limit the input by not having the 'multiple' keyword, we are sure the user passes a single file
 		var archive = input[0];
-
+		console.log(archive)
 		// now we need to validate that the input contains is a zip file, which name has the .zip extension
 		if (!archive.name.includes('.zip') ) {
-			var errorMessage = 'You should provide a single file, expected to be an archive with a .zip extension.'
-			this.setState({'errorMessage': errorMessage });
 			return false;
 		} 
-
-		// we load the zip archive, and validate that it contains the files we expect
-		var archivePromise = jsZip.loadAsync(archive)
-		.then(function(zip) {
-			//validate that we have the five files we want using the file names
-			console.log(zip.files)
-		});
 		return true;
 	}
+
+	validateArchiveContent = (input) => {
+		// we load the zip archive, and validate that it contains the files we expect
+		var archive = input[0];
+		var archiveContentPromise = 
+			jsZip.loadAsync(archive).then(zip => {
+				var filesToParse = {}
+				//validate that we have the five files we want using the file names
+				for (var key in this.filesInArchive) {
+					//if we have the file, we add it to a filesToParse dict with the ref to the file
+					if (Object.keys(zip.files).includes(this.filesInArchive[key])) {
+						filesToParse[key] = zip.file(this.filesInArchive[key]);
+					} 
+				}
+				//everything is fine, we have all files, so we can go on with parsing
+				return filesToParse;
+			})
+
+		return archiveContentPromise;
+	}
+
 
 	renderComponent() {
 		const hasUploadedArchive = this.state.hasUploadedArchive;
