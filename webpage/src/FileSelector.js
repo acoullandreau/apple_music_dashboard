@@ -74,7 +74,7 @@ class FileSelector extends React.Component {
 	validateInputFormat = (input) => {
 		// as we limit the input by not having the 'multiple' keyword, we are sure the user passes a single file
 		var archive = input[0];
-		console.log(archive)
+
 		// now we need to validate that the input contains is a zip file, which name has the .zip extension
 		if (!archive.name.includes('.zip') ) {
 			return false;
