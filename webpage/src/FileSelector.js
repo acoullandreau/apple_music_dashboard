@@ -15,9 +15,9 @@ class FileSelector extends React.Component {
 
 		// preserve the initial state in a new object
 		this.initialState = { 
-			'hasUploadedArchive': String(localStorage.getItem('hasUploadedArchive')) === "true",
-			'archive': localStorage.getItem('archive'),
-			'archiveName': localStorage.getItem('archiveName'),
+			'hasUploadedArchive': false,
+			'archive': null,
+			'archiveName': null,
 			'errorMessage':''
 		};
 
@@ -107,8 +107,8 @@ class FileSelector extends React.Component {
 		const hasUploadedArchive = this.state.hasUploadedArchive;
 		const errorMessage = this.state.errorMessage;
 		let fileSelector;
-		console.log('hasUploadedArchive', hasUploadedArchive)
-		console.log('state.initialState', this.state, this.initialState)
+		//console.log('hasUploadedArchive', hasUploadedArchive)
+		//console.log('state.initialState', this.state, this.initialState)
 
 		if ( hasUploadedArchive === true && errorMessage === '') {
 			fileSelector = (

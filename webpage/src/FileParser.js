@@ -2,14 +2,8 @@ import jsZip from 'jszip';
 import Utils from './Utils.js';
 
 class FileParser {
-	constructor(filesToParse) {
-		this.filesToParse = this.getFilesToParse(filesToParse)
-		this.filesToParse.then(result => {
-			console.log(result)
-		});
-	}
 
-	getFilesToParse = (filesToParse) => {
+	static getFilesToParse(filesToParse) {
 		// this function extracts specifically the json files that are added to the archives as zip files (nested zip)
 		var getFilesPromise = new Promise((resolve, reject) => {
 			var extractedFilesPromises = [];
@@ -46,7 +40,7 @@ class FileParser {
 		return getFilesPromise;
 	}
 
-	extractNestedZipFile = (archive) => {
+	static extractNestedZipFile(archive) {
 		var nestedZip = new Promise((resolve, reject) => { 
 			var extractedNestedFile = archive.async("blob")
 			.then(jsZip.loadAsync)
@@ -55,6 +49,19 @@ class FileParser {
 			})
 		})
 		return nestedZip;
+	}
+
+	static parseFiles(files) {
+		for (var key in files) {
+			var fileName = files[key].name
+			if (fileName.includes('json')) {
+				//files[key].async("text")
+				console.log(files[key].async("text"))
+			} else if (fileName.includes('csv')) {
+				//files[key].async("blob")
+				//papaparse(blob)
+			}
+		}
 	}
 
 }
