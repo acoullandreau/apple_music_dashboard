@@ -33,7 +33,7 @@ class FileSelector extends React.Component {
 
 	clearStorage = () => {
 		localStorage.clear();
-		this.setState(this.initialState);
+		this.setState(Object.assign({}, this.initialState));
 	}
 
 	onFileSelection = (e) => {
@@ -107,6 +107,8 @@ class FileSelector extends React.Component {
 		const hasUploadedArchive = this.state.hasUploadedArchive;
 		const errorMessage = this.state.errorMessage;
 		let fileSelector;
+		console.log('hasUploadedArchive', hasUploadedArchive)
+		console.log('state.initialState', this.state, this.initialState)
 
 		if ( hasUploadedArchive === true && errorMessage === '') {
 			fileSelector = (

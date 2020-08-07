@@ -10,6 +10,7 @@ class App extends React.Component {
 		// we store the dict of target files to parse 
 		localStorage.setItem('targetFiles', targetFiles);
 		var fileParser = new FileParser(targetFiles);
+		//console.log(fileParser.filesToParse)
 		// fileParser.filesToParse.then(result => {
 		// 	console.log(result);
 		// })
