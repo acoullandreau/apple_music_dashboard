@@ -107,13 +107,29 @@ class FileParser {
 				})
 			} else if (key === 'apple_music_play_activity') {
 				files[key].then(result => {
-					// papaConfig contains "complete" callback function to execute when parsing is done
-					//papaConfig['complete'] = function(results, file) {
-						//this.parsePlayActivity(results.data);
-					//}
-					//var playActivityFile = Papa.parse(result, papaConfig)
-					// store read file to local storage
-
+					new Promise((resolve, reject) => {
+						// papaConfig contains "complete" callback function to execute when parsing is done
+						papaConfig['complete'] = (results, file) => {
+							// parse file
+							var playActivityFile = FileParser.parsePlayActivity(results.data)
+							resolve(playActivityFile);
+						}
+						papaConfig['transformHeader'] = (header) => {
+							if (header === 'Artist Name') {
+								return 'Artist';
+							} else if (header === 'Content Name') {
+								return 'Title';
+							} 
+							return header;
+						}
+						Papa.parse(result, papaConfig);
+					})
+					.then(result => {
+						console.log(result)
+						//store in localStorage
+						//add to another structure for processing?
+						//console.log(result)
+					})
 				})
 			} else if (key === 'identifier_information') {
 				files[key].then(result => {
@@ -127,8 +143,8 @@ class FileParser {
 	}
 
 	static parsePlayActivity(playActivityFile) {
-		// rename {'Content Name':'Title', 'Artist Name':'Artist'}
 		// Add a datetime column from 'Transaction Date' with conversion to local time
+		
 		// Add year, month, day, hod, dow columns from datetime column 
 		// Remove rows with year before 2015
 		// Add partial listening column
@@ -136,6 +152,9 @@ class FileParser {
 		// Add play duration column
 		// Remove 99th percentile outliers of play duration
 		// store read file to local storage
+
+
+		return playActivityFile;
 	}
 
 	static parseLikesDislikes(likesDislikesFile) {
@@ -155,7 +174,7 @@ class FileParser {
 	}
 
 	static parseLibraryActivity(libraryActivityFile) {
-		console.log(libraryActivityFile)
+		//console.log(libraryActivityFile)
 		// Add a datetime column from 'Transaction Date'
 		// Add year, month, day, hod, dow columns from datetime column
 		// Add UserAgent column and Transaction Agent Model
