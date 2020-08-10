@@ -1,5 +1,4 @@
 import React from 'react';
-import fs from 'fs';
 import jsZip from 'jszip';
 
 class FileSelector extends React.Component {
@@ -38,7 +37,7 @@ class FileSelector extends React.Component {
 
 	onFileSelection = (e) => {
 		//check the format of the archive loaded -> zip file containing the structure we want!
-		var loadFilePromise = new Promise((resolve, reject) => {
+		new Promise((resolve, reject) => {
 			var archive = e.target.files;
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
@@ -64,7 +63,7 @@ class FileSelector extends React.Component {
 	storeArchive = (archive) => {
 		if (typeof(archive) !== "undefined") {
 	    	localStorage.setItem('hasUploadedArchive', true);
-	    	localStorage.setItem('archive', archive);
+	    	localStorage.setItem('archive', JSON.stringify(archive));
 	    	localStorage.setItem('archiveName', archive[0].name);
 	    	this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive[0].name });
 	    }
