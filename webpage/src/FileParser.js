@@ -125,7 +125,7 @@ class FileParser {
 						Papa.parse(result, papaConfig);
 					})
 					.then(result => {
-						console.log(result)
+						//console.log(result)
 						//store in localStorage
 						//add to another structure for processing?
 						//console.log(result)
@@ -143,11 +143,36 @@ class FileParser {
 	}
 
 	static parsePlayActivity(playActivityFile) {
-		// Add a datetime column from 'Transaction Date' with conversion to local time
-		
-		// Add year, month, day, hod, dow columns from datetime column 
-		// Remove rows with year before 2015
-		// Add partial listening column
+		for (var row in playActivityFile) {
+			// add time related columns, removing rows that have a date before june 2015
+			if (typeof(playActivityFile[row]['Event Start Timestamp']) !== 'undefined') {
+				playActivityFile[row]['Activity date time'] = playActivityFile[row]['Event Start Timestamp'];
+			} else {
+				playActivityFile[row]['Activity date time'] = playActivityFile[row]['Event End Timestamp'];
+			}
+			if (typeof(playActivityFile[row]['Activity date time']) !== 'undefined') {
+				var datetimeString = playActivityFile[row]['Activity date time'];
+				var utcOffset = playActivityFile[row]['UTC Offset In Seconds'];
+				var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
+				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
+					delete playActivityFile[row];
+				} else {
+					playActivityFile[row]['Play Year'] = datetimeObject['year'];
+					playActivityFile[row]['Play Month'] = datetimeObject['month'];
+					playActivityFile[row]['Play DOM'] = datetimeObject['dom'];
+					playActivityFile[row]['Play DOW'] = datetimeObject['dow'];
+					playActivityFile[row]['Play HOD'] = datetimeObject['hod'];
+				}
+			} else {
+				delete playActivityFile[row];
+			}
+
+			// Add partial listening column
+
+		}
+
+
+		// 
 		// Add track origin column
 		// Add play duration column
 		// Remove 99th percentile outliers of play duration
@@ -158,17 +183,17 @@ class FileParser {
 	}
 
 	static parseLikesDislikes(likesDislikesFile) {
-		for (var entry in likesDislikesFile) {
-			var title = likesDislikesFile[entry]['Item Description'].split('-')[1];
-			var artist = likesDislikesFile[entry]['Item Description'].split('-')[0];
+		for (var row in likesDislikesFile) {
+			var title = likesDislikesFile[row]['Item Description'].split('-')[1];
+			var artist = likesDislikesFile[row]['Item Description'].split('-')[0];
 			if (typeof(title) === 'undefined') {
 				title = ''
 			}
 			if (typeof(artist) === 'undefined') {
 				artist = ''
 			}
-			likesDislikesFile[entry]['Title'] = title.trim();
-			likesDislikesFile[entry]['Artist'] = artist.trim();
+			likesDislikesFile[row]['Title'] = title.trim();
+			likesDislikesFile[row]['Artist'] = artist.trim();
 		}
 		return likesDislikesFile;
 	}
@@ -178,6 +203,24 @@ class FileParser {
 		// Add a datetime column from 'Transaction Date'
 		// Add year, month, day, hod, dow columns from datetime column
 		// Add UserAgent column and Transaction Agent Model
+	}
+
+	static parseDateTime(datetimeString, utcOffset = null) {
+		var dateInMs = Date.parse(datetimeString);
+		if (utcOffset) {
+			var utcOffsetInMs = parseInt(utcOffset) * 1000;
+			var dateInLocalTimeInMs = dateInMs + utcOffsetInMs;
+		}
+		var dateObject = {};
+		// basically, we shift the UTC time representation to match the local time
+		dateInLocalTimeInMs = new Date(dateInLocalTimeInMs)
+		// then we can fetch year, month,... using the getUTC[...] methods
+		dateObject['year'] = dateInLocalTimeInMs.getUTCFullYear();
+		dateObject['month'] = dateInLocalTimeInMs.getUTCMonth() + 1; // zero-based, so we add 1
+		dateObject['dom'] = dateInLocalTimeInMs.getUTCDate();
+		dateObject['dow'] = dateInLocalTimeInMs.getUTCDay();
+		dateObject['hod'] = dateInLocalTimeInMs.getUTCHours();
+		return dateObject;
 	}
 
 
