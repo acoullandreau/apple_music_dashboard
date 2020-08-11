@@ -143,42 +143,96 @@ class FileParser {
 	}
 
 	static parsePlayActivity(playActivityFile) {
+		var rowsDeleted = []
 		for (var row in playActivityFile) {
+			var entry = playActivityFile[row];
+
 			// add time related columns, removing rows that have a date before june 2015
-			if (typeof(playActivityFile[row]['Event Start Timestamp']) !== 'undefined') {
-				playActivityFile[row]['Activity date time'] = playActivityFile[row]['Event Start Timestamp'];
+			if (typeof(entry['Event Start Timestamp']) !== 'undefined') {
+				entry['Activity date time'] = entry['Event Start Timestamp'];
 			} else {
-				playActivityFile[row]['Activity date time'] = playActivityFile[row]['Event End Timestamp'];
+				entry['Activity date time'] = entry['Event End Timestamp'];
 			}
-			if (typeof(playActivityFile[row]['Activity date time']) !== 'undefined') {
-				var datetimeString = playActivityFile[row]['Activity date time'];
-				var utcOffset = playActivityFile[row]['UTC Offset In Seconds'];
+			if (typeof(entry['Activity date time']) !== 'undefined') {
+				var datetimeString = entry['Activity date time'];
+				var utcOffset = entry['UTC Offset In Seconds'];
 				var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
 				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
-					delete playActivityFile[row];
+					delete playActivityFile[row]
+					rowsDeleted.push(entry);
+					break;
 				} else {
-					playActivityFile[row]['Play Year'] = datetimeObject['year'];
-					playActivityFile[row]['Play Month'] = datetimeObject['month'];
-					playActivityFile[row]['Play DOM'] = datetimeObject['dom'];
-					playActivityFile[row]['Play DOW'] = datetimeObject['dow'];
-					playActivityFile[row]['Play HOD'] = datetimeObject['hod'];
+					entry['Play Year'] = datetimeObject['year'];
+					entry['Play Month'] = datetimeObject['month'];
+					entry['Play DOM'] = datetimeObject['dom'];
+					entry['Play DOW'] = datetimeObject['dow'];
+					entry['Play HOD'] = datetimeObject['hod'];
 				}
 			} else {
-				delete playActivityFile[row];
+				delete playActivityFile[row]
+				rowsDeleted.push(entry);
+				break;
 			}
 
 			// Add partial listening column
+			if (entry['End Reason Type'] === 'NATURAL_END_OF_TRACK' || entry['Play Duration Milliseconds']>=entry['Media Duration In Milliseconds']) {
+				entry['Played completely'] = true;
+			} else {
+				entry['Played completely'] = false;
+			}
+
+			// Add track origin column
+			var trackOrigin = entry['Feature Name'].split('/')[0].trim()
+			switch (trackOrigin) {
+				case 'search' || 'browse':
+					entry['Track origin'] = 'search';
+					break;
+				case 'library' || 'my-music' || 'playlists' || 'playlist_detail':
+					entry['Track origin'] = 'library';
+					break;
+				case 'for_you':
+					if (entry['Feature Name'].split('/').length > 1) {
+						switch (entry['Feature Name'].split('/')[1].trim()) {
+							case 'recently_played':
+								entry['Track origin'] = 'for you - recently played';
+								break;
+							case 'personalized_mix':
+								entry['Track origin'] = 'for you - personalized mix';
+								break;
+							default:
+								entry['Track origin'] = 'for you - other';
+						}
+					} else {
+						entry['Track origin'] = 'for you - other';
+					}
+					break;
+				default:
+					entry['Track origin'] = 'other';
+			}
+
+			// Add play duration column
+			var startTime = new Date(entry['Event Start Timestamp']);
+			var endTime = new Date(entry['Event End Timestamp']);
+			console.log(startTime - endTime)
+			// if (startTime. === 'NATURAL_END_OF_TRACK' || entry['Play Duration Milliseconds']>=entry['Media Duration In Milliseconds']) {
+			// 	entry['Play duration in minutes'] = true;
+			// } else if {
+
+			// } else {
+			// 	entry['Play duration in minutes'] = parseInt(entry['Media Duration In Milliseconds'])/60000;
+			// }
+
+		// play_activity_df['Play duration in minutes'] = media_duration/60000
+  //       play_activity_df.loc[start.dt.day == end.dt.day, 'Play duration in minutes'] = (end - start).dt.total_seconds()/60
+  //       play_activity_df.loc[(played_completely == False)&(type(play_duration)!=float)&(play_duration>0), 'Play duration in minutes'] = play_duration/60000
+
+			// Remove 99th percentile outliers of play duration
 
 		}
 
-
-		// 
-		// Add track origin column
-		// Add play duration column
-		// Remove 99th percentile outliers of play duration
 		// store read file to local storage
 
-
+		console.log(Object.keys(playActivityFile).length);
 		return playActivityFile;
 	}
 
@@ -218,7 +272,7 @@ class FileParser {
 		dateObject['year'] = dateInLocalTimeInMs.getUTCFullYear();
 		dateObject['month'] = dateInLocalTimeInMs.getUTCMonth() + 1; // zero-based, so we add 1
 		dateObject['dom'] = dateInLocalTimeInMs.getUTCDate();
-		dateObject['dow'] = dateInLocalTimeInMs.getUTCDay();
+		dateObject['dow'] = dateInLocalTimeInMs.getUTCDay(); // Sunday is 0
 		dateObject['hod'] = dateInLocalTimeInMs.getUTCHours();
 		return dateObject;
 	}
