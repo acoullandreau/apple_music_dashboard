@@ -75,17 +75,24 @@ class FileParser {
 			header: true, 
 		}  
 
+		//var parsedFiles = {};
+
 		for (var key in files) {
 			if (key === 'apple_music_library_activity') {
 				files[key].then(result => {
 					var libraryActivityFile = JSON.parse(result);
-					this.parseLibraryActivity(libraryActivityFile);
-					// store read file to local storage
+					libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
+					console.log(libraryActivityFile)
+					// Add read file to parsedFile object
+					//parsedFiles['libraryActivityFile'] = libraryActivityFile;
+					return libraryActivityFile;
 				})
 			} else if (key === 'apple_music_library_tracks') {
 				files[key].then(result => {
 					var libraryTracksFile = JSON.parse(result);
-					// store read file to local storage
+					// Add read file to parsedFile object
+					//parsedFiles['libraryTracksFile'] = libraryTracksFile;
+					return libraryTracksFile;
 				})
 			} else if (key === 'apple_music_likes_and_dislikes') {
 				files[key].then(result => {
@@ -99,11 +106,10 @@ class FileParser {
 						Papa.parse(result, papaConfig);
 					})
 					.then(result => {
-						//store in localStorage
-						//add to another structure for processing?
-						//console.log(result)
+						// Add parsed file to parsedFile object
+						//parsedFiles['likesDislikesFile'] = result;
+						return result;
 					})
-
 				})
 			} else if (key === 'apple_music_play_activity') {
 				files[key].then(result => {
@@ -111,7 +117,7 @@ class FileParser {
 						// papaConfig contains "complete" callback function to execute when parsing is done
 						papaConfig['complete'] = (results, file) => {
 							// parse file
-							var playActivityFile = FileParser.parsePlayActivity(results.data)
+							var playActivityFile = FileParser.parsePlayActivity(results.data);
 							resolve(playActivityFile);
 						}
 						papaConfig['transformHeader'] = (header) => {
@@ -125,25 +131,28 @@ class FileParser {
 						Papa.parse(result, papaConfig);
 					})
 					.then(result => {
-						//console.log(result)
-						//store in localStorage
-						//add to another structure for processing?
-						//console.log(result)
+						// Add parsed file to parsedFile object
+						//parsedFiles['playActivityFile'] = result;
+						return result;
 					})
 				})
 			} else if (key === 'identifier_information') {
 				files[key].then(result => {
 					var identifierInfosFile = JSON.parse(result);
-					// store read file to local storage
+					// Add read file to parsedFile object
+					//parsedFiles['identifierInfosFile'] = identifierInfosFile;
+					return identifierInfosFile;
 				})
 			}
 		}
 
-		//console.log(parsedFilesPromises)
+
 	}
 
 	static parsePlayActivity(playActivityFile) {
-		var rowsDeleted = []
+
+		var rowsDeleted = [];
+		var playDuration = {};
 		for (var row in playActivityFile) {
 			var entry = playActivityFile[row];
 
@@ -213,26 +222,27 @@ class FileParser {
 			// Add play duration column
 			var startTime = new Date(entry['Event Start Timestamp']);
 			var endTime = new Date(entry['Event End Timestamp']);
-			console.log(startTime - endTime)
-			// if (startTime. === 'NATURAL_END_OF_TRACK' || entry['Play Duration Milliseconds']>=entry['Media Duration In Milliseconds']) {
-			// 	entry['Play duration in minutes'] = true;
-			// } else if {
+			if (entry['Played completely'] === false && entry['Play Duration Milliseconds']>0) {
+				entry['Play duration in minutes'] = entry['Play Duration Milliseconds']/60000;
+			} else if (startTime.getUTCDate() === endTime.getUTCDate()) {
+				entry['Play duration in minutes'] = ((endTime - startTime)/1000)/60; //convert from ms to s, then to min
+			} else {
+				entry['Play duration in minutes'] = parseInt(entry['Media Duration In Milliseconds'])/60000;
+			}
 
-			// } else {
-			// 	entry['Play duration in minutes'] = parseInt(entry['Media Duration In Milliseconds'])/60000;
-			// }
-
-		// play_activity_df['Play duration in minutes'] = media_duration/60000
-  //       play_activity_df.loc[start.dt.day == end.dt.day, 'Play duration in minutes'] = (end - start).dt.total_seconds()/60
-  //       play_activity_df.loc[(played_completely == False)&(type(play_duration)!=float)&(play_duration>0), 'Play duration in minutes'] = play_duration/60000
-
-			// Remove 99th percentile outliers of play duration
-
+			playDuration[row] = entry['Play duration in minutes'];
 		}
 
-		// store read file to local storage
+		// Remove 99th percentile outliers of play duration
+		var rowsToDelete = this.removeOutlier(playDuration);
+		for (var row in playActivityFile) {
+			if (rowsToDelete.includes(row)) {
+				delete playActivityFile[row];
+				rowsDeleted.push(playActivityFile[row]);
+			}
+	
+		}
 
-		console.log(Object.keys(playActivityFile).length);
 		return playActivityFile;
 	}
 
@@ -253,10 +263,47 @@ class FileParser {
 	}
 
 	static parseLibraryActivity(libraryActivityFile) {
-		//console.log(libraryActivityFile)
-		// Add a datetime column from 'Transaction Date'
-		// Add year, month, day, hod, dow columns from datetime column
-		// Add UserAgent column and Transaction Agent Model
+		var rowsDeleted = [];
+
+		for (var row in libraryActivityFile) {
+			var entry = libraryActivityFile[row];
+
+			// add time related columns, removing rows that have a date before june 2015
+			if (typeof(entry['Transaction Date']) !== 'undefined') {
+				var datetimeString = entry['Transaction Date'];
+				var datetimeObject = this.parseDateTime(datetimeString);
+				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
+					delete libraryActivityFile[row]
+					rowsDeleted.push(entry);
+					break;
+				} else {
+					entry['Activity Year'] = datetimeObject['year'];
+					entry['Activity Month'] = datetimeObject['month'];
+					entry['Activity DOM'] = datetimeObject['dom'];
+					entry['Activity DOW'] = datetimeObject['dow'];
+					entry['Activity HOD'] = datetimeObject['hod'];
+				}
+			} else {
+				delete libraryActivityFile[row]
+				rowsDeleted.push(entry);
+				break;
+			}
+
+			// add UserAgent column and Transaction Agent Model
+			var userAgent = entry['UserAgent'].split('/')[0];
+			if (userAgent === 'itunescloudd') {
+				entry['Transaction Agent'] = 'Mobile';
+				entry['Transaction Agent Model'] = entry['UserAgent'].split('/')[3].split(',')[0];
+			} else if (userAgent === 'iTunes') {
+				entry['Transaction Agent'] = 'Computer';
+			} else {
+				entry['Transaction Agent'] = userAgent;
+			}
+			
+		}
+
+		return libraryActivityFile;
+
 	}
 
 	static parseDateTime(datetimeString, utcOffset = null) {
@@ -264,6 +311,8 @@ class FileParser {
 		if (utcOffset) {
 			var utcOffsetInMs = parseInt(utcOffset) * 1000;
 			var dateInLocalTimeInMs = dateInMs + utcOffsetInMs;
+		} else {
+			var dateInLocalTimeInMs = dateInMs;
 		}
 		var dateObject = {};
 		// basically, we shift the UTC time representation to match the local time
@@ -277,6 +326,24 @@ class FileParser {
 		return dateObject;
 	}
 
+	static removeOutlier(obj) {
+		var playDurations = Object.values(obj);
+		playDurations.sort(function(a, b) {
+            return a - b;
+         });
+
+		var len =  playDurations.length;
+		var percentile99 = Math.floor(len*.99) - 1;
+
+		var rowsToDelete = [];
+		for (var row in Object.keys(obj)) {
+			if (obj[row] > playDurations[percentile99]) {
+				rowsToDelete.push(row);
+			}
+		}
+		
+		return rowsToDelete;
+	} 
 
 }
 
