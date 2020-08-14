@@ -70,81 +70,181 @@ class FileParser {
 	}
 
 	static parseFiles(files) {
-		var papaConfig = { 
-			delimiter: ",",
-			header: true, 
-		}  
 
-		//var parsedFiles = {};
+		// Basic logic
+		// 1. We get a dict of promised as an input (files)
+		// 2. We add each promise to an array of promises
+		// 3. What we return is a promise that resolves with a new dict containing the parsed files
+		// 4. In order to build this dict, 
+		// 	a. we use Promise.all on the array of promises we create in 2
+		// 	b. when they are all resolved, we can proceed to the parsing of each file
+		// 	c. for each file a promise is created, and added to an array (parsedFilesPromises)
+		// 	d. each promise is resolved with the parsed file, that is also added to the output dict
+		// 	d. when all the promises of this array are resolved (other Promise.all), we resolve the promise we return with the dict
 
+		var filesNames = [];
+		var filesPromises = [];
+
+		// we can easily map the objects in the array of promises passed to Promise.all, and the result, with their names
 		for (var key in files) {
-			if (key === 'apple_music_library_activity') {
-				files[key].then(result => {
-					var libraryActivityFile = JSON.parse(result);
-					libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
-					console.log(libraryActivityFile)
-					// Add read file to parsedFile object
-					//parsedFiles['libraryActivityFile'] = libraryActivityFile;
-					return libraryActivityFile;
-				})
-			} else if (key === 'apple_music_library_tracks') {
-				files[key].then(result => {
-					var libraryTracksFile = JSON.parse(result);
-					// Add read file to parsedFile object
-					//parsedFiles['libraryTracksFile'] = libraryTracksFile;
-					return libraryTracksFile;
-				})
-			} else if (key === 'apple_music_likes_and_dislikes') {
-				files[key].then(result => {
-					new Promise((resolve, reject) => {
-						// papaConfig contains "complete" callback function to execute when parsing is done
-						papaConfig['complete'] = (results, file) => {
-							// parse file
-							var likesDislikesFile = FileParser.parseLikesDislikes(results.data)
-							resolve(likesDislikesFile);
-						}
-						Papa.parse(result, papaConfig);
-					})
-					.then(result => {
-						// Add parsed file to parsedFile object
-						//parsedFiles['likesDislikesFile'] = result;
-						return result;
-					})
-				})
-			} else if (key === 'apple_music_play_activity') {
-				files[key].then(result => {
-					new Promise((resolve, reject) => {
-						// papaConfig contains "complete" callback function to execute when parsing is done
-						papaConfig['complete'] = (results, file) => {
-							// parse file
-							var playActivityFile = FileParser.parsePlayActivity(results.data);
-							resolve(playActivityFile);
-						}
-						papaConfig['transformHeader'] = (header) => {
-							if (header === 'Artist Name') {
-								return 'Artist';
-							} else if (header === 'Content Name') {
-								return 'Title';
-							} 
-							return header;
-						}
-						Papa.parse(result, papaConfig);
-					})
-					.then(result => {
-						// Add parsed file to parsedFile object
-						//parsedFiles['playActivityFile'] = result;
-						return result;
-					})
-				})
-			} else if (key === 'identifier_information') {
-				files[key].then(result => {
-					var identifierInfosFile = JSON.parse(result);
-					// Add read file to parsedFile object
-					//parsedFiles['identifierInfosFile'] = identifierInfosFile;
-					return identifierInfosFile;
-				})
-			}
+			filesNames.push(key);
+			filesPromises.push(files[key])
 		}
+
+		return new Promise((resolve, reject) => {
+			var parsedFiles = {};
+			var parsedFilesPromises = [];
+
+			Promise.all(filesPromises).then(result => {
+
+				var papaConfig = { 
+					delimiter: ",",
+					header: true, 
+				}
+
+				for (var i=0; i<filesNames.length; i++) {
+					if (filesNames[i] === 'apple_music_library_activity') {
+						var libraryActivityPromise = new Promise((resolve, reject) => {
+							var libraryActivityFile = JSON.parse(result[i]);
+							libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
+							parsedFiles['libraryActivityFile'] = libraryActivityFile;
+							resolve(libraryActivityFile);
+						})
+						parsedFilesPromises.push(libraryActivityPromise);
+
+					} else if (filesNames[i] === 'apple_music_library_tracks') {
+						var libraryTracksPromise = new Promise((resolve, reject) => {
+							var libraryTracksFile = JSON.parse(result[i]);
+							parsedFiles['libraryTracksFile'] = libraryTracksFile;
+							resolve({'libraryTracksFile': libraryTracksFile});
+						})
+						parsedFilesPromises.push(libraryTracksPromise);
+
+					} else if (filesNames[i] === 'apple_music_likes_and_dislikes') {
+						var likesDislikesPromise = new Promise((resolve, reject) => {
+							// papaConfig contains "complete" callback function to execute when parsing is done
+							papaConfig['complete'] = (results, file) => {
+								// parse file
+								var likesDislikesFile = FileParser.parseLikesDislikes(results.data)
+								parsedFiles['likesDislikesFile'] = likesDislikesFile;
+								resolve({'likesDislikesFile': likesDislikesFile});
+							}
+							Papa.parse(result[i], papaConfig);
+						})
+						parsedFilesPromises.push(likesDislikesPromise);
+
+					} else if (filesNames[i] === 'apple_music_play_activity') {
+						var playActivityPromise = new Promise((resolve, reject) => {
+							// papaConfig contains "complete" callback function to execute when parsing is done
+							papaConfig['complete'] = (results, file) => {
+								// parse file
+								var playActivityFile = FileParser.parsePlayActivity(results.data);
+								parsedFiles['playActivityFile'] = playActivityFile;
+								resolve({'playActivityFile': playActivityFile});
+							}
+							papaConfig['transformHeader'] = (header) => {
+								if (header === 'Artist Name') {
+									return 'Artist';
+								} else if (header === 'Content Name') {
+									return 'Title';
+								} 
+								return header;
+							}
+							Papa.parse(result[i], papaConfig);
+						})
+						parsedFilesPromises.push(playActivityPromise);
+
+					} else if (filesNames[i] === 'identifier_information') {
+						var identifierInfosPromise = new Promise((resolve, reject) => {
+							var identifierInfosFile = JSON.parse(result[i]);
+							parsedFiles['identifierInfosFile'] = identifierInfosFile;
+							resolve({'identifierInfosFile': identifierInfosFile});
+						})
+						parsedFilesPromises.push(identifierInfosPromise);
+
+					}
+
+				}
+
+				Promise.all(parsedFilesPromises).then(result => {
+					resolve(parsedFiles);
+				})
+			})
+		})
+
+		// return new Promise((resolve, reject) => {
+		// 	var parsedFiles = {};
+		// 	var parsedFilesPromises = [];
+		// 	for (var key in files) {
+		// 		if (key === 'apple_music_library_activity') {
+		// 			files[key].then(result => {
+		// 				var libraryActivityPromise = new Promise((resolve, reject) => {
+		// 					var libraryActivityFile = JSON.parse(result);
+		// 					libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
+		// 					parsedFiles['libraryActivityFile'] = libraryActivityFile;
+		// 					resolve({'libraryActivityFile': libraryActivityFile});
+		// 				})
+		// 				parsedFilesPromises.push(libraryActivityPromise);
+		// 			})
+		// 		} else if (key === 'apple_music_library_tracks') {
+		// 			files[key].then(result => {
+		// 				var libraryTracksPromise = new Promise((resolve, reject) => {
+		// 					var libraryTracksFile = JSON.parse(result);
+		// 					parsedFiles['libraryTracksFile'] = libraryTracksFile;
+		// 					resolve({'libraryTracksFile': libraryTracksFile});
+		// 				})
+		// 				parsedFilesPromises.push(libraryTracksPromise);
+		// 			})
+		// 		} else if (key === 'apple_music_likes_and_dislikes') {
+		// 			files[key].then(result => {
+		// 				var likesDislikesPromise = new Promise((resolve, reject) => {
+		// 					// papaConfig contains "complete" callback function to execute when parsing is done
+		// 					papaConfig['complete'] = (results, file) => {
+		// 						// parse file
+		// 						var likesDislikesFile = FileParser.parseLikesDislikes(results.data)
+		// 						parsedFiles['likesDislikesFile'] = likesDislikesFile;
+		// 						resolve({'likesDislikesFile': likesDislikesFile});
+		// 					}
+		// 					Papa.parse(result, papaConfig);
+		// 				})
+		// 				parsedFilesPromises.push(likesDislikesPromise);
+		// 			})
+		// 		} else if (key === 'apple_music_play_activity') {
+		// 			files[key].then(result => {
+		// 				var playActivityPromise = new Promise((resolve, reject) => {
+		// 					// papaConfig contains "complete" callback function to execute when parsing is done
+		// 					papaConfig['complete'] = (results, file) => {
+		// 						// parse file
+		// 						var playActivityFile = FileParser.parsePlayActivity(results.data);
+		// 						parsedFiles['playActivityFile'] = playActivityFile;
+		// 						resolve({'playActivityFile': playActivityFile});
+		// 					}
+		// 					papaConfig['transformHeader'] = (header) => {
+		// 						if (header === 'Artist Name') {
+		// 							return 'Artist';
+		// 						} else if (header === 'Content Name') {
+		// 							return 'Title';
+		// 						} 
+		// 						return header;
+		// 					}
+		// 					Papa.parse(result, papaConfig);
+		// 				})
+		// 				parsedFilesPromises.push(playActivityPromise);
+		// 			})
+		// 		} else if (key === 'identifier_information') {
+		// 			files[key].then(result => {
+		// 				var identifierInfosPromise = new Promise((resolve, reject) => {
+		// 					var identifierInfosFile = JSON.parse(result);
+		// 					parsedFiles['identifierInfosFile'] = identifierInfosFile;
+		// 					resolve({'identifierInfosFile': identifierInfosFile});
+		// 				})
+		// 				parsedFilesPromises.push(identifierInfosPromise);
+		// 			})
+		// 		}
+
+		// 	}
+		// 	resolve(parsedFilesPromises, parsedFiles)
+		// })
 
 
 	}
@@ -235,10 +335,10 @@ class FileParser {
 
 		// Remove 99th percentile outliers of play duration
 		var rowsToDelete = this.removeOutlier(playDuration);
-		for (var row in playActivityFile) {
-			if (rowsToDelete.includes(row)) {
-				delete playActivityFile[row];
-				rowsDeleted.push(playActivityFile[row]);
+		for (var fileRow in playActivityFile) {
+			if (rowsToDelete.includes(fileRow)) {
+				delete playActivityFile[fileRow];
+				rowsDeleted.push(playActivityFile[fileRow]);
 			}
 	
 		}
@@ -308,11 +408,12 @@ class FileParser {
 
 	static parseDateTime(datetimeString, utcOffset = null) {
 		var dateInMs = Date.parse(datetimeString);
+		var dateInLocalTimeInMs;
 		if (utcOffset) {
 			var utcOffsetInMs = parseInt(utcOffset) * 1000;
-			var dateInLocalTimeInMs = dateInMs + utcOffsetInMs;
+			dateInLocalTimeInMs = dateInMs + utcOffsetInMs;
 		} else {
-			var dateInLocalTimeInMs = dateInMs;
+			dateInLocalTimeInMs = dateInMs;
 		}
 		var dateObject = {};
 		// basically, we shift the UTC time representation to match the local time

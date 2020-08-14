@@ -11,15 +11,10 @@ class App extends React.Component {
 		//localStorage.setItem('targetFiles', JSON.stringify(targetFiles));
 		var filesToParsePromise = FileParser.getFilesToParse(targetFiles);
 		filesToParsePromise.then(result => {
-			//do the parsing of each file
-			//var parsedFiles = FileParser.parseFiles(result);
-			// parsedFiles.then(result => {
-			// 	//console.log(Object.keys(result).length)
-			// })
-			//console.log(parsedFiles)
-			//console.log(Object.keys(parsedFiles).length)
-			FileParser.parseFiles(result);
-			console.log(result)
+			var parsedFiles = FileParser.parseFiles(result);
+			parsedFiles.then(result => {
+				console.log(result)
+			})
 		});
 	}
 
