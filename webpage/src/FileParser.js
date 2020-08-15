@@ -208,103 +208,6 @@ class FileParser {
 
 	}
 
-	static parsePlayActivityContent(playActivityFile) {
-
-		var rowsDeleted = [];
-		var playDuration = {};
-		for (var row in playActivityFile) {
-			var entry = playActivityFile[row];
-
-			// add time related columns, removing rows that have a date before june 2015
-			if (typeof(entry['Event Start Timestamp']) !== 'undefined') {
-				entry['Activity date time'] = entry['Event Start Timestamp'];
-			} else {
-				entry['Activity date time'] = entry['Event End Timestamp'];
-			}
-			if (typeof(entry['Activity date time']) !== 'undefined') {
-				var datetimeString = entry['Activity date time'];
-				var utcOffset = entry['UTC Offset In Seconds'];
-				var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
-				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
-					delete playActivityFile[row]
-					rowsDeleted.push(entry);
-					break;
-				} else {
-					entry['Play Year'] = datetimeObject['year'];
-					entry['Play Month'] = datetimeObject['month'];
-					entry['Play DOM'] = datetimeObject['dom'];
-					entry['Play DOW'] = datetimeObject['dow'];
-					entry['Play HOD'] = datetimeObject['hod'];
-				}
-			} else {
-				delete playActivityFile[row]
-				rowsDeleted.push(entry);
-				break;
-			}
-
-			// Add partial listening column
-			if (entry['End Reason Type'] === 'NATURAL_END_OF_TRACK' || entry['Play Duration Milliseconds']>=entry['Media Duration In Milliseconds']) {
-				entry['Played completely'] = true;
-			} else {
-				entry['Played completely'] = false;
-			}
-
-			// Add track origin column
-			var trackOrigin = entry['Feature Name'].split('/')[0].trim()
-			switch (trackOrigin) {
-				case 'search' || 'browse':
-					entry['Track origin'] = 'search';
-					break;
-				case 'library' || 'my-music' || 'playlists' || 'playlist_detail':
-					entry['Track origin'] = 'library';
-					break;
-				case 'for_you':
-					if (entry['Feature Name'].split('/').length > 1) {
-						switch (entry['Feature Name'].split('/')[1].trim()) {
-							case 'recently_played':
-								entry['Track origin'] = 'for you - recently played';
-								break;
-							case 'personalized_mix':
-								entry['Track origin'] = 'for you - personalized mix';
-								break;
-							default:
-								entry['Track origin'] = 'for you - other';
-						}
-					} else {
-						entry['Track origin'] = 'for you - other';
-					}
-					break;
-				default:
-					entry['Track origin'] = 'other';
-			}
-
-			// Add play duration column
-			var startTime = new Date(entry['Event Start Timestamp']);
-			var endTime = new Date(entry['Event End Timestamp']);
-			if (entry['Played completely'] === false && entry['Play Duration Milliseconds']>0) {
-				entry['Play duration in minutes'] = entry['Play Duration Milliseconds']/60000;
-			} else if (startTime.getUTCDate() === endTime.getUTCDate()) {
-				entry['Play duration in minutes'] = ((endTime - startTime)/1000)/60; //convert from ms to s, then to min
-			} else {
-				entry['Play duration in minutes'] = parseInt(entry['Media Duration In Milliseconds'])/60000;
-			}
-
-			playDuration[row] = entry['Play duration in minutes'];
-		}
-
-		// Remove 99th percentile outliers of play duration
-		var rowsToDelete = this.removeOutlier(playDuration);
-		for (var fileRow in playActivityFile) {
-			if (rowsToDelete.includes(fileRow)) {
-				delete playActivityFile[fileRow];
-				rowsDeleted.push(playActivityFile[fileRow]);
-			}
-	
-		}
-
-		return playActivityFile;
-	}
-
 	static parseLikesDislikesContent(likesDislikesFile) {
 		for (var row in likesDislikesFile) {
 			var title = likesDislikesFile[row]['Item Description'].split('-')[1];
@@ -366,6 +269,27 @@ class FileParser {
 
 	}
 
+	static parsePlayActivityContent(playActivityFile) {
+
+		var rowsToDelete = [];
+		var playDurations = {};
+		for (var row in playActivityFile) {
+			var entry = playActivityFile[row];
+			this.parsePlayActivityRow(entry, rowsToDelete, row, playDurations);
+		}
+
+		// Get rows above 99th percentile of play duration
+		this.getPercentileOutliers(playDurations, 0.99, rowsToDelete); 
+
+		// remove all the rows we do not want to keep for further analysis
+		for (var i in rowsToDelete) {
+			var rowToDelete = rowsToDelete[i]
+			delete playActivityFile[rowToDelete];
+		}
+
+		return playActivityFile;
+	}
+
 	static parseDateTime(datetimeString, utcOffset = null) {
 		var dateInMs = Date.parse(datetimeString);
 		var dateInLocalTimeInMs;
@@ -387,23 +311,116 @@ class FileParser {
 		return dateObject;
 	}
 
-	static removeOutlier(obj) {
-		var playDurations = Object.values(obj);
+	static parsePlayActivityRow(row, rowsToDelete, rowIndex, playDurations) {
+		// add time related columns, removing rows that have a date before june 2015
+		var rowParsedTime = this.addPlayAcivityTimeColumns(row, rowIndex, rowsToDelete);
+
+		if (rowParsedTime === 'complete') {
+			// Add partial listening column
+			this.setPartialListening(row);
+			// Add track origin column
+			this.getTrackOrigin(row);
+			// Add play duration column
+			this.computePlayDuration(row, rowIndex, playDurations);		
+		} 
+	}
+
+	static addPlayAcivityTimeColumns(row, rowIndex, rowsToDelete) {
+		if (typeof(row['Event Start Timestamp']) !== 'undefined') {
+			row['Activity date time'] = row['Event Start Timestamp'];
+		} else {
+			row['Activity date time'] = row['Event End Timestamp'];
+		}
+		if (typeof(row['Activity date time']) !== 'undefined') {
+			var datetimeString = row['Activity date time'];
+			var utcOffset = row['UTC Offset In Seconds'];
+			var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
+			if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
+				rowsToDelete.push(rowIndex);
+				return 'incomplete';
+				//break;
+			} else {
+				row['Play Year'] = datetimeObject['year'];
+				row['Play Month'] = datetimeObject['month'];
+				row['Play DOM'] = datetimeObject['dom'];
+				row['Play DOW'] = datetimeObject['dow'];
+				row['Play HOD'] = datetimeObject['hod'];
+			}
+		} else {
+			rowsToDelete.push(rowIndex);
+			return 'incomplete';
+		}
+		return 'complete';
+	}
+
+	static setPartialListening(row) {
+		if (row['End Reason Type'] === 'NATURAL_END_OF_TRACK' || row['Play Duration Milliseconds']>=row['Media Duration In Milliseconds']) {
+			row['Played completely'] = true;
+		} else {
+			row['Played completely'] = false;
+		}
+	}
+
+	static getTrackOrigin(row) {
+		var trackOrigin = row['Feature Name'].split('/')[0].trim()
+		switch (trackOrigin) {
+			case 'search' || 'browse':
+				row['Track origin'] = 'search';
+				break;
+			case 'library' || 'my-music' || 'playlists' || 'playlist_detail':
+				row['Track origin'] = 'library';
+				break;
+			case 'for_you':
+				if (row['Feature Name'].split('/').length > 1) {
+					switch (row['Feature Name'].split('/')[1].trim()) {
+						case 'recently_played':
+							row['Track origin'] = 'for you - recently played';
+							break;
+						case 'personalized_mix':
+							row['Track origin'] = 'for you - personalized mix';
+							break;
+						default:
+							row['Track origin'] = 'for you - other';
+					}
+				} else {
+					row['Track origin'] = 'for you - other';
+				}
+				break;
+			default:
+				row['Track origin'] = 'other';
+		}
+	}
+
+	static computePlayDuration(row, rowIndex, playDurations) {
+		var startTime = new Date(row['Event Start Timestamp']);
+		var endTime = new Date(row['Event End Timestamp']);
+		if (row['Played completely'] === false && row['Play Duration Milliseconds']>0) {
+			row['Play duration in minutes'] = row['Play Duration Milliseconds']/60000;
+		} else if (startTime.getUTCDate() === endTime.getUTCDate()) {
+			row['Play duration in minutes'] = ((endTime - startTime)/1000)/60; //convert from ms to s, then to min
+		} else {
+			row['Play duration in minutes'] = parseInt(row['Media Duration In Milliseconds'])/60000;
+		}
+
+		playDurations[rowIndex] = row['Play duration in minutes'];
+	}
+
+	static getPercentileOutliers(playDurationsDict, percentile, rowsToDelete) {
+		var playDurations = Object.values(playDurationsDict);
 		playDurations.sort(function(a, b) {
             return a - b;
          });
 
 		var len =  playDurations.length;
-		var percentile99 = Math.floor(len*.99) - 1;
+		var indexPercentile = Math.floor(len*percentile) - 1;
+		
 
-		var rowsToDelete = [];
-		for (var row in Object.keys(obj)) {
-			if (obj[row] > playDurations[percentile99]) {
-				rowsToDelete.push(row);
+		for (var rowIndex in Object.keys(playDurationsDict)) {
+			if (playDurationsDict[rowIndex] > playDurations[indexPercentile]) {
+				rowsToDelete.push(rowIndex);
 			}
 		}
-		
-		return rowsToDelete;
+
 	} 
 
 }
