@@ -13,6 +13,7 @@ class App extends React.Component {
 		filesToParsePromise.then(result => {
 			var parsedFiles = FileParser.parseFiles(result);
 			parsedFiles.then(result => {
+				//localStorage.setItem('parsedFiles', JSON.stringify(result));
 				console.log(result)
 			})
 		});

@@ -97,73 +97,10 @@ class FileParser {
 
 			Promise.all(filesPromises).then(result => {
 
-				var papaConfig = { 
-					delimiter: ",",
-					header: true, 
-				}
-
 				for (var i=0; i<filesNames.length; i++) {
-					if (filesNames[i] === 'apple_music_library_activity') {
-						var libraryActivityPromise = new Promise((resolve, reject) => {
-							var libraryActivityFile = JSON.parse(result[i]);
-							libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
-							parsedFiles['libraryActivityFile'] = libraryActivityFile;
-							resolve(libraryActivityFile);
-						})
-						parsedFilesPromises.push(libraryActivityPromise);
-
-					} else if (filesNames[i] === 'apple_music_library_tracks') {
-						var libraryTracksPromise = new Promise((resolve, reject) => {
-							var libraryTracksFile = JSON.parse(result[i]);
-							parsedFiles['libraryTracksFile'] = libraryTracksFile;
-							resolve({'libraryTracksFile': libraryTracksFile});
-						})
-						parsedFilesPromises.push(libraryTracksPromise);
-
-					} else if (filesNames[i] === 'apple_music_likes_and_dislikes') {
-						var likesDislikesPromise = new Promise((resolve, reject) => {
-							// papaConfig contains "complete" callback function to execute when parsing is done
-							papaConfig['complete'] = (results, file) => {
-								// parse file
-								var likesDislikesFile = FileParser.parseLikesDislikes(results.data)
-								parsedFiles['likesDislikesFile'] = likesDislikesFile;
-								resolve({'likesDislikesFile': likesDislikesFile});
-							}
-							Papa.parse(result[i], papaConfig);
-						})
-						parsedFilesPromises.push(likesDislikesPromise);
-
-					} else if (filesNames[i] === 'apple_music_play_activity') {
-						var playActivityPromise = new Promise((resolve, reject) => {
-							// papaConfig contains "complete" callback function to execute when parsing is done
-							papaConfig['complete'] = (results, file) => {
-								// parse file
-								var playActivityFile = FileParser.parsePlayActivity(results.data);
-								parsedFiles['playActivityFile'] = playActivityFile;
-								resolve({'playActivityFile': playActivityFile});
-							}
-							papaConfig['transformHeader'] = (header) => {
-								if (header === 'Artist Name') {
-									return 'Artist';
-								} else if (header === 'Content Name') {
-									return 'Title';
-								} 
-								return header;
-							}
-							Papa.parse(result[i], papaConfig);
-						})
-						parsedFilesPromises.push(playActivityPromise);
-
-					} else if (filesNames[i] === 'identifier_information') {
-						var identifierInfosPromise = new Promise((resolve, reject) => {
-							var identifierInfosFile = JSON.parse(result[i]);
-							parsedFiles['identifierInfosFile'] = identifierInfosFile;
-							resolve({'identifierInfosFile': identifierInfosFile});
-						})
-						parsedFilesPromises.push(identifierInfosPromise);
-
-					}
-
+					var parsedFilePromise = this.parseEachFile(filesNames[i], result[i], parsedFiles);
+					parsedFilesPromises.push(parsedFilePromise);
+				
 				}
 
 				Promise.all(parsedFilesPromises).then(result => {
@@ -172,84 +109,106 @@ class FileParser {
 			})
 		})
 
-		// return new Promise((resolve, reject) => {
-		// 	var parsedFiles = {};
-		// 	var parsedFilesPromises = [];
-		// 	for (var key in files) {
-		// 		if (key === 'apple_music_library_activity') {
-		// 			files[key].then(result => {
-		// 				var libraryActivityPromise = new Promise((resolve, reject) => {
-		// 					var libraryActivityFile = JSON.parse(result);
-		// 					libraryActivityFile = this.parseLibraryActivity(libraryActivityFile);
-		// 					parsedFiles['libraryActivityFile'] = libraryActivityFile;
-		// 					resolve({'libraryActivityFile': libraryActivityFile});
-		// 				})
-		// 				parsedFilesPromises.push(libraryActivityPromise);
-		// 			})
-		// 		} else if (key === 'apple_music_library_tracks') {
-		// 			files[key].then(result => {
-		// 				var libraryTracksPromise = new Promise((resolve, reject) => {
-		// 					var libraryTracksFile = JSON.parse(result);
-		// 					parsedFiles['libraryTracksFile'] = libraryTracksFile;
-		// 					resolve({'libraryTracksFile': libraryTracksFile});
-		// 				})
-		// 				parsedFilesPromises.push(libraryTracksPromise);
-		// 			})
-		// 		} else if (key === 'apple_music_likes_and_dislikes') {
-		// 			files[key].then(result => {
-		// 				var likesDislikesPromise = new Promise((resolve, reject) => {
-		// 					// papaConfig contains "complete" callback function to execute when parsing is done
-		// 					papaConfig['complete'] = (results, file) => {
-		// 						// parse file
-		// 						var likesDislikesFile = FileParser.parseLikesDislikes(results.data)
-		// 						parsedFiles['likesDislikesFile'] = likesDislikesFile;
-		// 						resolve({'likesDislikesFile': likesDislikesFile});
-		// 					}
-		// 					Papa.parse(result, papaConfig);
-		// 				})
-		// 				parsedFilesPromises.push(likesDislikesPromise);
-		// 			})
-		// 		} else if (key === 'apple_music_play_activity') {
-		// 			files[key].then(result => {
-		// 				var playActivityPromise = new Promise((resolve, reject) => {
-		// 					// papaConfig contains "complete" callback function to execute when parsing is done
-		// 					papaConfig['complete'] = (results, file) => {
-		// 						// parse file
-		// 						var playActivityFile = FileParser.parsePlayActivity(results.data);
-		// 						parsedFiles['playActivityFile'] = playActivityFile;
-		// 						resolve({'playActivityFile': playActivityFile});
-		// 					}
-		// 					papaConfig['transformHeader'] = (header) => {
-		// 						if (header === 'Artist Name') {
-		// 							return 'Artist';
-		// 						} else if (header === 'Content Name') {
-		// 							return 'Title';
-		// 						} 
-		// 						return header;
-		// 					}
-		// 					Papa.parse(result, papaConfig);
-		// 				})
-		// 				parsedFilesPromises.push(playActivityPromise);
-		// 			})
-		// 		} else if (key === 'identifier_information') {
-		// 			files[key].then(result => {
-		// 				var identifierInfosPromise = new Promise((resolve, reject) => {
-		// 					var identifierInfosFile = JSON.parse(result);
-		// 					parsedFiles['identifierInfosFile'] = identifierInfosFile;
-		// 					resolve({'identifierInfosFile': identifierInfosFile});
-		// 				})
-		// 				parsedFilesPromises.push(identifierInfosPromise);
-		// 			})
-		// 		}
+	}
 
-		// 	}
-		// 	resolve(parsedFilesPromises, parsedFiles)
-		// })
+	static parseEachFile = (filename, file, parsedFiles) => {
+		var parsedFilePromise;
 
+		if (filename === 'apple_music_library_activity') {
+			parsedFilePromise = this.parseLibraryActivity(file, parsedFiles);
+
+		} else if (filename === 'apple_music_library_tracks') {
+			parsedFilePromise = this.parseLibraryTracks(file, parsedFiles);
+
+		} else if (filename === 'apple_music_likes_and_dislikes') {
+			parsedFilePromise = this.parseLikesDislikes(file, parsedFiles);
+
+		} else if (filename === 'apple_music_play_activity') {
+			parsedFilePromise = this.parsePlayActivity(file, parsedFiles);
+
+		} else if (filename === 'identifier_information') {
+			parsedFilePromise = this.parseIdentifierInfos(file, parsedFiles);
+
+		}
+
+		return parsedFilePromise;
+	}
+
+
+	static parseLibraryActivity(content, parsedFiles) {
+		return new Promise((resolve, reject) => {
+			var libraryActivityFile = JSON.parse(content);
+			libraryActivityFile = this.parseLibraryActivityContent(libraryActivityFile);
+			parsedFiles['libraryActivityFile'] = libraryActivityFile;
+			resolve(libraryActivityFile);
+		})
+	}
+
+
+	static parseLibraryTracks(content, parsedFiles) {
+		return new Promise((resolve, reject) => {
+			var libraryTracksFile = JSON.parse(content);
+			parsedFiles['libraryTracksFile'] = libraryTracksFile;
+			resolve(libraryTracksFile);
+		})
+	}
+
+	static parsePlayActivity(content, parsedFiles) {
+		var papaConfig = { 
+			delimiter: ",",
+			header: true, 
+		}
+
+		return new Promise((resolve, reject) => {
+			// papaConfig contains "complete" callback function to execute when parsing is done
+			papaConfig['complete'] = (results, file) => {
+				// parse file
+				var playActivityFile = this.parsePlayActivityContent(results.data);
+				parsedFiles['playActivityFile'] = playActivityFile;
+				resolve(playActivityFile);
+			}
+			papaConfig['transformHeader'] = (header) => {
+				if (header === 'Artist Name') {
+					return 'Artist';
+				} else if (header === 'Content Name') {
+					return 'Title';
+				} 
+				return header;
+			}
+			Papa.parse(content, papaConfig);
+		})
 
 	}
 
-	static parsePlayActivity(playActivityFile) {
+	static parseLikesDislikes(content, parsedFiles) {
+		var papaConfig = { 
+			delimiter: ",",
+			header: true, 
+		}
+
+		return new Promise((resolve, reject) => {
+			// papaConfig contains "complete" callback function to execute when parsing is done
+			papaConfig['complete'] = (results, file) => {
+				// parse file
+				var likesDislikesFile = this.parseLikesDislikesContent(results.data)
+				parsedFiles['likesDislikesFile'] = likesDislikesFile;
+				resolve(likesDislikesFile);
+			}
+			Papa.parse(content, papaConfig);
+		})
+
+	}
+
+	static parseIdentifierInfos(content, parsedFiles) {
+		return new Promise((resolve, reject) => {
+			var identifierInfosFile = JSON.parse(content);
+			parsedFiles['identifierInfosFile'] = identifierInfosFile;
+			resolve(identifierInfosFile);
+		})
+
+	}
+
+	static parsePlayActivityContent(playActivityFile) {
 
 		var rowsDeleted = [];
 		var playDuration = {};
@@ -346,7 +305,7 @@ class FileParser {
 		return playActivityFile;
 	}
 
-	static parseLikesDislikes(likesDislikesFile) {
+	static parseLikesDislikesContent(likesDislikesFile) {
 		for (var row in likesDislikesFile) {
 			var title = likesDislikesFile[row]['Item Description'].split('-')[1];
 			var artist = likesDislikesFile[row]['Item Description'].split('-')[0];
@@ -362,7 +321,7 @@ class FileParser {
 		return likesDislikesFile;
 	}
 
-	static parseLibraryActivity(libraryActivityFile) {
+	static parseLibraryActivityContent(libraryActivityFile) {
 		var rowsDeleted = [];
 
 		for (var row in libraryActivityFile) {
@@ -373,6 +332,7 @@ class FileParser {
 				var datetimeString = entry['Transaction Date'];
 				var datetimeObject = this.parseDateTime(datetimeString);
 				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
+
 					delete libraryActivityFile[row]
 					rowsDeleted.push(entry);
 					break;
