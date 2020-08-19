@@ -20,6 +20,7 @@ class FileSelector extends React.Component {
 			'errorMessage':''
 		};
 
+
 		this.filesInArchive = {
             'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
             'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
@@ -32,6 +33,11 @@ class FileSelector extends React.Component {
 
 	clearStorage = () => {
 		localStorage.clear();
+		this.setState(Object.assign({}, this.initialState));
+	}
+
+	onReset = () => {
+		this.props.onReset();
 		this.setState(Object.assign({}, this.initialState));
 	}
 
@@ -106,15 +112,13 @@ class FileSelector extends React.Component {
 		const hasUploadedArchive = this.state.hasUploadedArchive;
 		const errorMessage = this.state.errorMessage;
 		let fileSelector;
-		//console.log('hasUploadedArchive', hasUploadedArchive)
-		//console.log('state.initialState', this.state, this.initialState)
 
 		if ( hasUploadedArchive === true && errorMessage === '') {
 			fileSelector = (
 				<div>
 				    <label className="custom-file-upload">
 				    	<div>You have loaded an archive {this.state.archiveName}</div>
-	          			<div><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
+	          			<div><input type="button" onClick={this.onReset} value="Load another archive" /></div>
 	        		</label>
 				</div>
 			)
