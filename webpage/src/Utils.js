@@ -14,7 +14,12 @@ class Utils {
 	}
 
 	static computeSimilarityScore(a, b) {
-		return stringSimilarity.compareTwoStrings(a, b);
+		var aNoPunc = a.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+		var aNoPuncUp = aNoPunc.replace(/\s{2,}/g," ").toUpperCase();
+		var bNoPunc = b.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+		var bNoPuncUp = bNoPunc.replace(/\s{2,}/g," ").toUpperCase();
+
+		return stringSimilarity.compareTwoStrings(aNoPuncUp, bNoPuncUp);
 	}
 
 
