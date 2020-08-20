@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FileSelector from './FileSelector.js';
 import FileParser from './FileParser.js';
+import FileProcessor from './FileProcessor.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 
@@ -12,15 +13,20 @@ class App extends React.Component {
 		var filesToParsePromise = FileParser.getFilesToParse(targetFiles);
 		filesToParsePromise.then(result => {
 			var parsedFiles = FileParser.parseFiles(result);
-			parsedFiles.then(result => {
-				// we save the parsed files to indexedDB
-				connectorInstance.addObjectToDB(result)
-				// we remove the archive from the local storage
-				localStorage.removeItem('archive')
-
-				// we process each file
-			})
+			return parsedFiles;
 		})
+		.then(result => {
+			// we save the parsed files to indexedDB
+			connectorInstance.addObjectToDB(result);
+			// we remove the archive from the local storage
+			localStorage.removeItem('archive');
+
+			// we process the files
+			//var processedFiles = 
+			FileProcessor.processFiles(result);
+			//return processedFiles;
+		})
+		
 	}
 
 	onReset = () => {

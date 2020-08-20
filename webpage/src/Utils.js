@@ -1,3 +1,5 @@
+import stringSimilarity from 'string-similarity';
+
 
 class Utils {
 
@@ -6,6 +8,15 @@ class Utils {
 		parsedFileName = parsedFileName.toLowerCase().replace(/\s/g, '_');
 		return parsedFileName;
 	}
+
+	static concatTitleArtist(title, artist) {
+		return title.trim()+' && '+artist.trim();
+	}
+
+	static computeSimilarityScore(a, b) {
+		return stringSimilarity.compareTwoStrings(a, b);
+	}
+
 
 }
 
