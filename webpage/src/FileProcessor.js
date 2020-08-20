@@ -93,7 +93,7 @@ class FileProcessor {
 
 	  			var titleArtist = Utils.concatTitleArtist(title, artist);
 	  			
-	  			if (!Object.keys(processOutput['trackInstanceDict']).includes(titleArtist)) {
+	  			if (titleArtist in processOutput['trackInstanceDict'] == false) {
 	  				this.manageUnknownTrackFromLibrary(title, artist, index, row, processOutput);
 
 	  			} else {
@@ -108,7 +108,7 @@ class FileProcessor {
 	  			}
 
 	  			// we update the artist/track names dictionnary
-	  			if (!Object.keys(processOutput['artistTracksTitles']).includes(artist)) {
+	  			if (artist in processOutput['artistTracksTitles'] == false) {
 	  				processOutput['artistTracksTitles'][artist]=[];
 	  			} 
 	  			if (!processOutput['artistTracksTitles'][artist].includes(title)) {
@@ -137,7 +137,7 @@ class FileProcessor {
 	static manageUnknownTrackFromLibrary(title, artist, index, row, processOutput) {
 		var titleArtist = Utils.concatTitleArtist(title, artist);
 
-		if (Object.keys(processOutput['artistTracksTitles']).includes(artist)) {
+		if (artist in processOutput['artistTracksTitles']) {
 			var titleComparisonResult = this.compareTitleForArtist(processOutput['artistTracksTitles'][artist], title);
 			
 			if (titleComparisonResult === 'No match') {
@@ -231,7 +231,7 @@ class FileProcessor {
 
 	  			var titleArtist = Utils.concatTitleArtist(title, artist);
 	  			
-	  			if (!Object.keys(processOutput['trackInstanceDict']).includes(titleArtist)) {
+	  			if (titleArtist in processOutput['trackInstanceDict'] == false) {
 	  				this.manageUnknownTrackFromPlayActivity(title, artist, index, row, processOutput);
 
 	  			} else {
@@ -246,7 +246,7 @@ class FileProcessor {
 	  			}
 
 	  			// we update the artist/track names dictionnary
-	  			if (!Object.keys(processOutput['artistTracksTitles']).includes(artist)) {
+	  			if (artist in processOutput['artistTracksTitles'] == false) {
 	  				processOutput['artistTracksTitles'][artist]=[];
 	  			} 
 	  			if (!processOutput['artistTracksTitles'][artist].includes(title)) {
@@ -262,7 +262,7 @@ class FileProcessor {
 	static manageUnknownTrackFromPlayActivity(title, artist, index, row, processOutput) {
 		var titleArtist = Utils.concatTitleArtist(title, artist);
 
-		if (Object.keys(processOutput['artistTracksTitles']).includes(artist)) {
+		if (artist in processOutput['artistTracksTitles']) {
 			var titleComparisonResult = this.compareTitleForArtist(processOutput['artistTracksTitles'][artist], title);
 			
 			if (titleComparisonResult === 'No match') {
