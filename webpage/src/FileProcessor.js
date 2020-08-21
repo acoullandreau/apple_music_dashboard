@@ -47,28 +47,16 @@ class FileProcessor {
 			});
 			processPromises.push(processPlayActivityPromise);
 
-			// // process Likes Dislikes file
-			// var processLikesDislikesPromise = new Promise((resolve, reject) => {
-			// 	this.processLikesDislikes(files['likesDislikesFile'], processOutput);
-			// 	resolve();
-			// });
-			// processPromises.push(processLikesDislikesPromise);
+			// process Likes Dislikes file
+			var processLikesDislikesPromise = new Promise((resolve, reject) => {
+				this.processLikesDislikes(files['likesDislikesFile'], processOutput);
+				resolve();
+			});
+			processPromises.push(processLikesDislikesPromise);
 
 
 			Promise.all(processPromises).then(result => {
-				//console.log(result)
-				console.log(processOutput)
-				Object.keys(processOutput['trackInstanceDict']).forEach(function(key) {
-					if (key === ' && ') {
-						console.log(processOutput['trackInstanceDict'][key])
-					}
-				})
-				// Object.keys(processOutput['trackInstanceDict']).forEach(function(key) { 
-				// 	console.log(processOutput['trackInstanceDict'][key].identifier)
-				// })
-				console.log(Object.keys(processOutput['trackInstanceDict']).length)
-				console.log(Object.keys(processOutput['artistTracksTitles']).length)
-				//resolve(processOutput)
+				resolve(processOutput)
 			})
 
 
@@ -127,7 +115,7 @@ class FileProcessor {
 		for (var i in artistTitles) {
 			var artistTitle = artistTitles[i];
 			var similarityScore = Utils.computeSimilarityScore(artistTitle, titleToCompare);
-			if (similarityScore >= 0.7) {
+			if (similarityScore >= 0.68) {
 				return artistTitle;
 			}
 		}
@@ -196,7 +184,7 @@ class FileProcessor {
 
   			var foundMatch = false;
 
-  			Object.keys(processOutput['trackInstanceDict']).forEach(function(key) { 
+  			for (var key in processOutput['trackInstanceDict']) {
 				var trackInstance = processOutput['trackInstanceDict'][key];
 
 				if (trackInstance.appleMusicID.includes(row['Identifier'])) {
@@ -206,7 +194,7 @@ class FileProcessor {
 					}
 					foundMatch = true;
 				}
-			})
+  			}
 
 			if (foundMatch === false) {
 				processOutput['itemsNotMatched']['identifier_info'].push((index, row['Identifier']));
@@ -220,7 +208,7 @@ class FileProcessor {
   			var index = elem;
   			var row = file[elem];
 
-  			if (typeof(row['Title']) !== 'undefined') {
+  			if (typeof(row['Title']) !== 'undefined' && row['Title'] !== ' ' && row['Title'] !== '') {
 	  			var title = row['Title'];
 	  			var artist;
 	  			if (typeof(row['Artist']) === 'undefined') {
@@ -312,6 +300,90 @@ class FileProcessor {
         var titleArtist = Utils.concatTitleArtist(title, artist);
         processOutput['trackInstanceDict'][titleArtist]=trackInstance;
         processOutput['increment']++;
+	}
+
+
+	static processLikesDislikes(file, processOutput) {
+
+		for (var elem in file) {
+  			var index = elem;
+  			var row = file[elem];
+
+  			if (typeof(row['Title']) !== 'undefined') {
+	  			var title = row['Title'];
+	  			var artist;
+	  			if (typeof(row['Artist']) === 'undefined') {
+	  				artist = 'No Artist';
+	  			} else {
+	  				artist = row['Artist'];
+	  			}
+
+	  			var titleArtist = Utils.concatTitleArtist(title, artist);
+	  			var foundMatch = false;
+
+	  			for (var key in processOutput['trackInstanceDict']) {
+					var trackInstance = processOutput['trackInstanceDict'][key];
+
+					if (trackInstance.appleMusicID.includes(row['Item Reference'])) {
+						trackInstance.addAppearance({'source': 'likes_dislikes', 'df_index':index});
+						trackInstance.setRating(row['Preference']);
+						if (!trackInstance.hasTitleName(title)) {
+							trackInstance.addTitle(title);
+							if (!processOutput['artistTracksTitles'][artist].includes(title)) {
+	  							processOutput['artistTracksTitles'][artist].push(title);
+	  						} 
+						}
+						foundMatch = true;
+					}
+	  			}
+
+				if (foundMatch === false) {
+		  			if (titleArtist in processOutput['trackInstanceDict']) {
+		  				var trackInstance = processOutput['trackInstanceDict'][titleArtist];
+		  				trackInstance.addAppearance({'source': 'likes_dislikes', 'df_index':index});
+						trackInstance.setRating(row['Preference']);
+
+		  			} else {
+						if (artist in processOutput['artistTracksTitles']) {
+							var titleComparisonResult = this.compareTitleForArtist(processOutput['artistTracksTitles'][artist], title);
+
+							if (titleComparisonResult === 'No match') {
+								processOutput['itemsNotMatched']['likes_dislikes'].push(index);
+
+							} else {
+								// we retrieve the matching track instance
+								var matchTitleArtist = Utils.concatTitleArtist(titleComparisonResult, artist);
+								var trackInstance = processOutput['trackInstanceDict'][matchTitleArtist];
+
+								// if the title of the current row is not yet associated to the track instance we add it
+								if (!trackInstance.hasTitleName(title)) {
+									trackInstance.addTitle(title);
+								}
+
+								// we add apperance and rating
+								trackInstance.addAppearance({'source': 'likes_dislikes', 'df_index':index});
+								trackInstance.setRating(row['Preference']);
+
+								// we add a reference of the track instance to the trackInstanceDict with this combination of title/artist
+					            processOutput['trackInstanceDict'][titleArtist]=trackInstance;
+					            // we add a reference to this title in the list of titles for this artist
+								processOutput['artistTracksTitles'][artist].push(title);
+
+							}
+						} else {
+                        	/* we add the item to the items_not_matched,
+                        	we choose not to add it to the Track instances as the amount of information is little
+                        	and our reference really is the play activity! */
+                        	processOutput['itemsNotMatched']['likes_dislikes'].push(index);
+
+						}
+		  			}
+				}
+
+  			} else {
+  				processOutput['itemsNotMatched']['likes_dislikes'].push(index);
+  			}
+  		}
 	}
 
 }

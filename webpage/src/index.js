@@ -22,9 +22,11 @@ class App extends React.Component {
 			localStorage.removeItem('archive');
 
 			// we process the files
-			//var processedFiles = 
-			FileProcessor.processFiles(result);
-			//return processedFiles;
+			var processedFiles = FileProcessor.processFiles(result);
+			return processedFiles;
+		})
+		.then(result => {
+			console.log(result)
 		})
 		
 	}

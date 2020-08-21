@@ -210,8 +210,8 @@ class FileParser {
 
 	static parseLikesDislikesContent(likesDislikesFile) {
 		for (var row in likesDislikesFile) {
-			var title = likesDislikesFile[row]['Item Description'].split('-')[1];
-			var artist = likesDislikesFile[row]['Item Description'].split('-')[0];
+			var title = likesDislikesFile[row]['Item Description'].split(' - ')[1];
+			var artist = likesDislikesFile[row]['Item Description'].split(' - ')[0];
 			if (typeof(title) === 'undefined') {
 				title = ''
 			}
