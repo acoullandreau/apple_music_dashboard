@@ -47,18 +47,8 @@ class FileSelector extends React.Component {
 			var archive = e.target.files;
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
-				// we validate that the archive contains the target files we need
-				this.validateArchiveContent(archive).then(result => {
-					if (Object.keys(result).length === Object.keys(this.filesInArchive).length) {
-						// we store the archive
-						this.storeArchive(archive);
-						// we pass back to the App the dict containing the files to parse
-						this.props.onFileLoad(result);
-					} else {
-						var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
-						this.setState({'errorMessage': errorMessage });
-					}
-				})
+				this.props.onFileLoad(archive);
+				
 			} else {
 				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
 				this.setState({'errorMessage': errorMessage });
