@@ -1,13 +1,13 @@
 import React from 'react';
-import worker from './worker.js';
-import WebWorker from './workerSetup';
+//import worker from './worker.js';
+//import WebWorker from './workerSetup';
 import FileSelector from './FileSelector.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 
 class App extends React.Component {
 	componentDidMount = () => {
-		this.worker = new WebWorker(worker);
+		this.worker = new Worker('./worker.js', { type: 'module' });
 	}
 
 	onFileLoad = (archive) => {

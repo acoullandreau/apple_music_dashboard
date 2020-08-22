@@ -1,5 +1,4 @@
 import React from 'react';
-import jsZip from 'jszip';
 
 class FileSelector extends React.Component {
 
@@ -48,7 +47,7 @@ class FileSelector extends React.Component {
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
 				this.props.onFileLoad(archive);
-				
+
 			} else {
 				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
 				this.setState({'errorMessage': errorMessage });
@@ -75,26 +74,6 @@ class FileSelector extends React.Component {
 			return false;
 		} 
 		return true;
-	}
-
-	validateArchiveContent = (input) => {
-		// we load the zip archive, and validate that it contains the files we expect
-		var archive = input[0];
-		var archiveContentPromise = 
-			jsZip.loadAsync(archive).then(zip => {
-				var filesToParse = {}
-				//validate that we have the five files we want using the file names
-				for (var key in this.filesInArchive) {
-					//if we have the file, we add it to a filesToParse dict with the ref to the file
-					if (Object.keys(zip.files).includes(this.filesInArchive[key])) {
-						filesToParse[key] = zip.file(this.filesInArchive[key]);
-					} 
-				}
-				//everything is fine, we have all files, so we can go on with parsing
-				return filesToParse;
-			})
-
-		return archiveContentPromise;
 	}
 
 
