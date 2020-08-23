@@ -27,7 +27,9 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} />
+				<div>
+					<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} />
+				</div>
 			</div>
 		)
 		

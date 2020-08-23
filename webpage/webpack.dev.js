@@ -3,10 +3,11 @@ const path = require('path');
 
 module.exports = {
 	entry: './src/index.js',
+	devtool: 'source-map',
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'index.js',
-		library: 'apple-music-dashboard'
+		publicPath: '/dist/'
 	},
 	module: {
 		rules: [
@@ -16,7 +17,8 @@ module.exports = {
 			use: {
 				loader: 'babel-loader',
 				options: {
-					presets: ['@babel/preset-env']
+					presets: ['@babel/preset-env', '@babel/preset-react', {
+                          'plugins': ['@babel/plugin-proposal-class-properties']}]
 				}
 			}
 		}
@@ -24,5 +26,8 @@ module.exports = {
 	},
 	plugins: [
 		new WorkerPlugin()
-	]
+	],
+	resolve: {
+		extensions: ['*', '.js', '.jsx']
+	},
 };
