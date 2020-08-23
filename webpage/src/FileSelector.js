@@ -18,17 +18,7 @@ class FileSelector extends React.Component {
 			'archiveName': null,
 			'errorMessage':''
 		};
-
-
-		this.filesInArchive = {
-            'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
-            'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
-            'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
-            'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
-            'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
-        }
 	}
-
 
 	clearStorage = () => {
 		localStorage.clear();
