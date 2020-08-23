@@ -6,14 +6,15 @@ import FileProcessor from './FileProcessor.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 
+var filesInArchive = {
+    'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
+    'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
+    'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
+    'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
+    'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
+}
+
 var validateArchiveContent = (input) => {
-	var filesInArchive = {
-        'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
-        'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
-        'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
-        'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
-        'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
-    }
 
 	// we load the zip archive, and validate that it contains the files we expect
 	var archive = input[0];
@@ -43,65 +44,40 @@ self.addEventListener('message', function(e) {
 		var archive = e.data['payload'];
 		// validate the archive
 		validateArchiveContent(archive).then(result => {
-			
-			// if (Object.keys(result).length === Object.keys(filesInArchive).length) {
-			// 	// we store the archive
-			// 	this.storeArchive(archive);
-			// 	// we pass back to the App the dict containing the files to parse
-			// 	return result
-			// } else {
-			// 	var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
-			// 	this.setState({'errorMessage': errorMessage });
-			// }
+			if (Object.keys(result).length === Object.keys(filesInArchive).length) {
+				// we store the archive
+				postMessage({'type':'archiveValidated', 'payload':''});
+				return result
+			} else {
+				// the archive's format is incorrect, we pass an error message to display to the user
+				var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
+				postMessage({'type':'archiveRejected', 'payload':errorMessage});
+			}
 		})
-		// extract files
+		.then(result => {
+			// extract files
+			return FileParser.getFilesToParse(result);
+		})
+		.then(result => {
+			// parse files 
+			return FileParser.parseFiles(result);
+		})
+		.then(result => {
+			// save parsed files to indexedDB
+			connectorInstance.addObjectsToDB(result);
+			// we inform the app that the files were parsed, the archive object can be removed from localStorage
+			postMessage({'type':'filesParsed', 'payload':''});
 
-		// parse files 
-
-
-		// process files 
-
-
-		// build file for visualizations
-
+			// process them
+			return FileProcessor.processFiles(result);
+		})
+		.then(result => {
+			// build file for visualizations
+			//result is an object with track instances, list of genres and artists....
+			//console.log(result)
+		})
 
 		// save file to indexedDB
 	}
-
-	// we validate that the archive contains the target files we need
-	// this.validateArchiveContent(archive).then(result => {
-	// 	if (Object.keys(result).length === Object.keys(this.filesInArchive).length) {
-	// 		// we store the archive
-	// 		this.storeArchive(archive);
-	// 		// we pass back to the App the dict containing the files to parse
-			//return result
-	// 	} else {
-	// 		var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
-	// 		this.setState({'errorMessage': errorMessage });
-	// 	}
-	// })
-
-
-	// // we open the archive, parse and process the fles, and save them to the DB
-	// var filesToParsePromise = FileParser.getFilesToParse(targetFiles);
-	// filesToParsePromise.then(result => {
-	// 	var parsedFiles = FileParser.parseFiles(result);
-	// 	return parsedFiles;
-	// })
-	// .then(result => {
-	// 	// we save the parsed files to indexedDB
-	// 	connectorInstance.addObjectToDB(result);
-	// 	// we remove the archive from the local storage
-	// 	localStorage.removeItem('archive');
-
-	// 	// we process the files
-	// 	var processedFiles = FileProcessor.processFiles(result);
-	// 	return processedFiles;
-	// })
-	// .then(result => {
-	// 	postMessage(result);
-	// 	//console.log(result)
-	// })
-
 
 })

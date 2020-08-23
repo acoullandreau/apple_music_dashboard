@@ -2,16 +2,6 @@ import Utils from './Utils.js';
 
 class FileProcessor {
 
-	// constructor() {
-	// 	this.increment = 0;
-	// 	this.trackInstanceDict = {};
-	// 	this.artistTracksTitles = {};
- //        this.genresList = [];
-	// 	this.itemsNotMatched = {'library_tracks':[], 'identifier_info':[], 
-	// 	'play_activity':[], 'likes_dislikes':[]};
- //  	}
-
-
   	static processFiles(files) {
 
   		return new Promise((resolve, reject) => {

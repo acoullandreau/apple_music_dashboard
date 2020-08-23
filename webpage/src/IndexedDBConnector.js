@@ -56,13 +56,13 @@ class IndexedDBConnector {
 
 	}
 
-	addObjectToDB(files) {
+	addObjectsToDB(objectsDict) {
 		//check if index exists, add if not, else edit
 		this.connection().then(db => {
 			var tx = db.transaction(this.storeName, "readwrite");
 			var store = tx.objectStore(this.storeName);
-			for (var file in files) {
-				store.put(files[file], file);
+			for (var file in objectsDict) {
+				store.put(objectsDict[file], file);
 			}
 
 		})

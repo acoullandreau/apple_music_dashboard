@@ -13,9 +13,15 @@ class App extends React.Component {
 	onFileLoad = (archive) => {
 		this.worker.postMessage({'type':'archive', 'payload':archive});
 
-		// this.worker.addEventListener('message', event => {
-		// 	console.log(event);
-		// });
+		this.worker.addEventListener('message', event => {
+			if (event.data['type'] === 'archiveValidated') {
+				this.refs.fileSelector.storeArchive(archive);
+			} else if (event.data['type'] === 'archiveRejected') {
+				this.refs.fileSelector.setState({'errorMessage': event.data['payload'] })
+			} else if (event.data['type'] === 'filesParsed') {
+				localStorage.removeItem('archive');
+			}
+		});
 		
 	}
 
@@ -28,7 +34,7 @@ class App extends React.Component {
 		return (
 			<div>
 				<div>
-					<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} />
+					<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" />
 				</div>
 			</div>
 		)
