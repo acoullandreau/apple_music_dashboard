@@ -1,11 +1,13 @@
 import React from 'react';
-//import worker from './worker.js';
-//import WebWorker from './workerSetup';
 import FileSelector from './FileSelector.js';
+import Loader from './Loader.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 
 class App extends React.Component {
+
+	state = { 'isLoading': false, 'hasVisuals': false };
+
 	componentDidMount = () => {
 		this.worker = new Worker('./worker.js', { type: 'module' });
 	}
@@ -14,12 +16,21 @@ class App extends React.Component {
 		this.worker.postMessage({'type':'archive', 'payload':archive});
 
 		this.worker.addEventListener('message', event => {
-			if (event.data['type'] === 'archiveValidated') {
-				this.refs.fileSelector.storeArchive(archive);
-			} else if (event.data['type'] === 'archiveRejected') {
-				this.refs.fileSelector.setState({'errorMessage': event.data['payload'] })
-			} else if (event.data['type'] === 'filesParsed') {
-				localStorage.removeItem('archive');
+			switch (event.data['type']) {
+				case 'archiveValidated':
+					this.refs.fileSelector.storeArchive(archive);
+					this.setState({'isLoading': true});
+					break;
+				case 'archiveRejected':
+					this.refs.fileSelector.setState({'errorMessage': event.data['payload'] })
+					break;
+				case 'filesParsed':
+					localStorage.removeItem('archive');
+					break;
+				case 'visualizationFileReady':
+					this.setState({'isLoading': false});
+					//start building viz
+					console.log('Ready for viz');
 			}
 		});
 		
@@ -31,13 +42,34 @@ class App extends React.Component {
 
 
 	render() {
-		return (
-			<div>
-				<div>
-					<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" />
-				</div>
-			</div>
-		)
+
+		if (!this.state.hasVisuals) {
+			let elemToRender;
+
+			if (this.state.isLoading) {
+				elemToRender = (
+					<div>
+						<div>
+							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" />
+						</div>
+						<div>
+							<Loader />
+						</div>
+					</div>
+				)
+			} else {
+				elemToRender = (
+					<div>
+						<div>
+							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" />
+						</div>
+					</div>
+				)
+			}
+
+			return elemToRender;
+		}
+
 		
 	}
 }

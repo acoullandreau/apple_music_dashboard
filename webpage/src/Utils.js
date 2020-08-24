@@ -22,6 +22,20 @@ class Utils {
 		return stringSimilarity.compareTwoStrings(aNoPuncUp, bNoPuncUp);
 	}
 
+	static cleanListValues(list) {
+		if (list !== []) {
+			if (list.length === 0) {
+				return 'Unknown';
+			} else if (list.length === 1) {
+				return list[0];
+			} else {
+				return list.join(' && ');
+			}
+		} else {
+			return 'Unknown';
+		}
+
+	 }
 
 }
 

@@ -71,7 +71,7 @@ class FileProcessor {
 
 	  			var titleArtist = Utils.concatTitleArtist(title, artist);
 	  			
-	  			if (titleArtist in processOutput['trackInstanceDict'] == false) {
+	  			if (titleArtist in processOutput['trackInstanceDict'] === false) {
 	  				this.manageUnknownTrackFromLibrary(title, artist, index, row, processOutput);
 
 	  			} else {
@@ -79,14 +79,14 @@ class FileProcessor {
 	  				trackInstance.updateTrackFromLibrary(index, row);
 
   					// we add the track's genre to the list of genres
-		            if (!processOutput['genresList'].includes(row['Genre'])) {
+		            if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
 		                processOutput['genresList'].push(row['Genre']);
 		            }
 
 	  			}
 
 	  			// we update the artist/track names dictionnary
-	  			if (artist in processOutput['artistTracksTitles'] == false) {
+	  			if (artist in processOutput['artistTracksTitles'] === false) {
 	  				processOutput['artistTracksTitles'][artist]=[];
 	  			} 
 	  			if (!processOutput['artistTracksTitles'][artist].includes(title)) {
@@ -133,7 +133,7 @@ class FileProcessor {
 				trackInstance.updateTrackFromLibrary(index, row);
 
 				// we add the track's genre to the list of genres
-            if (!processOutput['genresList'].includes(row['Genre'])) {
+            if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
                 processOutput['genresList'].push(row['Genre']);
             }
 
@@ -157,7 +157,7 @@ class FileProcessor {
 		trackInstance.updateTrackFromLibrary(index, row);
 
 			// we add the track's genre to the list of genres
-        if (!processOutput['genresList'].includes(row['Genre'])) {
+        if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
             processOutput['genresList'].push(row['Genre']);
         }
 
@@ -209,7 +209,7 @@ class FileProcessor {
 
 	  			var titleArtist = Utils.concatTitleArtist(title, artist);
 	  			
-	  			if (titleArtist in processOutput['trackInstanceDict'] == false) {
+	  			if (titleArtist in processOutput['trackInstanceDict'] === false) {
 	  				this.manageUnknownTrackFromPlayActivity(title, artist, index, row, processOutput);
 
 	  			} else {
@@ -217,14 +217,14 @@ class FileProcessor {
 	  				trackInstance.updateTrackFromPlayActivity(index, row);
 
   					// we add the track's genre to the list of genres
-		            if (!processOutput['genresList'].includes(row['Genre'])) {
+		            if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
 		                processOutput['genresList'].push(row['Genre']);
 		            }
 
 	  			}
 
 	  			// we update the artist/track names dictionnary
-	  			if (artist in processOutput['artistTracksTitles'] == false) {
+	  			if (artist in processOutput['artistTracksTitles'] === false) {
 	  				processOutput['artistTracksTitles'][artist]=[];
 	  			} 
 	  			if (!processOutput['artistTracksTitles'][artist].includes(title)) {
@@ -258,7 +258,7 @@ class FileProcessor {
 				trackInstance.updateTrackFromPlayActivity(index, row);
 
 				// we add the track's genre to the list of genres
-	            if (!processOutput['genresList'].includes(row['Genre'])) {
+	            if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
 	                processOutput['genresList'].push(row['Genre']);
 	            }
 
@@ -282,7 +282,7 @@ class FileProcessor {
 		trackInstance.updateTrackFromPlayActivity(index, row);
 
 			// we add the track's genre to the list of genres
-        if (!processOutput['genresList'].includes(row['Genre'])) {
+        if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
             processOutput['genresList'].push(row['Genre']);
         }
 
@@ -437,7 +437,7 @@ class Track {
   			trackRating = 'DISLIKE';
   		}
 
-	  	if (!this.rating.includes(trackRating)) {
+	  	if (typeof(trackRating) !== 'undefined' && !this.rating.includes(trackRating)) {
 			this.rating.push(trackRating);
 		}
   	}

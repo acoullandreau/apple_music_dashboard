@@ -3,6 +3,7 @@
 import jsZip from 'jszip';
 import FileParser from './FileParser.js';
 import FileProcessor from './FileProcessor.js';
+import VisualizationFileBuilder from './VisualizationFileBuilder.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 
@@ -34,7 +35,6 @@ var validateArchiveContent = (input) => {
 
 	return archiveContentPromise;
 }
-
 
 // worker's event listener
 self.addEventListener('message', function(e) {
@@ -72,12 +72,15 @@ self.addEventListener('message', function(e) {
 			return FileProcessor.processFiles(result);
 		})
 		.then(result => {
-			// build file for visualizations
-			//result is an object with track instances, list of genres and artists....
-			//console.log(result)
+			var matchIndexInstanceDict = VisualizationFileBuilder.buildIndexTrackDict(result['trackInstanceDict']);
+			var playActivityFilePromise = connectorInstance.readObjectFromDB('playActivityFile');
+			playActivityFilePromise.then(result => {
+				var visualizationFile = VisualizationFileBuilder.buildVisualizationFile(matchIndexInstanceDict, result);
+				connectorInstance.addObjectToDB(visualizationFile, 'visualizationFile');
+				postMessage({'type':'visualizationFileReady', 'payload':''});
+			})
 		})
 
-		// save file to indexedDB
 	}
 
 })

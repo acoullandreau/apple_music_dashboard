@@ -59,22 +59,38 @@ class IndexedDBConnector {
 	addObjectsToDB(objectsDict) {
 		//check if index exists, add if not, else edit
 		this.connection().then(db => {
-			var tx = db.transaction(this.storeName, "readwrite");
-			var store = tx.objectStore(this.storeName);
+			var transaction = db.transaction(this.storeName, "readwrite");
+			var objectStore = transaction.objectStore(this.storeName);
 			for (var file in objectsDict) {
-				store.put(objectsDict[file], file);
+				objectStore.put(objectsDict[file], file);
 			}
 
 		})
 	}
 
-	readObjectFromDB() {
+	addObjectToDB(object, objectName) {
+		//check if index exists, add if not, else edit
 		this.connection().then(db => {
-
+			var transaction = db.transaction(this.storeName, "readwrite");
+			var objectStore = transaction.objectStore(this.storeName);
+			objectStore.put(object, objectName);
 		})
 	}
 
-	removeObjectFromDB() {
+	readObjectFromDB(objectName) {
+		return new Promise((resolve, reject) => {
+			this.connection().then(db => {
+					var transaction = db.transaction(this.storeName, "readwrite");
+					var objectStore = transaction.objectStore(this.storeName);
+					var objectStoreRequest = objectStore.get(objectName);
+					objectStoreRequest.onsuccess = function(event) {
+						resolve(objectStoreRequest.result);
+		  			};
+			})
+		})
+	}
+
+	removeObjectFromDB(objectName) {
 		//check if index exist, delete if it does
 		this.connection().then(db => {
 
