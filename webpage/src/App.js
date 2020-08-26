@@ -52,12 +52,14 @@ class App extends React.Component {
 
 	onReset = () => {
 		connectorInstance.deleteStore();
+		this.setState({'isLoading': false, 'hasVisuals': false });
 	} 
 
 	reloadViz = () => {
-		console.log(this.state)
+		// display loading screen again while visualizations are recomputed
+		this.setState({'isLoading': true, 'hasVisuals': false });
+		// request from loader to recompute the visualizations
 		this.worker.postMessage({'type':'visualization', 'payload':''});
-		this.setState({'isLoading': true, 'hasVisuals': true });
 
 		this.worker.addEventListener('message', event => {
 			switch (event.data['type']) {
@@ -67,6 +69,7 @@ class App extends React.Component {
 			}
 		})
 	}
+
 
 	renderScreen = () => {
 		let elemToRender;
@@ -85,12 +88,12 @@ class App extends React.Component {
 					<div>
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
-					<div>
-						<PiePlot />
-					</div>
+					<div> Plots </div>
 				</div>
 			)
+
 		} 
+		// <div> <PiePlot values={[618, 11, 120, 72, 223]} labels={["iPhone6", "iPad4", "Computer", "iPhone8", "iPhone11"]} /> </div>
 
 		return elemToRender;
 

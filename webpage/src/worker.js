@@ -7,7 +7,6 @@ import VisualizationFileBuilder from './VisualizationFileBuilder.js';
 import VisualizationsBuilder from './VisualizationsBuilder.js';
 import connectorInstance from './IndexedDBConnector.js';
 
-
 var filesInArchive = {
     'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
     'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
@@ -89,8 +88,12 @@ self.addEventListener('message', function(e) {
 		var archive = e.data['payload'];
 		prepareFiles(archive);
 	} else if (e.data['type'] === 'visualization') {
-		//VisualizationsBuilder.buildSkippedSongsHist()
-
+		//var plotsPromises = 
+		VisualizationsBuilder.preparePlots();
+		// plotsPromise.then(result =>{
+		// 	console.log(result)
+		// } )
+		
 		postMessage({'type':'visualizationsReady', 'payload':''});
 	}
 

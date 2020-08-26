@@ -259,8 +259,10 @@ class FileParser {
 				entry['Transaction Agent Model'] = entry['UserAgent'].split('/')[3].split(',')[0];
 			} else if (userAgent === 'iTunes') {
 				entry['Transaction Agent'] = 'Computer';
+				entry['Transaction Agent Model'] ='Computer';
 			} else {
 				entry['Transaction Agent'] = userAgent;
+				entry['Transaction Agent Model'] ='';
 			}
 			
 		}
@@ -313,7 +315,7 @@ class FileParser {
 
 	static parsePlayActivityRow(row, rowsToDelete, rowIndex, playDurations) {
 		// add time related columns, removing rows that have a date before june 2015
-		var rowParsedTime = this.addPlayAcivityTimeColumns(row, rowIndex, rowsToDelete);
+		var rowParsedTime = this.addPlayActivityTimeColumns(row, rowIndex, rowsToDelete);
 
 		if (rowParsedTime === 'complete') {
 			// Add partial listening column
@@ -325,8 +327,8 @@ class FileParser {
 		} 
 	}
 
-	static addPlayAcivityTimeColumns(row, rowIndex, rowsToDelete) {
-		if (typeof(row['Event Start Timestamp']) !== 'undefined') {
+	static addPlayActivityTimeColumns(row, rowIndex, rowsToDelete) {
+		if (typeof(row['Event Start Timestamp']) !== 'undefined' && row['Event Start Timestamp'] !== "") {
 			row['Activity date time'] = row['Event Start Timestamp'];
 		} else {
 			row['Activity date time'] = row['Event End Timestamp'];
