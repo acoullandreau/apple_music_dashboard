@@ -8,8 +8,10 @@
     "@testing-library/user-event": "^7.2.1",
     "jszip": "^3.5.0",
     "papaparse": "^5.2.0",
+    "plotly.js": "^1.54.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-plotly.js": "^2.4.0",
     "react-scripts": "3.4.1",
     "string-similarity": "^4.0.2"
   },

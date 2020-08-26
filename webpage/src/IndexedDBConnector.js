@@ -47,6 +47,19 @@ class IndexedDBConnector {
 
 	}
 
+	checkIfVizAvailable() {
+		return new Promise((resolve, reject) => {
+			this.connection().then(db => {
+					var transaction = db.transaction(this.storeName, "readonly");
+					var objectStore = transaction.objectStore(this.storeName);
+					var objectStoreRequest = objectStore.get('visualizationFile');
+					objectStoreRequest.onsuccess = function(event) {
+						resolve(true);
+		  			};
+			})
+		})
+	}
+
 	createStore(db, storeName) {
 		//create object store
 		var store = db.createObjectStore(storeName, {autoIncrement: true});
