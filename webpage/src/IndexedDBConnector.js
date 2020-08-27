@@ -52,9 +52,9 @@ class IndexedDBConnector {
 			this.connection().then(db => {
 					var transaction = db.transaction(this.storeName, "readonly");
 					var objectStore = transaction.objectStore(this.storeName);
-					var objectStoreRequest = objectStore.get('visualizationFile');
+					var objectStoreRequest = objectStore.get('plotDetails');
 					objectStoreRequest.onsuccess = function(event) {
-						resolve(true);
+						resolve(objectStoreRequest.result);
 		  			};
 			})
 		})

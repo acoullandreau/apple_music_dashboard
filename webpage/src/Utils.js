@@ -34,8 +34,17 @@ class Utils {
 		} else {
 			return 'Unknown';
 		}
+	}
 
-	 }
+	static computePercentage(countDict, total) {
+		var percentageDict = {};
+		for (var key in countDict) {
+			var percentage = (countDict[key]/total * 100).toFixed(2);
+			percentageDict[key] = parseFloat(percentage);
+		}
+
+		return percentageDict;
+	}
 
 }
 

@@ -88,13 +88,12 @@ self.addEventListener('message', function(e) {
 		var archive = e.data['payload'];
 		prepareFiles(archive);
 	} else if (e.data['type'] === 'visualization') {
-		//var plotsPromises = 
-		VisualizationsBuilder.preparePlots();
-		// plotsPromise.then(result =>{
-		// 	console.log(result)
-		// } )
-		
-		postMessage({'type':'visualizationsReady', 'payload':''});
+		var plotsDetails = VisualizationsBuilder.preparePlots();
+		plotsDetails.then(result => {
+			connectorInstance.addObjectToDB(result, 'plotDetails');
+			console.log(result)
+			postMessage({'type':'visualizationsReady', 'payload':result});
+		})
 	}
 
 })

@@ -306,10 +306,11 @@ class FileParser {
 		dateInLocalTimeInMs = new Date(dateInLocalTimeInMs)
 		// then we can fetch year, month,... using the getUTC[...] methods
 		dateObject['year'] = dateInLocalTimeInMs.getUTCFullYear();
-		dateObject['month'] = dateInLocalTimeInMs.getUTCMonth() + 1; // zero-based, so we add 1
+		dateObject['month'] = dateInLocalTimeInMs.getUTCMonth(); // zero-based
 		dateObject['dom'] = dateInLocalTimeInMs.getUTCDate();
 		dateObject['dow'] = dateInLocalTimeInMs.getUTCDay(); // Sunday is 0
 		dateObject['hod'] = dateInLocalTimeInMs.getUTCHours();
+
 		return dateObject;
 	}
 
@@ -337,10 +338,10 @@ class FileParser {
 			var datetimeString = row['Activity date time'];
 			var utcOffset = row['UTC Offset In Seconds'];
 			var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
+
 			if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
 				rowsToDelete.push(rowIndex);
 				return 'incomplete';
-				//break;
 			} else {
 				row['Play Year'] = datetimeObject['year'];
 				row['Play Month'] = datetimeObject['month'];

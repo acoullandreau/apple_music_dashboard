@@ -26,8 +26,8 @@ class FileSelector extends React.Component {
 	}
 
 	onReset = () => {
-		this.props.onReset();
 		this.setState(Object.assign({}, this.initialState));
+		this.props.onReset();
 	}
 
 	onFileSelection = (e) => {
