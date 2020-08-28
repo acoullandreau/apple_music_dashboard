@@ -1,6 +1,7 @@
 import React from 'react';
 import connectorInstance from './IndexedDBConnector.js';
 import Utils from './Utils.js';
+import plotConfig from './plotConfig.json';
 
 class VisualizationsBuilder {
 
@@ -16,7 +17,6 @@ class VisualizationsBuilder {
 					this.buildPiePlot('year', result, playPlotDetails);
 					//prepare bar plots
 					this.buildBarPlot(result, playPlotDetails);
-
 
 					resolve(playPlotDetails);
 				});
@@ -84,36 +84,28 @@ class VisualizationsBuilder {
 
 		// we add the percentage version of each dictionary
 		for (var year in plotParameters) {
-			plotParameters[year]['MonthPer'] = Utils.computePercentage(plotParameters[year]['MonthCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['DOMPer'] = Utils.computePercentage(plotParameters[year]['DOMCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['DOWPer'] = Utils.computePercentage(plotParameters[year]['DOWCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['HODPer'] = Utils.computePercentage(plotParameters[year]['HODCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['SkippedRatioPer'] = Utils.computePercentage(plotParameters[year]['SkippedRatioCount'], plotParameters[year]['totalEntryCount']);
+			plotParameters[year]['MonthPercent'] = Utils.computePercentage(plotParameters[year]['MonthCount'], plotParameters[year]['totalEntryCount']);
+			plotParameters[year]['DOMPercent'] = Utils.computePercentage(plotParameters[year]['DOMCount'], plotParameters[year]['totalEntryCount']);
+			plotParameters[year]['DOWPercent'] = Utils.computePercentage(plotParameters[year]['DOWCount'], plotParameters[year]['totalEntryCount']);
+			plotParameters[year]['HODPercent'] = Utils.computePercentage(plotParameters[year]['HODCount'], plotParameters[year]['totalEntryCount']);
+			plotParameters[year]['SkippedRatioPercent'] = Utils.computePercentage(plotParameters[year]['SkippedRatioCount'], plotParameters[year]['totalEntryCount']);
 		}
 
-		plotDetails['barMonthCount'] = {};
-		plotDetails['barMonthCount']['title'] = 'Number of tracks listened to for each month of the year';
+		plotDetails['barPlot'] = {};
+		// we populate plotDetails with the details of each bar plot
+		this.buildBarPlotDict(plotParameters, plotDetails);
 
-		// we add this object to plotDetails
-		for (var year in plotParameters) {
-			plotDetails['barMonthCount'][year] = plotParameters[year]['MonthCount'];
 
+	}
+
+	static buildBarPlotDict(parametersDict, plotDetails) {
+		for (var plot in plotConfig.barPlot) {
+			plotDetails['barPlot'][plot] = {};
+			var plotType = plot.replace("bar", "");
+			for (var year in parametersDict) {
+				plotDetails['barPlot'][plot][year] = parametersDict[year][plotType];
+			}
 		}
-
-
-		// barMonthCount
-		// barMonthPercent
-		// barDOMCount
-		// barDOMPercent
-		// barDOWCount
-		// barDOWPercent
-		// barHODCount
-		// barHODPercent
-		// barSkippedCount
-		// barSkippedPercent
-
-
-
 
 	}
 
@@ -125,16 +117,13 @@ class VisualizationsBuilder {
 
 		if (type === 'year') {
 			pieType = 'pieYear';
-			title = 'Which was your most active year?';
 			targetColumn = 'Play Year';
 		} else if (type === 'device') {
 			pieType = 'pieDevice';
-			title = 'What device do you listen to music on?';
 			targetColumn = 'Transaction Agent Model'
 		}
 
 		plotDetails[pieType] = {};
-		plotDetails[pieType]['title'] = title;
 		for (var row in data) {
 			if (data[row][targetColumn] in plotParameters === false && data[row][targetColumn] !== "") {
 				plotParameters[data[row][targetColumn]] = 0;

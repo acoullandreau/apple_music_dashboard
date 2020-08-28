@@ -1,0 +1,69 @@
+{
+
+	"piePlot" : {
+		"pieYear" : {
+			"title":"Which was your most active year?",
+			"layout":{}
+		},
+		"pieDevice" : {
+			"title":"What device did you listen to music on?",
+			"layout":{}
+		}
+
+	},
+	"barPlot" : {
+		"barMonthCount" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barMonthPercent" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barDOMCount" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barDOMPercent" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barDOWCount" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barDOWPercent" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barHODCount" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barHODPercent" : {
+			"title":"",
+			"barmode":"group",
+			"layout":{}
+		},
+		"barSkippedRatioCount" : {
+			"title":"",
+			"barmode":"stack",
+			"layout":{}
+		},
+		"barSkippedRatioPercent" : {
+			"title":"",
+			"barmode":"stack",
+			"layout":{}
+		}
+
+	}
+
+
+}

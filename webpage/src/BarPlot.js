@@ -1,31 +1,83 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import plotConfig from './plotConfig.json';
+
 
 class BarPlot extends React.Component {
 
-	componentDidMount() {
-		console.log(this.props)
+	getLabels(target, year) {
+		if (target === 'month') {
+			return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+		} else if (target === 'dow') {
+			return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+		} else {
+			return Object.keys(this.props.data.data[year]);
+		}
 	}
 
-	componentDidUpdate(prevProps) {
-		if(this.props.data !== prevProps.data) {
-			this.updateUser();
+
+	getPlotContent() {
+		var traces = [];
+		var labels = this.getLabels(this.props.target, year);
+		for (var year in this.props.data.data) {
+			var values = Object.values(this.props.data.data[year]);
+			var trace = {
+				x: labels,
+				y: values,
+				name: year,
+				type: 'bar'
+			}
+			traces.push(trace)
 		}
-	} 
+
+		return traces;
+	}
+
+	renderPlot() {
+		var data = this.getPlotContent();
+		var title = this.props.data.title;
+		var layout;
+		var type;
+
+		switch (this.props.target) {
+			// case 'month':
+			// 	type = 'group';
+			// 	break;
+			// case 'dom':
+			// 	break;
+			// case 'dow':
+			// 	break;
+			// case 'hod':
+			// 	break;
+			case 'skipped':
+				type = 'stack';
+				break;
+			default:
+				type = 'group';
+				break;
+
+		}
+
+		var barPlot = (
+			<Plot
+			  data={data}
+			  layout={{title: title, barmode: type}}
+			/>
+		)
+
+		return barPlot;
+
+		
+	}
+
 
 	render() {
+		
 		return (
-		  <div>BarPlot</div>
-		  // <Plot
-		  //   data={[
-		  //     {
-		  //       x: this.props.values,
-		  //       y: this.props.labels,
-		  //       type: 'bar',
-		  //     },
-		  //   ]}
-		  //   layout={{title: this.props.title, barmode: this.props.barmode}}
-		  // />
+			<div>
+				<div>BarPlot</div>
+				<div>{this.renderPlot()}</div>
+			</div>
 		);
 	}
 }

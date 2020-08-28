@@ -93,9 +93,9 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div> 
-						<PiePlot values={this.state.plotDetails['pieYear']['values']} labels={this.state.plotDetails['pieYear']['labels']} title={this.state.plotDetails['pieYear']['title']} />
-					 	<PiePlot values={this.state.plotDetails['pieDevice']['values']} labels={this.state.plotDetails['pieDevice']['labels']} title={this.state.plotDetails['pieDevice']['title']} />
-					 	<BarPlot data={this.state.plotDetails['barMonthCount']} type='month' />
+						<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
+					 	<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
+					 	<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
 					</div>
 				</div>
 			)
