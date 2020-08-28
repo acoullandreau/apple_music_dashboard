@@ -5,77 +5,94 @@ import plotConfig from './plotConfig.json';
 
 class BarPlot extends React.Component {
 
-	getLabels(target, year) {
-		if (target === 'month') {
-			return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-		} else if (target === 'dow') {
-			return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+	getLabels(targetDataName) {
+		return plotConfig.barPlot[targetDataName]['labels'];
+	}
+
+	getRefTargetData() {
+		var type = this.props.target.type;
+		var targetType;
+		var unit = this.props.target.unit;
+		var targetUnit = unit[0].toUpperCase() + unit.slice(1);
+
+		if (type === 'month' || type === 'skippedRatio') {
+			targetType = type[0].toUpperCase() + type.slice(1);
 		} else {
-			return Object.keys(this.props.data.data[year]);
+			targetType = type.toUpperCase();
 		}
+
+		var targetData = 'bar' + targetType + targetUnit;
+		return targetData;
+
 	}
 
 
-	getPlotContent() {
+	getPlotContent(targetDataName) {
 		var traces = [];
-		var labels = this.getLabels(this.props.target, year);
-		for (var year in this.props.data.data) {
-			var values = Object.values(this.props.data.data[year]);
-			var trace = {
-				x: labels,
-				y: values,
-				name: year,
-				type: 'bar'
+		var targetData = this.props.data[targetDataName];
+
+		if (this.props.target.type === 'skippedRatio') {
+			var partials = [];
+			var completes = [];
+			var labels = Object.keys(targetData);
+			for (var year in targetData) {
+				partials.push(targetData[year]['partial'])
+				completes.push(targetData[year]['complete'])
 			}
-			traces.push(trace)
+			var tracePartials = {
+				x: labels,
+				y: partials,
+				name: 'Partial listening',
+				type: 'bar'
+			};
+			traces.push(tracePartials);
+			var traceCompletes = {
+				x: labels,
+				y: completes,
+				name: 'Complete listening',
+				type: 'bar'
+			};
+			traces.push(traceCompletes);
+
+		} else {
+			var labels = this.getLabels(targetDataName);
+			for (var year in targetData) {
+				var values = Object.values(targetData[year]);
+				var trace = {
+					x: labels,
+					y: values,
+					name: year,
+					type: 'bar'
+				}
+				traces.push(trace)
+			}
+
 		}
 
 		return traces;
 	}
 
 	renderPlot() {
-		var data = this.getPlotContent();
-		var title = this.props.data.title;
-		var layout;
-		var type;
-
-		switch (this.props.target) {
-			// case 'month':
-			// 	type = 'group';
-			// 	break;
-			// case 'dom':
-			// 	break;
-			// case 'dow':
-			// 	break;
-			// case 'hod':
-			// 	break;
-			case 'skipped':
-				type = 'stack';
-				break;
-			default:
-				type = 'group';
-				break;
-
-		}
+		var targetDataName = this.getRefTargetData();
+		var title = plotConfig.barPlot[targetDataName]['title'];
+		var barmode = plotConfig.barPlot[targetDataName]['barmode'];
+		var data = this.getPlotContent(targetDataName);
 
 		var barPlot = (
 			<Plot
 			  data={data}
-			  layout={{title: title, barmode: type}}
+			  layout={{title: title, barmode: barmode, autosize:true}}
+			  style={{width: "100%", height: "100%"}}
 			/>
 		)
 
 		return barPlot;
-
-		
 	}
 
 
 	render() {
-		
 		return (
 			<div>
-				<div>BarPlot</div>
 				<div>{this.renderPlot()}</div>
 			</div>
 		);

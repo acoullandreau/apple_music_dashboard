@@ -27,7 +27,8 @@ class PiePlot extends React.Component {
 						insidetextorientation: "horizontal",
 					},
 				]}
-				layout={{title: this.getTitle()}}
+				layout={{title: this.getTitle(), autosize:true}}
+				style={{width: "100%", height: "100%"}}
 			/>
 		);
 	}

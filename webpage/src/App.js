@@ -95,7 +95,10 @@ class App extends React.Component {
 					<div> 
 						<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
 					 	<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
-					 	<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
+					 	<div>
+					 		<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'percent'}} />
+					 	</div>
+				 		<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
 					</div>
 				</div>
 			)

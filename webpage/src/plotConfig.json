@@ -13,52 +13,60 @@
 	},
 	"barPlot" : {
 		"barMonthCount" : {
-			"title":"",
+			"title":"Distribution of count of tracks listened to month for different years",
+			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barMonthPercent" : {
-			"title":"",
+			"title":"Distribution of percentage of tracks listened to month for different years",
+			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barDOMCount" : {
-			"title":"",
+			"title":"Distribution of count of tracks listened to per day of the month for different years",
+			"labels" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barDOMPercent" : {
-			"title":"",
+			"title":"Distribution of percentage of tracks listened to per day of the month for different years",
+			"labels" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barDOWCount" : {
-			"title":"",
+			"title":"Distribution of count of tracks listened to per day of the week for different years",
+			"labels":["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barDOWPercent" : {
-			"title":"",
+			"title":"Distribution of percentage of tracks listened to per day of the week for different years",
+			"labels":["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barHODCount" : {
-			"title":"",
+			"title":"Distribution of count of tracks listened to per hour of the day for different years (in local time)",
+			"labels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barHODPercent" : {
-			"title":"",
+			"title":"Distribution of percentage of tracks listened to per hour of the day for different years (in local time)",
+			"labels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
 			"barmode":"group",
 			"layout":{}
 		},
 		"barSkippedRatioCount" : {
-			"title":"",
+			"title":"Ratio of tracks skipped, versus listened to completely, per year (in count of songs)",
 			"barmode":"stack",
 			"layout":{}
 		},
 		"barSkippedRatioPercent" : {
-			"title":"",
+			"title":"Ratio of tracks skipped, versus listened to completely, per year (in percentagage)",
 			"barmode":"stack",
 			"layout":{}
 		}
