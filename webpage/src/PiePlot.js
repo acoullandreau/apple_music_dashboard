@@ -4,18 +4,19 @@ import plotConfig from './plotConfig.json';
 
 class PiePlot extends React.Component {
 
-
-	getTitle() {
+	getTargetConfig() {
 		if (this.props.target === 'year') {
-			return plotConfig.piePlot['pieYear']['title'];
+			return plotConfig.piePlot['pieYear'];
 		} else if (this.props.target === 'device') {
-			return plotConfig.piePlot['pieDevice']['title'];
+			return plotConfig.piePlot['pieDevice'];
 		}
 
 	}
 
 	render() {
-
+		var targetConfig = this.getTargetConfig();
+		var style = targetConfig['style'];
+		var title = targetConfig['title'];
 		return (
 			<Plot
 				data={[
@@ -27,26 +28,11 @@ class PiePlot extends React.Component {
 						insidetextorientation: "horizontal",
 					},
 				]}
-				layout={{title: this.getTitle(), autosize:true}}
-				style={{width: "100%", height: "100%"}}
+				layout={{title: title, autosize:true}}
+				style={style}
 			/>
 		);
 	}
 }
 
 export default PiePlot;
-
-
-			// <Plot
-			//   data={[
-			//     {
-			//       x: [1, 2, 3],
-			//       y: [2, 6, 3],
-			//       type: 'scatter',
-			//       mode: 'lines+markers',
-			//       marker: {color: 'red'},
-			//     },
-			//     {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
-			//   ]}
-			//   layout={{width: 320, height: 240, title: 'A Fancy Plot'}}
-			// />

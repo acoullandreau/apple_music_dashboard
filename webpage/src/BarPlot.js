@@ -76,13 +76,16 @@ class BarPlot extends React.Component {
 		var targetDataName = this.getRefTargetData();
 		var title = plotConfig.barPlot[targetDataName]['title'];
 		var barmode = plotConfig.barPlot[targetDataName]['barmode'];
+		var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
+		var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];
 		var data = this.getPlotContent(targetDataName);
+		var style = plotConfig.barPlot[targetDataName]['style'];
 
 		var barPlot = (
 			<Plot
 			  data={data}
-			  layout={{title: title, barmode: barmode, autosize:true}}
-			  style={{width: "100%", height: "100%"}}
+			  layout={{title: title, barmode: barmode, autosize:true, xaxis:xaxis, yaxis:yaxis}}
+			  style={style}
 			/>
 		)
 
@@ -100,41 +103,3 @@ class BarPlot extends React.Component {
 }
 
 export default BarPlot;
-
-	// type  'month', 'DOM', 'DOW', 'HOD', 'skipped'
-	// barmode : group, stack
-	// use traces, one trace per year and data = array(traces)
-	// y-axis absolute count or percentage 
-	// var trace1 = {
-	//   x: ['giraffes', 'orangutans', 'monkeys'],
-	//   y: [20, 14, 23],
-	//   name: 'SF Zoo',
-	//   type: 'bar'
-	// };
-
-	// var trace2 = {
-	//   x: ['giraffes', 'orangutans', 'monkeys'],
-	//   y: [12, 18, 29],
-	//   name: 'LA Zoo',
-	//   type: 'bar'
-	// };
-
-	// var data = [trace1, trace2];
-
-	// var layout = {barmode: 'group'};
-
-
-
-	  // <Plot
-	  //   data={[
-	  //     {
-	  //       x: [1, 2, 3],
-	  //       y: [2, 6, 3],
-	  //       type: 'scatter',
-	  //       mode: 'lines+markers',
-	  //       marker: {color: 'red'},
-	  //     },
-	  //     {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
-	  //   ]}
-	  //   layout={{width: 320, height: 240, title: 'A Fancy Plot'}}
-	  // />

@@ -8,7 +8,7 @@ import BarPlot from './BarPlot.js';
 
 class App extends React.Component {
 
-	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {} };
+	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {} };
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -74,6 +74,19 @@ class App extends React.Component {
 		})
 	}
 
+	renderTimeBarPlot = () => {
+		//var barPlot;
+		if (this.state.selectedBarPlot !== {}) {
+		} else {
+			return (
+				<div>
+					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
+				</div>
+			)
+		}
+		//return <div>{barPlot}</div>;
+	}
+
 
 	renderScreen = () => {
 		let elemToRender;
@@ -96,7 +109,7 @@ class App extends React.Component {
 						<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
 					 	<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
 					 	<div>
-					 		<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'percent'}} />
+					 		{ this.renderTimeBarPlot() }
 					 	</div>
 				 		<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
 					</div>
@@ -104,7 +117,6 @@ class App extends React.Component {
 			)
 
 		} 
-
 		return elemToRender;
 
 	}
