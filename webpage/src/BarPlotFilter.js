@@ -1,38 +1,30 @@
 
 import React, { Component } from 'react'
-import { Form, Checkbox, Radio } from 'semantic-ui-react'
+import { Form, Checkbox, Button } from 'semantic-ui-react'
 
 class BarPlotFilter extends Component {
 
     state = { 'granularity':'month', 'unit':'count' };
 
     handleChange = (e, selection) => {
-        if (selection.type === 'checkbox') {
+
+        if (selection.radio) {
             this.setState({ 'granularity': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': selection.value, 'unit': this.state.unit } })
-        } else if (selection.type === 'radio') {
+        } else if (selection.toggle) {
+            console.log(selection)
             this.setState({ 'unit': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': this.state.granularity, 'unit': selection.value } })
         }
     }
 
     render() {
-        console.log(this.state)
-            // <div>
-            //     <Button attached='left'>Left</Button>
-            //     <Button attached='right'>Right</Button>
-            // </div>
-
-            // <Button.Group>
-            //     <Button>Count</Button>
-            //     <Button.Or />
-            //     <Button positive>Percentage</Button>
-            // </Button.Group>
-
-            // <Radio toggle label='Display values in percentage' onChange={this.handleChange}/> 
         return (
           <Form>
-
+            <div>
+                <Button toggle value='count' active={this.state.unit === 'count' ? true : false} onClick={this.handleChange}>Count</Button>
+                <Button toggle value='percent' active={this.state.unit === 'percent' ? true : false} onClick={this.handleChange}>Percentage</Button>
+            </div>
         	<Form.Field>
         	  Choose time granularity:
         	</Form.Field>
