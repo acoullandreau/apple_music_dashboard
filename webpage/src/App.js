@@ -5,6 +5,7 @@ import connectorInstance from './IndexedDBConnector.js';
 
 import PiePlot from './PiePlot.js'; 
 import BarPlot from './BarPlot.js'; 
+import BarPlotFilter from './BarPlotFilter.js'; 
 
 class App extends React.Component {
 
@@ -74,17 +75,29 @@ class App extends React.Component {
 		})
 	}
 
+	updatePlot = (parameters) => {
+		this.setState({ 'selectedBarPlot': parameters.payload });
+
+	}
+
+
 	renderTimeBarPlot = () => {
-		//var barPlot;
-		if (this.state.selectedBarPlot !== {}) {
-		} else {
+		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
 				<div>
 					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
+					<BarPlotFilter target='month' onChange={this.updatePlot} />
+				</div>
+			)
+		} else {
+			return (
+				<div>
+					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
+					<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.updatePlot} />
 				</div>
 			)
 		}
-		//return <div>{barPlot}</div>;
+
 	}
 
 
@@ -106,12 +119,10 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div> 
+					 	{ this.renderTimeBarPlot() }
 						<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
-					 	<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
-					 	<div>
-					 		{ this.renderTimeBarPlot() }
-					 	</div>
-				 		<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+						<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
+						<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
 					</div>
 				</div>
 			)

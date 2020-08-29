@@ -4,7 +4,7 @@ import jsZip from 'jszip';
 import FileParser from './FileParser.js';
 import FileProcessor from './FileProcessor.js';
 import VisualizationFileBuilder from './VisualizationFileBuilder.js';
-import VisualizationsBuilder from './VisualizationsBuilder.js';
+import VisualizationDetailsBuilder from './VisualizationDetailsBuilder.js';
 import connectorInstance from './IndexedDBConnector.js';
 
 var filesInArchive = {

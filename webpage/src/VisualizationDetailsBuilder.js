@@ -3,7 +3,7 @@ import connectorInstance from './IndexedDBConnector.js';
 import Utils from './Utils.js';
 import plotConfig from './plotConfig.json';
 
-class VisualizationsBuilder {
+class VisualizationDetailsBuilder {
 
 	static preparePlots() {
 		var plotPromises = [];
@@ -139,4 +139,4 @@ class VisualizationsBuilder {
 
 }
 
-export default VisualizationsBuilder;
+export default VisualizationDetailsBuilder;
