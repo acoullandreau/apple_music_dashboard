@@ -12,7 +12,6 @@ class BarPlotFilter extends Component {
             this.setState({ 'granularity': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': selection.value, 'unit': this.state.unit } })
         } else if (selection.toggle) {
-            console.log(selection)
             this.setState({ 'unit': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': this.state.granularity, 'unit': selection.value } })
         }
@@ -20,7 +19,7 @@ class BarPlotFilter extends Component {
 
     render() {
         return (
-          <Form>
+          <Form style={{ width:"25%"}}>
             <div>
                 <Button toggle value='count' active={this.state.unit === 'count' ? true : false} onClick={this.handleChange}>Count</Button>
                 <Button toggle value='percent' active={this.state.unit === 'percent' ? true : false} onClick={this.handleChange}>Percentage</Button>

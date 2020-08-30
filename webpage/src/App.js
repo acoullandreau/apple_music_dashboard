@@ -6,6 +6,7 @@ import connectorInstance from './IndexedDBConnector.js';
 import PiePlot from './PiePlot.js'; 
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
+import HeatMapPlot from './HeatMapPlot.js'; 
 
 class App extends React.Component {
 
@@ -119,10 +120,26 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div> 
-					 	{ this.renderTimeBarPlot() }
-						<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
-						<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
-						<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}}/>
+					</div>
+					<div> 
+						<div>
+							<div>
+								<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
+								<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
+							</div>
+						</div>
+					</div>
+					<div> 
+						<div>
+					 		{ this.renderTimeBarPlot() }
+						</div>
+					</div>
+					<div> 
+						<div>
+							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+						</div>
 					</div>
 				</div>
 			)

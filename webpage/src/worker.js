@@ -88,7 +88,7 @@ self.addEventListener('message', function(e) {
 		var archive = e.data['payload'];
 		prepareFiles(archive);
 	} else if (e.data['type'] === 'visualization') {
-		var plotsDetails = VisualizationsBuilder.preparePlots();
+		var plotsDetails = VisualizationDetailsBuilder.preparePlots();
 		plotsDetails.then(result => {
 			connectorInstance.addObjectToDB(result, 'plotDetails');
 			console.log(result)

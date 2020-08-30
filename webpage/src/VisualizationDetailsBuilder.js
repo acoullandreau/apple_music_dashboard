@@ -17,7 +17,11 @@ class VisualizationDetailsBuilder {
 					this.buildPiePlot('year', result, playPlotDetails);
 					//prepare bar plots
 					this.buildBarPlot(result, playPlotDetails);
+					// prepare 2D histogram
+					this.build2DHistPlot(result, playPlotDetails)
 
+					// build ranking dict
+					//prepare sunburst
 					resolve(playPlotDetails);
 				});
 			})
@@ -42,6 +46,55 @@ class VisualizationDetailsBuilder {
 				resolve(plotDetails);
 			})
 		})
+
+	}
+
+	static build2DHistPlot(data, plotDetails) {
+		var plotParameters = {};
+		var targetXDOM = 'Play Month';
+		var targetXDOW = 'Play DOW';
+		var targetYDOM = 'Play DOM';
+		var targetYDOW = 'Play HOD';
+		var targetZ = 'Play duration in minutes';
+
+		// we compute the count of song for each year and each time division (month, DOM, DOW, HOD) and the skipped ratio
+		for (var row in data) {
+			var year = data[row]['Play Year'];
+			var playDuration = data[row][targetZ];
+
+			if (year in plotParameters === false) {
+				plotParameters[year] = { 
+					'DOM':{'x':[], 'y':[], 'z':[]},
+					'DOW':{'x':[], 'y':[], 'z':[]}
+				};
+
+			}
+
+			if (year in plotParameters) {
+				plotParameters[year]['DOM']['x'].push(data[row][targetXDOM]);
+				plotParameters[year]['DOW']['x'].push(data[row][targetXDOW]);
+				plotParameters[year]['DOM']['y'].push(data[row][targetYDOM]);
+				plotParameters[year]['DOW']['y'].push(data[row][targetYDOW]);
+				plotParameters[year]['DOM']['z'].push(data[row][targetZ]);
+				plotParameters[year]['DOW']['z'].push(data[row][targetZ]);
+			}
+
+		}
+
+		plotDetails['heatMapPlot'] = {};
+
+		// we populate plotDetails with the details of each bar plot
+		this.build2DHistPlotDict(plotParameters, plotDetails);
+	}
+
+
+	static build2DHistPlotDict(parametersDict, plotDetails) {
+		plotDetails['heatMapPlot']['heatMapDOM'] = {};
+		plotDetails['heatMapPlot']['heatMapDOW'] = {};
+		for (var year in parametersDict) {
+			plotDetails['heatMapPlot']['heatMapDOM'][year] = parametersDict[year]['DOM'];
+			plotDetails['heatMapPlot']['heatMapDOW'][year] = parametersDict[year]['DOW'];
+		}
 
 	}
 
