@@ -19,8 +19,8 @@ class VisualizationDetailsBuilder {
 					this.buildBarPlot(result, playPlotDetails);
 					// prepare 2D histogram
 					this.build2DHistPlot(result, playPlotDetails)
-
 					// build ranking dict
+					this.buildRankingDict(result, playPlotDetails)
 					//prepare sunburst
 					resolve(playPlotDetails);
 				});
@@ -47,6 +47,63 @@ class VisualizationDetailsBuilder {
 			})
 		})
 
+	}
+
+	static buildRankingDict(data, plotDetails) {
+		var plotParameters = {};
+		for (var row in data) {
+			var year = data[row]['Play Year'];
+			var genres = data[row]['Genre'];
+			var artist = data[row]['Artist'];
+			var title = data[row]['Title'];
+			var origin = data[row]['Track origin'];
+
+			if (year in plotParameters === false) {
+				plotParameters[year] = { 
+					'genre':{},
+					'artist':{},
+					'title':{},
+					'origin':{}
+				};
+			}
+
+			if (year in plotParameters) {
+				this.processGenreCount(genres, plotParameters[year]['genre']);
+				Utils.populateCountDict(artist, plotParameters[year]['artist']);
+				Utils.populateCountDict(title, plotParameters[year]['title']);
+				Utils.populateCountDict(origin, plotParameters[year]['origin']);
+			}
+		}
+
+
+		plotDetails['rankingDict'] = {};
+
+		// we populate plotDetails with the details of each bar plot
+		plotDetails['rankingDict']['genre'] = {};
+		plotDetails['rankingDict']['artist'] = {};
+		plotDetails['rankingDict']['title'] = {};
+		plotDetails['rankingDict']['origin'] = {};
+		for (var year in plotParameters) {
+			plotDetails['rankingDict']['genre'][year] = plotParameters[year]['genre'];
+			plotDetails['rankingDict']['artist'][year] = plotParameters[year]['artist'];
+			plotDetails['rankingDict']['title'][year] = plotParameters[year]['title'];
+			plotDetails['rankingDict']['origin'][year] = plotParameters[year]['origin'];
+		}
+
+	}
+
+
+	static processGenreCount(genres, parametersDict) {
+		if (genres.includes('&&')) {
+            var genresList = genres.split('&&');
+            for (var i in genresList) {
+            	var genre = genresList[i].trim();
+            	Utils.populateCountDict(genre, parametersDict);
+            }
+		} else {
+			var genre = genres.trim();
+			Utils.populateCountDict(genre, parametersDict);
+		}
 	}
 
 	static build2DHistPlot(data, plotDetails) {

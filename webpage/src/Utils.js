@@ -46,6 +46,14 @@ class Utils {
 		return percentageDict;
 	}
 
+	static populateCountDict(value, counttDict) {
+		if (value in counttDict) {
+            counttDict[value] ++;
+        } else {
+           	counttDict[value] = 1;
+        }
+	}
+
 }
 
 export default Utils;
