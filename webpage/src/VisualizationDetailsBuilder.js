@@ -18,10 +18,12 @@ class VisualizationDetailsBuilder {
 					//prepare bar plots
 					this.buildBarPlot(result, playPlotDetails);
 					// prepare 2D histogram
-					this.build2DHistPlot(result, playPlotDetails)
+					this.build2DHistPlot(result, playPlotDetails);
 					// build ranking dict
-					this.buildRankingDict(result, playPlotDetails)
+					this.buildRankingDict(result, playPlotDetails);
 					//prepare sunburst
+					this.buildSunburst(result, playPlotDetails);
+
 					resolve(playPlotDetails);
 				});
 			})
@@ -46,6 +48,51 @@ class VisualizationDetailsBuilder {
 				resolve(plotDetails);
 			})
 		})
+
+	}
+
+	static buildSunburst(data, plotDetails) {
+		plotDetails['sunburst'] = {};
+
+		plotDetails['sunburst']['genre'] = {};
+		plotDetails['sunburst']['artist'] = {};
+		plotDetails['sunburst']['title'] = {};
+		plotDetails['sunburst']['origin'] = {};
+
+		this.buildSunburstArrays('Genre', plotDetails['rankingDict']['genre'], plotDetails['sunburst']['genre']);
+		this.buildSunburstArrays('Artist', plotDetails['rankingDict']['artist'], plotDetails['sunburst']['artist']);
+		this.buildSunburstArrays('Title', plotDetails['rankingDict']['title'], plotDetails['sunburst']['title']);
+		this.buildSunburstArrays('Track Origin', plotDetails['rankingDict']['origin'], plotDetails['sunburst']['origin']);
+
+	}
+
+
+	static buildSunburstArrays(target, inputData, targetDict) {
+		var labels = [];
+		var parents = [];
+		var values = [];
+		var ids = [];
+
+		for (var year in inputData) {
+			var currentIndex = labels.length;
+			ids.push(year.toString());
+			labels.push(year.toString());
+			parents.push(target)
+			var totalCount = 0;
+			for (var elem in inputData[year]) {
+				ids.push(year.toString()+' - '+elem);
+				labels.push(elem);
+				parents.push(year.toString());
+				values.push(inputData[year][elem]);
+				totalCount += inputData[year][elem];
+			}
+			values.splice(currentIndex, 0, totalCount)
+		}
+
+		targetDict['labels'] = labels;
+		targetDict['parents'] = parents;
+		targetDict['values'] = values;
+		targetDict['ids'] = ids;
 
 	}
 

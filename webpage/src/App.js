@@ -7,6 +7,7 @@ import PiePlot from './PiePlot.js';
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
 import HeatMapPlot from './HeatMapPlot.js'; 
+import SunburstPlot from './SunburstPlot.js'; 
 
 class App extends React.Component {
 
@@ -119,6 +120,9 @@ class App extends React.Component {
 					<div>
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
+					<div>
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
+					</div>					
 					<div> 
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}}/>
