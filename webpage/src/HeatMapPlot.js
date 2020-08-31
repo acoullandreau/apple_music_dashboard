@@ -15,7 +15,6 @@ class HeatMapPlot extends React.Component {
 		var xbins = plotConfig.heatMapPlot[targetDataName]['xbins'];
 		var ybins = plotConfig.heatMapPlot[targetDataName]['ybins'];
 		var labels = plotConfig.heatMapPlot[targetDataName]['labels'];
-		var i = 1;
 
 		for (var year in targetData) {
 			var x = targetData[year]['x'];
@@ -36,11 +35,8 @@ class HeatMapPlot extends React.Component {
 	            				"<extra></extra>")
 			}
 			traces.push(trace);
-			//i++;
 		}
-				// xaxis:'x'+i.toString(),
-				// yaxis:'y'+i.toString(),
-		console.log(traces)
+
 		return traces;
 	}
 
@@ -48,26 +44,40 @@ class HeatMapPlot extends React.Component {
 
 	renderPlot() {
 		var targetDataName = 'heatMap'+this.props.target.type;
-		var data = this.getPlotContent(targetDataName);
+		var plots = this.getPlotContent(targetDataName);
 		var title = plotConfig.heatMapPlot[targetDataName]['title'];
 		var xaxis = plotConfig.heatMapPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.heatMapPlot[targetDataName]['yaxis'];
 		// var style = plotConfig.heatMapPlot['heatMap'+targetDataName]['style'];
+		var histPlots = [];
 
-		var histPlot = (
-			<Plot
-			  data={data}
-			  layout={{
-			  	title: title, 
-			  	autosize:true, 
-			  	xaxis:xaxis, 
-			  	yaxis:yaxis,
-			  }}
-			/>
+		for (var plot in plots) {
+			histPlots.push(
+				(<div><Plot
+				  data={[plots[plot]]}
+				  layout={{
+				  	title: title, 
+				  	autosize:true, 
+				  	xaxis:xaxis, 
+				  	yaxis:yaxis,
+				  }}
+				/></div>)
+			)
+
+		}
+
+
+		return (<div>
+		    <ul>
+		      {
+		        React.Children.toArray(
+		          histPlots.map((item, i) => <li style={{listStyleType:"none"}}>{item}</li>)
+		        )
+		      }
+		    </ul>
+		  </div>
 		)
-			  	//grid: {rows: 5, columns: 1, pattern: 'independent'}
-
-		return histPlot;
+		
 	}
 
 	render() {
