@@ -9,8 +9,21 @@ class HeatMapPlot extends React.Component {
 		return plotConfig.heatMapPlot[targetDataName]['labels'];
 	}
 
+	getHoverTemplate(year) {
+		if (this.props.target.type === 'DOM') {
+			return ("<b>%{y} %{x}</b><b> "+ year.toString()+"<b><br>" +
+	            	"Time listening: %{z:,.0f} minutes<br>" +
+	            	"<extra></extra>")
+		} else if (this.props.target.type === 'DOW') {
+			return (year.toString()+" - %{x}s, %{y}h<b><br>" +
+	            	"Time listening: %{z:,.0f} minutes<br>" +
+	            	"<extra></extra>")
+		}
+	}
+
+
 	getPlotContent(targetDataName) {
-		var traces = [];
+		var traces = {};
 		var targetData = this.props.data[targetDataName];
 		var xbins = plotConfig.heatMapPlot[targetDataName]['xbins'];
 		var ybins = plotConfig.heatMapPlot[targetDataName]['ybins'];
@@ -30,11 +43,9 @@ class HeatMapPlot extends React.Component {
 				xbins:xbins,
 				autobiny: false,
 				ybins:ybins,
-				hovertemplate : ("<b>%{y} %{x}</b><b> "+ year.toString()+"<b><br>" +
-	            				"Time listening: %{z:,.0f} minutes<br>" +
-	            				"<extra></extra>")
+				hovertemplate : this.getHoverTemplate(year)
 			}
-			traces.push(trace);
+			traces[year]=trace;
 		}
 
 		return traces;
@@ -56,7 +67,7 @@ class HeatMapPlot extends React.Component {
 				(<div><Plot
 				  data={[plots[plot]]}
 				  layout={{
-				  	title: title, 
+				  	title: plot, 
 				  	autosize:true, 
 				  	xaxis:xaxis, 
 				  	yaxis:yaxis,
