@@ -29,24 +29,24 @@ var validateArchiveContent = (input) => {
 					filesToParse[key] = zip.file(filesInArchive[key]);
 				} 
 			}
-			//everything is fine, we have all files, so we can go on with parsing
+			//we return the dict, whether it is empty or filled with the files we read
 			return filesToParse;
 		})
 
 	return archiveContentPromise;
 }
 
-var prepareFiles = (archive) =>{
+var prepareFiles = (archive) => {
 	// validate the archive
 	validateArchiveContent(archive).then(result => {
 		if (Object.keys(result).length === Object.keys(filesInArchive).length) {
-			// we store the archive
+			// the archive's format is correct, we return the files promise
 			postMessage({'type':'archiveValidated', 'payload':''});
 			return result
 		} else {
 			// the archive's format is incorrect, we pass an error message to display to the user
 			var errorMessage = 'Please refer to the documentation to see what files are expected in the zip provided. '
-			postMessage({'type':'archiveRejected', 'payload':errorMessage});
+			return new Promise((resolve, reject) => {reject({'type':'archiveRejected', 'payload':errorMessage})});
 		}
 	})
 	.then(result => {
@@ -74,6 +74,9 @@ var prepareFiles = (archive) =>{
 			connectorInstance.addObjectToDB(visualizationFile, 'visualizationFile');
 			postMessage({'type':'visualizationFileReady', 'payload':''});
 		})
+	})
+	.catch(error => {
+		postMessage(error);
 	})
 }
 
