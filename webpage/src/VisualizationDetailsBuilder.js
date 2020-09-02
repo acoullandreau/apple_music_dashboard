@@ -60,12 +60,33 @@ class VisualizationDetailsBuilder {
 		plotDetails['sunburst']['origin'] = {};
 
 		this.buildSunburstArrays('Genre', plotDetails['rankingDict']['genre'], plotDetails['sunburst']['genre']);
-		this.buildSunburstArrays('Artist', plotDetails['rankingDict']['artist'], plotDetails['sunburst']['artist']);
-		this.buildSunburstArrays('Title', plotDetails['rankingDict']['title'], plotDetails['sunburst']['title']);
 		this.buildSunburstArrays('Track Origin', plotDetails['rankingDict']['origin'], plotDetails['sunburst']['origin']);
+
+		// we get a limited version of the artist ranking dict, limited to the top 100 entries
+		var artistRankingDict = this.reduceRankingDict(plotDetails['rankingDict']['artist'], 50);
+		this.buildSunburstArrays('Artist', artistRankingDict, plotDetails['sunburst']['artist']);
+
+		// we get a limited version of the title ranking dict, limited to the top 100 entries
+		var titleRankingDict = this.reduceRankingDict(plotDetails['rankingDict']['title'], 50);
+		this.buildSunburstArrays('Title', titleRankingDict, plotDetails['sunburst']['title']);
+
 
 	}
 
+	static reduceRankingDict(rankingDict, numEntries) {
+		var reducedRankingDict = {};
+		for (var year in rankingDict) {
+			reducedRankingDict[year] = {};
+			reducedRankingDict[year]['counts'] = {};
+			reducedRankingDict[year]['rankOrder'] = []
+			for (var k=0 ; k<numEntries ; k++) {
+				var key =  rankingDict[year]['rankOrder'][k];
+				reducedRankingDict[year]['counts'][key] = rankingDict[year]['counts'][key];
+				reducedRankingDict[year]['rankOrder'].push(key)
+			}
+		}
+		return reducedRankingDict;
+	}
 
 	static buildSunburstArrays(target, inputData, targetDict) {
 		var labels = [];
@@ -74,17 +95,18 @@ class VisualizationDetailsBuilder {
 		var ids = [];
 
 		for (var year in inputData) {
+			var countData = inputData[year]['counts'];
 			var currentIndex = labels.length;
 			ids.push(year.toString());
 			labels.push(year.toString());
 			parents.push(target)
 			var totalCount = 0;
-			for (var elem in inputData[year]) {
+			for (var elem in countData) {
 				ids.push(year.toString()+' - '+elem);
 				labels.push(elem);
 				parents.push(year.toString());
-				values.push(inputData[year][elem]);
-				totalCount += inputData[year][elem];
+				values.push(countData[elem]);
+				totalCount += countData[elem];
 			}
 			values.splice(currentIndex, 0, totalCount)
 		}
@@ -122,23 +144,25 @@ class VisualizationDetailsBuilder {
 			}
 		}
 
-
 		plotDetails['rankingDict'] = {};
 
 		// we populate plotDetails with the details of each bar plot
-		plotDetails['rankingDict']['genre'] = {};
-		plotDetails['rankingDict']['artist'] = {};
-		plotDetails['rankingDict']['title'] = {};
-		plotDetails['rankingDict']['origin'] = {};
-		for (var year in plotParameters) {
-			plotDetails['rankingDict']['genre'][year] = plotParameters[year]['genre'];
-			plotDetails['rankingDict']['artist'][year] = plotParameters[year]['artist'];
-			plotDetails['rankingDict']['title'][year] = plotParameters[year]['title'];
-			plotDetails['rankingDict']['origin'][year] = plotParameters[year]['origin'];
-		}
+		this.addRankingCount('genre', plotDetails, plotParameters)
+		this.addRankingCount('artist', plotDetails, plotParameters)
+		this.addRankingCount('title', plotDetails, plotParameters)
+		this.addRankingCount('origin', plotDetails, plotParameters)
 
 	}
 
+	static addRankingCount(target, plotDetails, parametersDict) {
+		plotDetails['rankingDict'][target] = {};
+
+		for (var year in parametersDict) {
+			plotDetails['rankingDict'][target][year] = {};
+			plotDetails['rankingDict'][target][year]['counts'] = parametersDict[year][target];
+			plotDetails['rankingDict'][target][year]['rankOrder'] = Utils.sortDictKeys(plotDetails['rankingDict'][target][year]['counts']);
+		}
+	}
 
 	static processGenreCount(genres, parametersDict) {
 		if (genres.includes('&&')) {

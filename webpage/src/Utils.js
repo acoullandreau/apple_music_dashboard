@@ -54,6 +54,12 @@ class Utils {
         }
 	}
 
+	static sortDictKeys(dict) {
+		return Object.keys(dict).sort(function(a, b) {
+			return dict[b] - dict[a]
+		})
+	}
+
 }
 
 export default Utils;
