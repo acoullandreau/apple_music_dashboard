@@ -9,10 +9,11 @@ import BarPlotFilter from './BarPlotFilter.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
 import SunburstPlotFilter from './SunburstPlotFilter.js'; 
+import RankingList from './RankingList.js'; 
 
 class App extends React.Component {
 
-	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedSunburstPlot' : {} };
+	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedRankingPlot' : {} };
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -107,19 +108,21 @@ class App extends React.Component {
 	}
 
 
-	renderSunburstPlot = () => {
-		if (Object.keys(this.state.selectedSunburstPlot).length === 0) {
+	renderRankingPlot = () => {
+		if (Object.keys(this.state.selectedRankingPlot).length === 0) {
 			return (
 				<div>
-					<SunburstPlotFilter target='genre' onChange={this.updatePlot} />
+					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':10}}/>
 					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
+					<SunburstPlotFilter target='genre' onChange={this.updatePlot} />
 				</div>
 			)
 		} else {
 			return (
 				<div>
-					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedSunburstPlot} />
-					<SunburstPlotFilter target={this.state.selectedSunburstPlot} onChange={this.updatePlot} />
+					<RankingList data={this.state.plotDetails['rankingDict']} target={this.state.selectedRankingPlot}/>
+					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedRankingPlot} />
+					<SunburstPlotFilter target={this.state.selectedRankingPlot} onChange={this.updatePlot} />
 				</div>
 			)
 		}
@@ -143,7 +146,7 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						{ this.renderSunburstPlot() }
+						{ this.renderRankingPlot() }
 					</div>					
 					<div> 
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>

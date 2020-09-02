@@ -60,6 +60,20 @@ class Utils {
 		})
 	}
 
+	static reduceRankingDict(rankingDict, numEntries) {
+		var reducedRankingDict = {};
+		for (var year in rankingDict) {
+			reducedRankingDict[year] = {};
+			reducedRankingDict[year]['counts'] = {};
+			reducedRankingDict[year]['rankOrder'] = []
+			for (var k=0 ; k<numEntries ; k++) {
+				var key =  rankingDict[year]['rankOrder'][k];
+				reducedRankingDict[year]['counts'][key] = rankingDict[year]['counts'][key];
+				reducedRankingDict[year]['rankOrder'].push(key)
+			}
+		}
+		return reducedRankingDict;
+	}
 }
 
 export default Utils;

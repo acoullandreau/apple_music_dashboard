@@ -63,29 +63,14 @@ class VisualizationDetailsBuilder {
 		this.buildSunburstArrays('Track Origin', plotDetails['rankingDict']['origin'], plotDetails['sunburst']['origin']);
 
 		// we get a limited version of the artist ranking dict, limited to the top 100 entries
-		var artistRankingDict = this.reduceRankingDict(plotDetails['rankingDict']['artist'], 50);
+		var artistRankingDict = Utils.reduceRankingDict(plotDetails['rankingDict']['artist'], 50);
 		this.buildSunburstArrays('Artist', artistRankingDict, plotDetails['sunburst']['artist']);
 
 		// we get a limited version of the title ranking dict, limited to the top 100 entries
-		var titleRankingDict = this.reduceRankingDict(plotDetails['rankingDict']['title'], 50);
+		var titleRankingDict = Utils.reduceRankingDict(plotDetails['rankingDict']['title'], 50);
 		this.buildSunburstArrays('Title', titleRankingDict, plotDetails['sunburst']['title']);
 
 
-	}
-
-	static reduceRankingDict(rankingDict, numEntries) {
-		var reducedRankingDict = {};
-		for (var year in rankingDict) {
-			reducedRankingDict[year] = {};
-			reducedRankingDict[year]['counts'] = {};
-			reducedRankingDict[year]['rankOrder'] = []
-			for (var k=0 ; k<numEntries ; k++) {
-				var key =  rankingDict[year]['rankOrder'][k];
-				reducedRankingDict[year]['counts'][key] = rankingDict[year]['counts'][key];
-				reducedRankingDict[year]['rankOrder'].push(key)
-			}
-		}
-		return reducedRankingDict;
 	}
 
 	static buildSunburstArrays(target, inputData, targetDict) {
@@ -160,6 +145,10 @@ class VisualizationDetailsBuilder {
 		for (var year in parametersDict) {
 			plotDetails['rankingDict'][target][year] = {};
 			plotDetails['rankingDict'][target][year]['counts'] = parametersDict[year][target];
+			// we remove the entries with an empty key
+			if (typeof(plotDetails['rankingDict'][target][year]['counts']['']) !== 'undefined') {
+				delete plotDetails['rankingDict'][target][year]['counts']['']
+			}
 			plotDetails['rankingDict'][target][year]['rankOrder'] = Utils.sortDictKeys(plotDetails['rankingDict'][target][year]['counts']);
 		}
 	}

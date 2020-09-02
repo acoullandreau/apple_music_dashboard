@@ -9,6 +9,20 @@
 		}
 
 	},
+	"sunburstPlot" : {
+		"genreSunburst":{
+			"title":""
+		},
+		"artistSunburst":{
+			"title":""
+		},
+		"titleSunburst":{
+			"title":""
+		},
+		"originSunburst":{
+			"title":""
+		}
+	},
 	"heatMapPlot" : {
 		"heatMapDOM" : {
 			"title":"Heat map of the play duration in minutes for each day",

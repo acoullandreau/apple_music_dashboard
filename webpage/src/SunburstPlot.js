@@ -6,8 +6,9 @@ class SunburstPlot extends React.Component {
 
 	render() {
 		var type = this.props.target.type;
-		// var style = targetConfig['style'];
-		// var title = targetConfig['title'];
+		var targetPlot = type+'Sunburst';
+		var title = plotConfig['sunburstPlot'][targetPlot]['title'];
+		// var style = plotConfig['sunburstPlot'][targetPlot]['style'];
 		var data = this.props.data[type];
 
 		return (
@@ -23,7 +24,7 @@ class SunburstPlot extends React.Component {
 						insidetextorientation: "radial",
 					},
 				]}
-				layout={{title: 'Title', autosize:true}}
+				layout={{title: title, autosize:true}}
 			/>
 		);
 	}

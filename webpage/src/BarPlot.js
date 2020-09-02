@@ -95,7 +95,7 @@ class BarPlot extends React.Component {
 
 	render() {
 		return (
-			<div style={{ width:"50%"}}>
+			<div>
 				<div>{this.renderPlot()}</div>
 			</div>
 		);
