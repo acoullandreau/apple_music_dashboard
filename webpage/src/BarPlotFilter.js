@@ -1,13 +1,12 @@
 
-import React, { Component } from 'react'
-import { Form, Checkbox, Button } from 'semantic-ui-react'
+import React from 'react';
+import { Form, Checkbox, Button } from 'semantic-ui-react';
 
-class BarPlotFilter extends Component {
+class BarPlotFilter extends React.Component {
 
     state = { 'granularity':'month', 'unit':'count' };
 
     handleChange = (e, selection) => {
-
         if (selection.radio) {
             this.setState({ 'granularity': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': selection.value, 'unit': this.state.unit } })

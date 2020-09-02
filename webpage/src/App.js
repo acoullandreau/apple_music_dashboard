@@ -8,10 +8,11 @@ import BarPlot from './BarPlot.js';
 import BarPlotFilter from './BarPlotFilter.js'; 
 import HeatMapPlot from './HeatMapPlot.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
+import SunburstPlotFilter from './SunburstPlotFilter.js'; 
 
 class App extends React.Component {
 
-	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {} };
+	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedSunburstPlot' : {} };
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -78,8 +79,11 @@ class App extends React.Component {
 	}
 
 	updatePlot = (parameters) => {
-		this.setState({ 'selectedBarPlot': parameters.payload });
-
+		if (parameters.type === 'bar') {
+			this.setState({ 'selectedBarPlot': parameters.payload });
+		} else if (parameters.type === 'sunburst') {
+			this.setState({ 'selectedSunburstPlot': parameters.payload });
+		}
 	}
 
 
@@ -103,6 +107,24 @@ class App extends React.Component {
 	}
 
 
+	renderSunburstPlot = () => {
+		if (Object.keys(this.state.selectedSunburstPlot).length === 0) {
+			return (
+				<div>
+					<SunburstPlotFilter target='genre' onChange={this.updatePlot} />
+					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
+				</div>
+			)
+		} else {
+			return (
+				<div>
+					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedSunburstPlot} />
+					<SunburstPlotFilter target={this.state.selectedSunburstPlot} onChange={this.updatePlot} />
+				</div>
+			)
+		}
+	}
+
 	renderScreen = () => {
 		let elemToRender;
 
@@ -121,7 +143,7 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
+						{ this.renderSunburstPlot() }
 					</div>					
 					<div> 
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
@@ -139,6 +161,9 @@ class App extends React.Component {
 						<div>
 					 		{ this.renderTimeBarPlot() }
 						</div>
+					</div>
+					<div>
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}}/>
 					</div>
 					<div> 
 						<div>
