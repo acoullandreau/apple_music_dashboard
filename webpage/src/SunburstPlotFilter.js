@@ -2,21 +2,35 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 
 class SunburstPlotFilter extends React.Component {
-    state = { 'target':'genre' };
+    state = { 'target':'genre', 'numItems':'5' };
 
     handleChange = (e, selection) => {
-        this.setState({ 'target': selection.value });
-        this.props.onChange({ 'type': 'sunburst', 'payload': {'type': selection.value } })
+    	var payload = { 'type' : this.state.target, 'numItems': this.state.numItems};
+
+    	if (selection) {
+    		// handle the type selection using buttons
+        	this.setState({ 'target': selection.value });
+        	payload['type'] = selection.value
+    	} else {
+    		// handles the number input field change
+    		this.setState({ 'numItems': e.target.value });
+    		payload['numItems'] = e.target.value;
+    	}
+        this.props.onChange({ 'type': 'sunburst', 'payload': payload })
     }
 
     render() {
         return (
-		    <Button.Group vertical>
-		      <Button toggle value='genre' active={this.state.target === 'genre' ? true : false} onClick={this.handleChange}>Genre</Button>
-		      <Button toggle value='artist' active={this.state.target === 'artist' ? true : false} onClick={this.handleChange}>Artist</Button>
-		      <Button toggle value='title' active={this.state.target === 'title' ? true : false} onClick={this.handleChange}>Title</Button>
-		    </Button.Group>
-
+        	<div>
+			    <Button.Group vertical>
+			      <Button toggle value='genre' active={this.state.target === 'genre' ? true : false} onClick={this.handleChange}>Genre</Button>
+			      <Button toggle value='artist' active={this.state.target === 'artist' ? true : false} onClick={this.handleChange}>Artist</Button>
+			      <Button toggle value='title' active={this.state.target === 'title' ? true : false} onClick={this.handleChange}>Title</Button>
+			    </Button.Group>
+			    <div>
+				    <input type="number" value={this.state.numItems} onChange={this.handleChange} />
+				</div>
+			</div>
         )
     }
 }

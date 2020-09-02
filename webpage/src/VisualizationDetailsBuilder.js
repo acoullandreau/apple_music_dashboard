@@ -109,7 +109,7 @@ class VisualizationDetailsBuilder {
 			var year = data[row]['Play Year'];
 			var genres = data[row]['Genre'];
 			var artist = data[row]['Artist'];
-			var title = data[row]['Title'];
+			var title = data[row]['Title'] + ' (' + artist + ')';
 			var origin = data[row]['Track origin'];
 
 			if (year in plotParameters === false) {

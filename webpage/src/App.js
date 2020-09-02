@@ -83,7 +83,7 @@ class App extends React.Component {
 		if (parameters.type === 'bar') {
 			this.setState({ 'selectedBarPlot': parameters.payload });
 		} else if (parameters.type === 'sunburst') {
-			this.setState({ 'selectedSunburstPlot': parameters.payload });
+			this.setState({ 'selectedRankingPlot': parameters.payload });
 		}
 	}
 
@@ -112,7 +112,7 @@ class App extends React.Component {
 		if (Object.keys(this.state.selectedRankingPlot).length === 0) {
 			return (
 				<div>
-					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':10}}/>
+					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}}/>
 					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
 					<SunburstPlotFilter target='genre' onChange={this.updatePlot} />
 				</div>
