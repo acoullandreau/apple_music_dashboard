@@ -7,6 +7,7 @@ class BarPlotFilter extends React.Component {
     state = { 'granularity':'month', 'unit':'count' };
 
     handleChange = (e, selection) => {
+
         if (selection.radio) {
             this.setState({ 'granularity': selection.value });
             this.props.onChange({ 'type': 'bar', 'payload': {'type': selection.value, 'unit': this.state.unit } })
@@ -18,7 +19,7 @@ class BarPlotFilter extends React.Component {
 
     render() {
         return (
-          <Form style={{ width:"25%"}}>
+          <Form>
             <div>
                 <Button toggle value='count' active={this.state.unit === 'count' ? true : false} onClick={this.handleChange}>Count</Button>
                 <Button toggle value='percent' active={this.state.unit === 'percent' ? true : false} onClick={this.handleChange}>Percentage</Button>

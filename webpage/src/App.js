@@ -2,7 +2,6 @@ import React from 'react';
 import FileSelector from './FileSelector.js';
 import Loader from './Loader.js';
 import connectorInstance from './IndexedDBConnector.js';
-
 import PiePlot from './PiePlot.js'; 
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
@@ -10,6 +9,8 @@ import HeatMapPlot from './HeatMapPlot.js';
 import SunburstPlot from './SunburstPlot.js'; 
 import SunburstPlotFilter from './SunburstPlotFilter.js'; 
 import RankingList from './RankingList.js'; 
+import QueryEngine from './QueryEngine.js'; 
+import QueryFilter from './QueryFilter.js'; 
 
 class App extends React.Component {
 
@@ -144,6 +145,9 @@ class App extends React.Component {
 				<div>
 					<div>
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
+					</div>
+					<div>
+						<QueryFilter target='sunburst' />
 					</div>
 					<div>
 						{ this.renderRankingPlot() }
