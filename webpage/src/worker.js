@@ -99,6 +99,7 @@ self.addEventListener('message', function(e) {
 			postMessage({'type':'visualizationsReady', 'payload':result});
 		})
 	} else if (e.data['type'] === 'query') {
+		console.log(e.data['payload'])
 		// payload contains target plot to recompute + filters dict
 		// filter the visualization file
 		// run VisualizationDetailsBuilder for target plot with the filtered file

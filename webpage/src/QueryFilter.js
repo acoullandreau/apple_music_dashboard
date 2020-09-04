@@ -4,10 +4,16 @@ import { Button, Dropdown } from 'semantic-ui-react';
 
 class QueryFilter extends React.Component {
 
-	state = { 'target':'', 'data':{'rating':'', 'offline':'', 'origin':[], 'skipped':'', 'inlib':'', 'year':[], 'genre':[], 'artist':[], 'title':''} };
+	state = { 'target':'', 'data':{'rating':'', 'offline':'', 'origin':'', 'skipped':'', 'inlib':'', 'year':'', 'genre':'', 'artist':'', 'title':''} };
+
+    componentDidMount() {
+        this.setState({ 'target' : this.props.target });
+    }
 
     handleChange = (e, selection) => {
-        this.state.data[selection.name] = selection.value;
+        var data = {...this.state.data};
+        data[selection.name] = selection.value;
+        this.setState({ data });
     }
 
     onSubmit = () => {

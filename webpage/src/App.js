@@ -14,7 +14,15 @@ import QueryFilter from './QueryFilter.js';
 
 class App extends React.Component {
 
-	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedRankingPlot' : {}, 'queryFilters':{} };
+	state = { 
+		'isLoading': false, 
+		'hasVisuals': false, 
+		'plotDetails': {}, 
+		'selectedBarPlot' : {}, 
+		'selectedRankingPlot' : {}, 
+		'queryFilters':{}, 
+		'queryFiltersDefault':{ artist: '', genre: '', inlib: "", offline: "", origin: '', rating: "", skipped: "", title: "", year: '' } 
+	};
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -49,10 +57,18 @@ class App extends React.Component {
 					this.worker.postMessage({'type':'visualization', 'payload':''});
 					break;
 				case 'visualizationsReady':
+					var queryFiltersDefault = {
+						artist: event.data['payload']['filters']['artist'],
+						genre: event.data['payload']['filters']['genre'], 
+						inlib: "", offline: "", 
+						origin: event.data['payload']['filters']['origin'], 
+						rating: "", skipped: "", title: "", 
+						year: event.data['payload']['filters']['year']
+					}
 					// visualizations can be rendered, so we update our App state to render the new component
 					this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': event.data['payload'] });
+					//'queryFiltersDefault':queryFiltersDefault
 					break;
-
 			}
 
 		});
@@ -74,6 +90,15 @@ class App extends React.Component {
 			switch (event.data['type']) {
 				case 'visualizationsReady':
 					// visualizations can be rendered, so we update our App state to render the new component
+					var queryFiltersDefault = {
+						artist: event.data['payload']['filters']['artist'],
+						genre: event.data['payload']['filters']['genre'], 
+						inlib: "", offline: "", 
+						origin: event.data['payload']['filters']['origin'], 
+						rating: "", skipped: "", title: "", 
+						year: event.data['payload']['filters']['year']
+					}
+					// visualizations can be rendered, so we update our App state to render the new component
 					this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': event.data['payload'] });
 					break;
 			}
@@ -90,9 +115,20 @@ class App extends React.Component {
 
 
 	onQuery = (parameters) => {
-		console.log(parameters)
-		this.setState({ 'queryFilters': parameters });
-		this.worker.postMessage({'type':'query', 'payload':parameters});
+		var isQuery = this.hasQueryFilters(parameters.data);
+		if (isQuery) {
+			this.setState({ 'queryFilters': parameters });
+			this.worker.postMessage({'type':'query', 'payload':parameters});
+		}
+	}
+
+	hasQueryFilters = (queryDict) => {
+		for (var key in queryDict) {
+			if (queryDict[key] !== this.state.queryFiltersDefault[key]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	renderTimeBarPlot = () => {
