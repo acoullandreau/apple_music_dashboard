@@ -21,7 +21,7 @@ class App extends React.Component {
 		'selectedBarPlot' : {}, 
 		'selectedRankingPlot' : {}, 
 		'queryFilters':{}, 
-		'queryFiltersDefault':{ artist: '', genre: '', inlib: "", offline: "", origin: '', rating: "", skipped: "", title: "", year: '' } 
+		'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': "", 'year': '' } 
 	};
 
 	componentDidMount = () => {

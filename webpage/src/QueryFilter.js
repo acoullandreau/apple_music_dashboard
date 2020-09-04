@@ -22,8 +22,9 @@ class QueryFilter extends React.Component {
 
     fetchOptionsRating = () =>  {
     	var options = [
-    		{ key: 1, text: 'Love', value: 'Love' },
-    		{ key: 2, text: 'Dislike', value: 'Dislike' }
+    		{ key: 1, text: 'Love', value: 'LOVE' },
+    		{ key: 2, text: 'Dislike', value: 'DISLIKE' },
+            { key: 3, text: 'Not rated', value: 'Unknown' }
     	];
 
     	return options;
@@ -31,8 +32,8 @@ class QueryFilter extends React.Component {
 
     fetchOptionsOffline = () =>  {
     	var options = [
-    		{ key: 1, text: 'Offline', value: 'Offline' },
-    		{ key: 2, text: 'Online', value: 'Online' }
+    		{ key: 1, text: 'Yes', value: 'true' },
+    		{ key: 2, text: 'No', value: 'false' }
     	];
 
     	return options;
@@ -40,9 +41,10 @@ class QueryFilter extends React.Component {
 
 
     fetchOptionsSkipped = () =>  {
+        // column in file is 'Played Completely', so the value is the inverse than the answer to 'Skipped'
     	var options = [
-    		{ key: 1, text: 'Partial', value: 'Partial' },
-    		{ key: 2, text: 'Complete', value: 'Complete' }
+    		{ key: 1, text: 'Yes', value: 'false' },
+    		{ key: 2, text: 'No', value: 'true' }
     	];
 
     	return options;
@@ -50,8 +52,8 @@ class QueryFilter extends React.Component {
 
 	fetchOptionsLibrary = () => {
     	var options = [
-    		{ key: 1, text: 'In library', value: 'InLib' },
-    		{ key: 2, text: 'Not in library', value: 'NotInLib' }
+    		{ key: 1, text: 'Yes', value: 'true' },
+    		{ key: 2, text: 'No', value: 'false' }
     	];
 
     	return options;

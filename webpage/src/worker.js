@@ -6,6 +6,7 @@ import FileProcessor from './FileProcessor.js';
 import VisualizationFileBuilder from './VisualizationFileBuilder.js';
 import VisualizationDetailsBuilder from './VisualizationDetailsBuilder.js';
 import connectorInstance from './IndexedDBConnector.js';
+import QueryEngine from './QueryEngine.js';
 
 var filesInArchive = {
     'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
@@ -95,11 +96,11 @@ self.addEventListener('message', function(e) {
 		var plotsDetails = VisualizationDetailsBuilder.prepareAllPlots();
 		plotsDetails.then(result => {
 			connectorInstance.addObjectToDB(result, 'plotDetails');
-			console.log(result)
 			postMessage({'type':'visualizationsReady', 'payload':result});
 		})
 	} else if (e.data['type'] === 'query') {
 		console.log(e.data['payload'])
+		QueryEngine.queryPlots(e.data['payload'])
 		// payload contains target plot to recompute + filters dict
 		// filter the visualization file
 		// run VisualizationDetailsBuilder for target plot with the filtered file
