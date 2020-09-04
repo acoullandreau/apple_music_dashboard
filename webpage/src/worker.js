@@ -67,6 +67,7 @@ var prepareFiles = (archive) => {
 		return FileProcessor.processFiles(result);
 	})
 	.then(result => {
+		connectorInstance.addObjectToDB(result, 'processOutput');
 		var matchIndexInstanceDict = VisualizationFileBuilder.buildIndexTrackDict(result['trackInstanceDict']);
 		var playActivityFilePromise = connectorInstance.readObjectFromDB('playActivityFile');
 		playActivityFilePromise.then(result => {
@@ -91,12 +92,16 @@ self.addEventListener('message', function(e) {
 		var archive = e.data['payload'];
 		prepareFiles(archive);
 	} else if (e.data['type'] === 'visualization') {
-		var plotsDetails = VisualizationDetailsBuilder.preparePlots();
+		var plotsDetails = VisualizationDetailsBuilder.prepareAllPlots();
 		plotsDetails.then(result => {
 			connectorInstance.addObjectToDB(result, 'plotDetails');
 			console.log(result)
 			postMessage({'type':'visualizationsReady', 'payload':result});
 		})
+	} else if (e.data['type'] === 'query') {
+		// payload contains target plot to recompute + filters dict
+		// filter the visualization file
+		// run VisualizationDetailsBuilder for target plot with the filtered file
 	}
 
 })

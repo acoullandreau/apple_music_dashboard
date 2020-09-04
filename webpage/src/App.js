@@ -14,7 +14,7 @@ import QueryFilter from './QueryFilter.js';
 
 class App extends React.Component {
 
-	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedRankingPlot' : {} };
+	state = { 'isLoading': false, 'hasVisuals': false, 'plotDetails': {}, 'selectedBarPlot' : {}, 'selectedRankingPlot' : {}, 'queryFilters':{} };
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -89,6 +89,12 @@ class App extends React.Component {
 	}
 
 
+	onQuery = (parameters) => {
+		console.log(parameters)
+		this.setState({ 'queryFilters': parameters });
+		this.worker.postMessage({'type':'query', 'payload':parameters});
+	}
+
 	renderTimeBarPlot = () => {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
@@ -147,7 +153,10 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						<QueryFilter target='sunburst' />
+						<QueryFilter data={this.state.plotDetails['filters']} target='heatMap' onQuery={this.onQuery} />
+					</div>
+					<div>
+						<QueryFilter data={this.state.plotDetails['filters']} target='sunburst' onQuery={this.onQuery} />
 					</div>
 					<div>
 						{ this.renderRankingPlot() }

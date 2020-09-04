@@ -1,20 +1,17 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Dropdown } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 
 class QueryFilter extends React.Component {
 
 	state = { 'target':'', 'data':{'rating':'', 'offline':'', 'origin':[], 'skipped':'', 'inlib':'', 'year':[], 'genre':[], 'artist':[], 'title':''} };
 
     handleChange = (e, selection) => {
-        if (typeof(this.state.data[selection.name]) === "string") {
-            this.state.data[selection.name] = selection.value;
-        } else {
-            this.state.data[selection.name].push(selection.value);
-            // if (selection.value in this.state.data[selection.name] === false) {
-            // }
-        }
-        console.log(this.state.data)
+        this.state.data[selection.name] = selection.value;
+    }
+
+    onSubmit = () => {
+        this.props.onQuery(this.state);
     }
 
     fetchOptionsRating = () =>  {
@@ -55,17 +52,110 @@ class QueryFilter extends React.Component {
     }
 
     fetchOptionsOrigin = () => {
-    	var options = [
-    		{ key: 1, text: 'Partial', value: 'Partial' },
-    		{ key: 2, text: 'Complete', value: 'Complete' }
-    	];
+        var options = [];
+        var k=1;
+        var origins = this.props.data['origin'];
+        for (var i in origins) {
+            var option = { key: k, text: origins[i], value: origins[i] };
+            options.push(option)
+            k++;
+        }
 
     	return options;
     }
 
+    fetchOptionsYear = () => {
+        var options = [];
+        var k=1;
+        var years = this.props.data['year'];
+        for (var i in years) {
+            var option = { key: k, text: years[i], value: years[i] };
+            options.push(option)
+            k++;
+        }
+
+        return options;
+    }
+
+    fetchOptionsGenre = () => {
+        var options = [];
+        var k=1;
+        var genres = this.props.data['genre'];
+        for (var i in genres) {
+            var option = { key: k, text: genres[i], value: genres[i] };
+            options.push(option)
+            k++;
+        }
+
+        return options;
+    }
+
+    fetchOptionsArtist = () => {
+        var options = [];
+        var k=1;
+        var artists = this.props.data['artist'];
+        for (var i in artists) {
+            var option = { key: k, text: artists[i], value: artists[i] };
+            options.push(option)
+            k++;
+        }
+
+        return options;
+    }
 
     renderQueryHeatMap() {
+        var renderingDict = {
+            'rating': { 'placeholder':'Rating', 'value':this.state.data['rating'], 'multiple':false, 'options':this.fetchOptionsRating() },
+            'offline': { 'placeholder':'Offline', 'value':this.state.data['offline'], 'multiple':false, 'options':this.fetchOptionsOffline() },
+            'skipped': { 'placeholder':'Skipped', 'value':this.state.data['skipped'], 'multiple':false, 'options':this.fetchOptionsSkipped() },
+            'origin': { 'placeholder':'Origin', 'value':this.state.data['origin'], 'multiple':true, 'options':this.fetchOptionsOrigin() },
+            'inlib': { 'placeholder':'Library Track', 'value':this.state.data['inlib'], 'multiple':false, 'options':this.fetchOptionsLibrary() },
+            'year': { 'placeholder':'Year', 'value':this.state.data['year'], 'multiple':true, 'options':this.fetchOptionsYear() },
+        }
+            // 'genre': { 'placeholder':'Genre', 'value':this.state.data['genre'], 'multiple':true, 'options':this.fetchOptionsGenre() },
+            // 'artist': { 'placeholder':'Artist', 'value':this.state.data['artist'], 'multiple':true, 'options':this.fetchOptionsArtist() },
 
+        return (
+            <div>
+                <ul style={{display: "inline"}}>
+                  {
+                    React.Children.toArray(
+                        Object.keys(renderingDict).map((item, i) => {
+                            if (renderingDict[item]['multiple']) {
+                                return (
+                                    <li style={{listStyleType:"none"}}>
+                                        <Dropdown
+                                            placeholder={renderingDict[item]['placeholder']}
+                                            name={item}
+                                            onChange={this.handleChange}
+                                            clearable
+                                            search
+                                            multiple
+                                            options={renderingDict[item]['options']}
+                                        />
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li style={{listStyleType:"none"}}>
+                                        <Dropdown
+                                            placeholder={renderingDict[item]['placeholder']}
+                                            name={item}
+                                            onChange={this.handleChange}
+                                            clearable
+                                            search
+                                            options={renderingDict[item]['options']}
+                                        />
+                                    </li>
+                                )
+                            }
+                        })
+                    )
+                  }
+                </ul>
+            </div>
+        )
+                  // <li>Placeholder for text input for Title keyword</li>
     }
 
     renderQuerySunburst() {
@@ -125,12 +215,14 @@ class QueryFilter extends React.Component {
     		return (
     			<div>
     				{this.renderQueryHeatMap()}
+                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
 				</div>
     		)
     	} else if (this.props.target === 'sunburst') {
     		return (
     			<div>
     				{this.renderQuerySunburst()}
+                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
     			</div>
     		)
     	}

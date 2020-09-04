@@ -5,7 +5,7 @@ import plotConfig from './plotConfig.json';
 
 class VisualizationDetailsBuilder {
 
-	static preparePlots() {
+	static prepareAllPlots() {
 		var plotPromises = [];
 		var plotDetails = {};
 
@@ -13,15 +13,15 @@ class VisualizationDetailsBuilder {
 			var playPlotsPromise = new Promise((resolve, reject) => {
 				var playPlotDetails = {};
 				connectorInstance.readObjectFromDB('visualizationFile').then(result => {
-					//prepare year pie plot
+					// prepare year pie plot
 					this.buildPiePlot('year', result, playPlotDetails);
-					//prepare bar plots
+					// prepare bar plots
 					this.buildBarPlot(result, playPlotDetails);
 					// prepare 2D histogram
 					this.build2DHistPlot(result, playPlotDetails);
 					// build ranking dict
 					this.buildRankingDict(result, playPlotDetails);
-					//prepare sunburst
+					// prepare sunburst
 					this.buildSunburst(result, playPlotDetails);
 
 					resolve(playPlotDetails);
@@ -39,6 +39,21 @@ class VisualizationDetailsBuilder {
 			})
 			plotPromises.push(devicePlotPromise);
 
+			var filtersPromise = new Promise((resolve, reject) => {
+				var filtersDetails = {};
+				var dbObjects = {};
+				connectorInstance.readObjectFromDB('visualizationFile').then(result => {
+					dbObjects['visualizationFile'] = result;
+				});
+				connectorInstance.readObjectFromDB('processOutput').then(result => {
+					dbObjects['processOutput'] = result;
+					// get query filter values for year, genre, artist and origin
+					this.getQueryFilterValues(dbObjects, filtersDetails);
+					resolve(filtersDetails)
+				});
+			})
+			plotPromises.push(filtersPromise);
+
 			Promise.all(plotPromises).then(result => {
 				for (var elem in result) {
 					for (var key in result[elem]) {
@@ -50,6 +65,31 @@ class VisualizationDetailsBuilder {
 		})
 
 	}
+
+	static getQueryFilterValues(data, plotDetails) {
+		plotDetails['filters'] = {};
+		plotDetails['filters']['genre'] = data['processOutput']['genresList'];
+		plotDetails['filters']['genre'].sort();
+
+		this.getTargetFilterValues('year', data['visualizationFile'], plotDetails['filters'] )
+		this.getTargetFilterValues('artist', data['visualizationFile'], plotDetails['filters'] )
+		this.getTargetFilterValues('origin', data['visualizationFile'], plotDetails['filters'] )
+
+	}
+
+	static getTargetFilterValues(target, inputData, targetDict) {
+		var columns = {'year':'Play Year', 'artist':'Artist', 'origin':'Track origin'};
+		targetDict[target] = [];
+		for (var row in inputData) {
+			var targetColumn = columns[target];
+			var data = inputData[row][targetColumn];
+			if (!targetDict[target].includes(data) && data !== '') {
+				targetDict[target].push(data);
+			}
+		}
+		targetDict[target].sort();
+	}
+
 
 	static buildSunburst(data, plotDetails) {
 		plotDetails['sunburst'] = {};
@@ -148,6 +188,10 @@ class VisualizationDetailsBuilder {
 			// we remove the entries with an empty key
 			if (typeof(plotDetails['rankingDict'][target][year]['counts']['']) !== 'undefined') {
 				delete plotDetails['rankingDict'][target][year]['counts']['']
+			}
+			// special case of the title where empty key is actually a composed key title/artist with parenthesis
+			if (typeof(plotDetails['rankingDict'][target][year]['counts'][' ()']) !== 'undefined') {
+				delete plotDetails['rankingDict'][target][year]['counts'][' ()']
 			}
 			plotDetails['rankingDict'][target][year]['rankOrder'] = Utils.sortDictKeys(plotDetails['rankingDict'][target][year]['counts']);
 		}
