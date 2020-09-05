@@ -120,6 +120,31 @@ class App extends React.Component {
 			this.setState({ 'queryFilters': parameters });
 			this.worker.postMessage({'type':'query', 'payload':parameters});
 		}
+
+		this.worker.addEventListener('message', event => {
+			switch (event.data['type']) {
+				case 'visualizationsReady':
+					var plotDetails = { ...this.state.plotDetails };
+					if (parameters.target.type === 'heatMap') {
+						//update plotDetails with heatMap
+						plotDetails.heatMapPlot = event.data['payload'];
+        				this.setState({ plotDetails });
+					} else if (parameters.target.type === 'sunburst') {
+						if (parameters.target.plot === 'origin') {
+							//update plotDetails with sunburst for origin only
+							plotDetails.sunburst['origin'] = event.data['payload']['sunburst']['origin'];
+        					this.setState({ plotDetails });
+						} else {
+							// update plotDetails with sunburst for genre, artist and title
+							plotDetails.sunburst['genre'] = event.data['payload']['sunburst']['genre'];
+							plotDetails.sunburst['artist'] = event.data['payload']['sunburst']['artist'];
+							plotDetails.sunburst['title'] = event.data['payload']['sunburst']['title'];
+        					this.setState({ plotDetails });
+						}
+					}
+					break;
+			}
+		})
 	}
 
 	hasQueryFilters = (queryDict) => {
@@ -189,14 +214,14 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'heatMap'}} onQuery={this.onQuery} />
-					</div>
-					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':'origin'}} onQuery={this.onQuery} />
+						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':''}} onQuery={this.onQuery} />
 					</div>
 					<div>
 						{ this.renderRankingPlot() }
 					</div>					
+					<div>
+						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'heatMap'}} onQuery={this.onQuery} />
+					</div>
 					<div> 
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}}/>
@@ -213,6 +238,9 @@ class App extends React.Component {
 						<div>
 					 		{ this.renderTimeBarPlot() }
 						</div>
+					</div>
+					<div>
+						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':'origin'}} onQuery={this.onQuery} />
 					</div>
 					<div>
 						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}}/>

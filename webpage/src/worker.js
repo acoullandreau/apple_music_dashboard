@@ -99,13 +99,14 @@ self.addEventListener('message', function(e) {
 			postMessage({'type':'visualizationsReady', 'payload':result});
 		})
 	} else if (e.data['type'] === 'query') {
-		console.log(e.data['payload'])
+		//console.log(e.data['payload'])
 		QueryEngine.queryPlots(e.data['payload']).then(result => {
-            console.log(result)
+			postMessage({'type':'visualizationsReady', 'payload':result});
+            //console.log(result)
+            //console.log(e.data['payload'].target)
         })
-		// payload contains target plot to recompute + filters dict
-		// filter the visualization file
-		// run VisualizationDetailsBuilder for target plot with the filtered file
+
+		// pass back the plot details for the App to update the state
 	}
 
 })

@@ -40,7 +40,7 @@ class QueryEngine  {
     }
 
     static queryPlots(queryParams) {
-        var target = queryParams.target;
+        var target = queryParams.target.type;
         var queryDict = queryParams.data;
 
         // we keep only the parameters that actually filter something
@@ -53,12 +53,12 @@ class QueryEngine  {
             var playPlotDetails = {};
             var p;
 
-            if (target.type === 'heatMap') {
+            if (target === 'heatMap') {
                 p = new Promise((resolve, reject) => {
                     VisualizationDetailsBuilder.build2DHistPlot(result, playPlotDetails);
                     resolve(playPlotDetails)
                 })
-            } else if (target.type === 'sunburst') {
+            } else if (target === 'sunburst') {
                 p = new Promise((resolve, reject) => {
                     //to build the queried sunburst we first need to recompute the count dicts
                     VisualizationDetailsBuilder.buildRankingDict(result, playPlotDetails);
