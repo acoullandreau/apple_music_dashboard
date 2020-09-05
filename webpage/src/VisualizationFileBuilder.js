@@ -32,19 +32,24 @@ class VisualizationFileBuilder {
 		for (var elem in visualizationFile) {
   			var index = elem;
   			var row = visualizationFile[elem];
-
-  			if (matchIndexInstanceDict[index]) {
-  				row['Track Instance'] = matchIndexInstanceDict[index][0];
-  				row['Library Track'] = matchIndexInstanceDict[index][1];
-  				row['Rating'] = Utils.cleanListValues(matchIndexInstanceDict[index][2]);
-  				row['Genre'] = Utils.cleanListValues(matchIndexInstanceDict[index][3]);
+  			if (row['Title'] !== '') {
+	  			if (matchIndexInstanceDict[index]) {
+	  				row['Track Instance'] = matchIndexInstanceDict[index][0];
+	  				row['Library Track'] = matchIndexInstanceDict[index][1];
+	  				row['Rating'] = Utils.cleanListValues(matchIndexInstanceDict[index][2]);
+	  				row['Genre'] = Utils.cleanListValues(matchIndexInstanceDict[index][3]);
+	  			} else {
+	  				row['Track Instance'] = '';
+	  				row['Library Track'] = '';
+	  				row['Rating'] = '';
+	  				row['Genre'] = '';
+	  			}
   			} else {
-  				row['Track Instance'] = '';
-  				row['Library Track'] = '';
-  				row['Rating'] = '';
-  				row['Genre'] = '';
+  				// we remove the rows with an empty Title
+  				delete visualizationFile[elem];
   			}
   		}
+
   		return visualizationFile;
 	}
 

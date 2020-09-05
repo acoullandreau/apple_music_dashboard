@@ -189,10 +189,6 @@ class VisualizationDetailsBuilder {
 			if (typeof(plotDetails['rankingDict'][target][year]['counts']['']) !== 'undefined') {
 				delete plotDetails['rankingDict'][target][year]['counts']['']
 			}
-			// special case of the title where empty key is actually a composed key title/artist with parenthesis
-			if (typeof(plotDetails['rankingDict'][target][year]['counts'][' ()']) !== 'undefined') {
-				delete plotDetails['rankingDict'][target][year]['counts'][' ()']
-			}
 			plotDetails['rankingDict'][target][year]['rankOrder'] = Utils.sortDictKeys(plotDetails['rankingDict'][target][year]['counts']);
 		}
 	}
@@ -241,7 +237,6 @@ class VisualizationDetailsBuilder {
 			}
 
 		}
-
 		plotDetails['heatMapPlot'] = {};
 
 		// we populate plotDetails with the details of each bar plot

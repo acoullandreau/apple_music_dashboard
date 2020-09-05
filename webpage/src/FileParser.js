@@ -319,6 +319,8 @@ class FileParser {
 		var rowParsedTime = this.addPlayActivityTimeColumns(row, rowIndex, rowsToDelete);
 
 		if (rowParsedTime === 'complete') {
+			// Convert the 'Offline' values to boolean
+			row['Offline'] = (row['Offline'] === "true");
 			// Add partial listening column
 			this.setPartialListening(row);
 			// Add track origin column
