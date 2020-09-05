@@ -32,8 +32,8 @@ class QueryFilter extends React.Component {
 
     fetchOptionsOffline = () =>  {
     	var options = [
-    		{ key: 1, text: 'Yes', value: 'true' },
-    		{ key: 2, text: 'No', value: 'false' }
+    		{ key: 1, text: 'Yes', value: true },
+    		{ key: 2, text: 'No', value: false }
     	];
 
     	return options;
@@ -43,8 +43,8 @@ class QueryFilter extends React.Component {
     fetchOptionsSkipped = () =>  {
         // column in file is 'Played Completely', so the value is the inverse than the answer to 'Skipped'
     	var options = [
-    		{ key: 1, text: 'Yes', value: 'false' },
-    		{ key: 2, text: 'No', value: 'true' }
+    		{ key: 1, text: 'Yes', value: false },
+    		{ key: 2, text: 'No', value: true }
     	];
 
     	return options;
@@ -52,8 +52,8 @@ class QueryFilter extends React.Component {
 
 	fetchOptionsLibrary = () => {
     	var options = [
-    		{ key: 1, text: 'Yes', value: 'true' },
-    		{ key: 2, text: 'No', value: 'false' }
+    		{ key: 1, text: 'Yes', value: true },
+    		{ key: 2, text: 'No', value: false }
     	];
 
     	return options;
@@ -219,14 +219,14 @@ class QueryFilter extends React.Component {
     }
 
     render() {
-    	if (this.props.target === 'heatMap') {
+    	if (this.props.target.type === 'heatMap') {
     		return (
     			<div>
     				{this.renderQueryHeatMap()}
                     <Button color='red' onClick={this.onSubmit}>Refresh</Button>
 				</div>
     		)
-    	} else if (this.props.target === 'sunburst') {
+    	} else if (this.props.target.type === 'sunburst') {
     		return (
     			<div>
     				{this.renderQuerySunburst()}

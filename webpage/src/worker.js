@@ -100,7 +100,9 @@ self.addEventListener('message', function(e) {
 		})
 	} else if (e.data['type'] === 'query') {
 		console.log(e.data['payload'])
-		QueryEngine.queryPlots(e.data['payload'])
+		QueryEngine.queryPlots(e.data['payload']).then(result => {
+            console.log(result)
+        })
 		// payload contains target plot to recompute + filters dict
 		// filter the visualization file
 		// run VisualizationDetailsBuilder for target plot with the filtered file
