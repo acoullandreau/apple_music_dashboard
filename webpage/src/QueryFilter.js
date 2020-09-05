@@ -20,6 +20,16 @@ class QueryFilter extends React.Component {
         this.props.onQuery(this.state);
     }
 
+    onReset = () => {
+        var data = {...this.state.data};
+        for (var filter in data) {
+            data[filter] = '';
+        }
+        console.log(data)
+        //this.setState({ data });
+        //this.props.onReset(this.state);
+    }
+
     fetchOptionsRating = () =>  {
     	var options = [
     		{ key: 1, text: 'Love', value: 'LOVE' },
@@ -223,14 +233,20 @@ class QueryFilter extends React.Component {
     		return (
     			<div>
     				{this.renderQueryHeatMap()}
-                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                    <div>
+                        <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                        <Button color='blue' onClick={this.onReset}>Reset</Button>
+                    </div>
 				</div>
     		)
     	} else if (this.props.target.type === 'sunburst') {
     		return (
     			<div>
     				{this.renderQuerySunburst()}
-                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                    <div>
+                        <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                        <Button color='blue' onClick={this.onReset}>Reset</Button>
+                    </div>
     			</div>
     		)
     	}

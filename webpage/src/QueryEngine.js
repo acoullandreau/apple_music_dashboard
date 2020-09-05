@@ -24,12 +24,14 @@ class QueryEngine  {
                         if (Array.isArray(queryDict[item])) {
                             // the query is on the union of several values for one column
                             if (!queryDict[item].includes(filteredFile[row][targetColumn])) {
-                                delete filteredFile[row]
+                                delete filteredFile[row];
+                                break;
                             }
                         } else {
                             // the query is on a single value per column, so exclusive value
                             if (filteredFile[row][targetColumn] !== queryDict[item]) {
-                                delete filteredFile[row]
+                                delete filteredFile[row];
+                                break;
                             }
                         }
                     }

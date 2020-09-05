@@ -96,17 +96,18 @@ self.addEventListener('message', function(e) {
 		var plotsDetails = VisualizationDetailsBuilder.prepareAllPlots();
 		plotsDetails.then(result => {
 			connectorInstance.addObjectToDB(result, 'plotDetails');
-			postMessage({'type':'visualizationsReady', 'payload':result});
+			postMessage({'type':'visualizationsReady', 'payload':{'context':'all', 'data':result}});
 		})
 	} else if (e.data['type'] === 'query') {
-		//console.log(e.data['payload'])
+		console.log(e.data['payload'])
 		QueryEngine.queryPlots(e.data['payload']).then(result => {
-			postMessage({'type':'visualizationsReady', 'payload':result});
-            //console.log(result)
-            //console.log(e.data['payload'].target)
+			postMessage({'type':'visualizationsReady', 'payload':{'context':e.data['payload'], 'data':result}});
         })
-
-		// pass back the plot details for the App to update the state
+	} else if (e.data['type'] === 'resetQuery') {
+		console.log(e.data['payload'])
+		// QueryEngine.queryPlots(e.data['payload']).then(result => {
+		// 	postMessage({'type':'visualizationsReady', 'payload':result});
+  //       })
 	}
 
 })

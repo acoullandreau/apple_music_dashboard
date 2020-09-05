@@ -57,17 +57,8 @@ class App extends React.Component {
 					this.worker.postMessage({'type':'visualization', 'payload':''});
 					break;
 				case 'visualizationsReady':
-					var queryFiltersDefault = {
-						artist: event.data['payload']['filters']['artist'],
-						genre: event.data['payload']['filters']['genre'], 
-						inlib: "", offline: "", 
-						origin: event.data['payload']['filters']['origin'], 
-						rating: "", skipped: "", title: "", 
-						year: event.data['payload']['filters']['year']
-					}
 					// visualizations can be rendered, so we update our App state to render the new component
-					this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': event.data['payload'] });
-					//'queryFiltersDefault':queryFiltersDefault
+					this.onVisualizationsReady(event.data['payload']);
 					break;
 			}
 
@@ -89,20 +80,38 @@ class App extends React.Component {
 		this.worker.addEventListener('message', event => {
 			switch (event.data['type']) {
 				case 'visualizationsReady':
-					// visualizations can be rendered, so we update our App state to render the new component
-					var queryFiltersDefault = {
-						artist: event.data['payload']['filters']['artist'],
-						genre: event.data['payload']['filters']['genre'], 
-						inlib: "", offline: "", 
-						origin: event.data['payload']['filters']['origin'], 
-						rating: "", skipped: "", title: "", 
-						year: event.data['payload']['filters']['year']
-					}
-					// visualizations can be rendered, so we update our App state to render the new component
-					this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': event.data['payload'] });
+					this.onVisualizationsReady(event.data['payload']);
 					break;
 			}
 		})
+	}
+
+	onVisualizationsReady = (payload) => {
+		// visualizations can be rendered, so we update our App state to render the new component
+		this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': payload.data });
+	}
+
+	onQueryVisualizationReady = (payload) => {
+		var plotDetails = { ...this.state.plotDetails };
+		var queryParams = payload.context;
+		var data = payload.data;
+		if (queryParams.target.type === 'heatMap') {
+			//update plotDetails with heatMap
+			plotDetails.heatMapPlot = data['heatMapPlot'];
+			this.setState({ plotDetails });
+		} else if (queryParams.target.type === 'sunburst') {
+			if (queryParams.target.plot === 'origin') {
+				//update plotDetails with sunburst for origin only
+				plotDetails.sunburst['origin'] = data['sunburst']['origin'];
+				this.setState({ plotDetails });
+			} else {
+				// update plotDetails with sunburst for genre, artist and title
+				plotDetails.sunburst['genre'] = data['sunburst']['genre'];
+				plotDetails.sunburst['artist'] = data['sunburst']['artist'];
+				plotDetails.sunburst['title'] = data['sunburst']['title'];
+				this.setState({ plotDetails });
+			}
+		}
 	}
 
 	updatePlot = (parameters) => {
@@ -114,37 +123,36 @@ class App extends React.Component {
 	}
 
 
-	onQuery = (parameters) => {
+	onQuerySubmit = (parameters) => {
 		var isQuery = this.hasQueryFilters(parameters.data);
 		if (isQuery) {
 			this.setState({ 'queryFilters': parameters });
 			this.worker.postMessage({'type':'query', 'payload':parameters});
+		} else {
+			this.onQueryReset();
 		}
 
 		this.worker.addEventListener('message', event => {
 			switch (event.data['type']) {
 				case 'visualizationsReady':
-					var plotDetails = { ...this.state.plotDetails };
-					if (parameters.target.type === 'heatMap') {
-						//update plotDetails with heatMap
-						plotDetails.heatMapPlot = event.data['payload'];
-        				this.setState({ plotDetails });
-					} else if (parameters.target.type === 'sunburst') {
-						if (parameters.target.plot === 'origin') {
-							//update plotDetails with sunburst for origin only
-							plotDetails.sunburst['origin'] = event.data['payload']['sunburst']['origin'];
-        					this.setState({ plotDetails });
-						} else {
-							// update plotDetails with sunburst for genre, artist and title
-							plotDetails.sunburst['genre'] = event.data['payload']['sunburst']['genre'];
-							plotDetails.sunburst['artist'] = event.data['payload']['sunburst']['artist'];
-							plotDetails.sunburst['title'] = event.data['payload']['sunburst']['title'];
-        					this.setState({ plotDetails });
-						}
-					}
+					this.onQueryVisualizationReady(event.data['payload']);
 					break;
 			}
 		})
+	}
+
+	onQueryReset = (parameters) => {
+		this.setState({ 'queryFilters': this.state.queryFiltersDefault });
+		this.worker.postMessage({ 'type':'resetQuery', 'payload':parameters });
+
+		this.worker.addEventListener('message', event => {
+			switch (event.data['type']) {
+				case 'visualizationsReady':
+					this.onQueryVisualizationReady(event.data['payload']);
+					break;
+			}
+		})
+
 	}
 
 	hasQueryFilters = (queryDict) => {
@@ -214,13 +222,23 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':''}} onQuery={this.onQuery} />
+						<QueryFilter 
+							data={this.state.plotDetails['filters']} 
+							target={{'type':'sunburst', 'plot':''}} 
+							onQuery={this.onQuerySubmit} 
+							onReset={this.onQueryReset}
+						/>
 					</div>
 					<div>
 						{ this.renderRankingPlot() }
 					</div>					
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'heatMap'}} onQuery={this.onQuery} />
+						<QueryFilter 
+							data={this.state.plotDetails['filters']} 
+							target={{'type':'heatMap'}} 
+							onQuery={this.onQuerySubmit}
+							onReset={this.onQueryReset}
+						/>
 					</div>
 					<div> 
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
@@ -240,7 +258,12 @@ class App extends React.Component {
 						</div>
 					</div>
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':'origin'}} onQuery={this.onQuery} />
+						<QueryFilter 
+							data={this.state.plotDetails['filters']}
+							target={{'type':'sunburst', 'plot':'origin'}} 
+							onQuery={this.onQuerySubmit} 
+							onReset={this.onQueryReset}
+						/>
 					</div>
 					<div>
 						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}}/>
