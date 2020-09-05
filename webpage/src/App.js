@@ -189,10 +189,10 @@ class App extends React.Component {
 					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target='heatMap' onQuery={this.onQuery} />
+						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'heatMap'}} onQuery={this.onQuery} />
 					</div>
 					<div>
-						<QueryFilter data={this.state.plotDetails['filters']} target='sunburst' onQuery={this.onQuery} />
+						<QueryFilter data={this.state.plotDetails['filters']} target={{'type':'sunburst', 'plot':'origin'}} onQuery={this.onQuery} />
 					</div>
 					<div>
 						{ this.renderRankingPlot() }
@@ -204,8 +204,8 @@ class App extends React.Component {
 					<div> 
 						<div>
 							<div>
-								<PiePlot data={this.state.plotDetails['pieYear']} target='year' />
-								<PiePlot data={this.state.plotDetails['pieDevice']} target='device' />
+								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 							</div>
 						</div>
 					</div>

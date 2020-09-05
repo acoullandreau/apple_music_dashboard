@@ -5,9 +5,9 @@ import plotConfig from './plotConfig.json';
 class PiePlot extends React.Component {
 
 	getTargetConfig() {
-		if (this.props.target === 'year') {
+		if (this.props.target.type === 'year') {
 			return plotConfig.piePlot['pieYear'];
-		} else if (this.props.target === 'device') {
+		} else if (this.props.target.type === 'device') {
 			return plotConfig.piePlot['pieDevice'];
 		}
 
