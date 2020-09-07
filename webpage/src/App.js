@@ -128,8 +128,8 @@ class App extends React.Component {
 		} else if (targetPlot === 'heatMap') {
 			console.log(payload)
 			//update the heatMap
-			//this.refs.heatMapDOM.updatePlot(payload);
-			//this.refs.heatMapDOW.updatePlot(payload);
+			this.refs.heatMapDOM.updatePlot(payload);
+			this.refs.heatMapDOW.updatePlot(payload);
 		}
 
 
