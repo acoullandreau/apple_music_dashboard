@@ -21,7 +21,11 @@ class HeatMapPlot extends React.Component {
 			this.setState({'data':data, 'type':parameters.payload.type});
 		}
 	}
-
+	
+	resetPlot() {
+		var data = this.state.initialData;
+		this.setState({ data });
+	}
 
 	getLabels(targetDataName) {
 		return plotConfig.heatMapPlot[targetDataName]['labels'];

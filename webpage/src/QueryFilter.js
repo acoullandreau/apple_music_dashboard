@@ -8,7 +8,8 @@ class QueryFilter extends React.Component {
         super(props);
         this.state = { 
             'target':'', 
-            'data':{'rating':'', 'offline':'', 'origin':'', 'skipped':'', 'inlib':'', 'year':'', 'genre':'', 'artist':'', 'title':''} 
+            'data':{'rating':'', 'offline':'', 'origin':'', 'skipped':'', 'inlib':'', 'year':'', 'genre':'', 'artist':'', 'title':''},
+            'resetIsDisabled': true,
         };
     }
 
@@ -23,7 +24,9 @@ class QueryFilter extends React.Component {
     }
 
     onSubmit = () => {
-        this.props.onQuery(this.state);
+        this.setState({ 'resetIsDisabled':false }, () => {
+            this.props.onQuery(this.state);
+        })
     }
 
     onReset = () => {
@@ -31,8 +34,9 @@ class QueryFilter extends React.Component {
         for (var filter in data) {
             data[filter] = '';
         }
-        this.setState({ data })
-        this.props.onReset(this.state.target);
+        this.setState({ 'data':data, 'resetIsDisabled':true }, () => {
+            this.props.onReset(this.state.target);
+        })
     }
 
     fetchOptionsRating = () =>  {
@@ -233,25 +237,38 @@ class QueryFilter extends React.Component {
         )
     }
 
+    renderButtons() {
+        if (this.state.resetIsDisabled) {
+            return (
+                <div>
+                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                    <Button color='blue' disabled onClick={this.onReset}>Reset</Button>
+                </div>
+            )
+        } else {
+            return(
+                <div>
+                    <Button color='red' onClick={this.onSubmit}>Refresh</Button>
+                    <Button color='blue' onClick={this.onReset}>Reset</Button>
+                </div>
+            )
+        }
+    }
+
     render() {
+        console.log(this.props)
     	if (this.props.target.type === 'heatMap') {
     		return (
     			<div>
     				{this.renderQueryHeatMap()}
-                    <div>
-                        <Button color='red' onClick={this.onSubmit}>Refresh</Button>
-                        <Button color='blue' onClick={this.onReset}>Reset</Button>
-                    </div>
+                    {this.renderButtons()}
 				</div>
     		)
     	} else if (this.props.target.type === 'sunburst') {
     		return (
     			<div>
     				{this.renderQuerySunburst()}
-                    <div>
-                        <Button color='red' onClick={this.onSubmit}>Refresh</Button>
-                        <Button color='blue' onClick={this.onReset}>Reset</Button>
-                    </div>
+                    {this.renderButtons()}
     			</div>
     		)
     	}

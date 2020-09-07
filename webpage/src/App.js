@@ -20,7 +20,6 @@ class App extends React.Component {
 		'hasVisuals': false, 
 		'plotDetails': {}, 
 		'selectedBarPlot' : {},  
-		'queryFilters':{}, 
 		'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': "", 'year': '' } 
 	};
 
@@ -80,7 +79,6 @@ class App extends React.Component {
 			'hasVisuals': false, 
 			'plotDetails': {}, 
 			'selectedBarPlot' : {}, 
-			'queryFilters':{}
 		});
 	} 
 
@@ -115,7 +113,6 @@ class App extends React.Component {
 	
 
 	onQueryVisualizationReady = (payload) => {
-
 		var targetPlot = payload.context.target.type;
 		if (targetPlot === 'sunburst') {
 			var plotType = payload.context.target.plot;
@@ -126,50 +123,18 @@ class App extends React.Component {
 				this.refs.ranking.updatePlot(payload);
 			}
 		} else if (targetPlot === 'heatMap') {
-			console.log(payload)
-			//update the heatMap
 			this.refs.heatMapDOM.updatePlot(payload);
 			this.refs.heatMapDOW.updatePlot(payload);
 		}
-
-
-		// var plotDetails = { ...this.state.plotDetails };
-		// var queryParams = payload.context;
-		// var data = payload.data;
-		
-		// if (queryParams.target.type === 'heatMap') {
-		// 	//update plotDetails with heatMap
-		// 	plotDetails.heatMapPlot = data['heatMapPlot'];
-		// 	this.setState({ plotDetails });
-		// } else if (queryParams.target.type === 'sunburst') {
-		// 	// we update the rankingDict
-		// 	plotDetails.rankingDict = data['rankingDict'];
-		// 	if (queryParams.target.plot === 'origin') {
-		// 		//update plotDetails with sunburst for origin only
-		// 		plotDetails.sunburst['origin'] = data['sunburst']['origin'];
-		// 		this.setState({ plotDetails });
-		// 	} else {
-		// 		// update plotDetails with sunburst for genre, artist and title
-		// 		plotDetails.sunburst['genre'] = data['sunburst']['genre'];
-		// 		plotDetails.sunburst['artist'] = data['sunburst']['artist'];
-		// 		plotDetails.sunburst['title'] = data['sunburst']['title'];
-		// 		this.setState({ plotDetails }, () => console.log(this.state));
-		// 	}
-		// }
 	}
 
 
 	onQuerySubmit = (parameters) => {
 		var isQuery = this.hasQueryFilters(parameters.data);
 		if (isQuery) {
-			this.setState({ 'queryFilters': parameters });
 			this.worker.postMessage({'type':'query', 'payload':parameters});
 		} else {
-			if (this.state.queryFilters !== {}) {
-				// in this case there was a query that is being reseted
-				this.onQueryReset(parameters);
-			}
-
+			this.onQueryReset(parameters);
 		}
 	}
 
@@ -184,25 +149,19 @@ class App extends React.Component {
 	
 
 	onQueryReset = (plotTarget) => {
-		console.log(plotTarget)
-		//this.updatePlot(plotTarget)
-		// console.log('Reset')
-		// // we build a payload containing the plotDetailsInit values for the plot being reseted
-		// var payload = { 'context':{'data':{}, 'target':plotTarget}, 'data':{} };
-		// if (plotTarget.type === 'heatMapPlot') {
-		// 	payload['data']['heatMapPlot'] = Object.assign({}, this.state.plotDetailsInit['heatMapPlot']);
-		// } else if (plotTarget.type === 'sunburst') {
-		// 	payload['data']['rankingDict'] = Object.assign({}, this.state.plotDetailsInit['rankingDict']);
-		// 	payload['data']['sunburst'] = {};
-		// 	if (plotTarget.plot === 'origin') {
-		// 		payload['data']['sunburst']['origin'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['origin']);
-		// 	} else {
-		// 		payload['data']['sunburst']['genre'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['genre']);
-		// 		payload['data']['sunburst']['artist'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['artist']);
-		// 		payload['data']['sunburst']['title'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['title']);
-		// 	}
-		// }
-		// this.onQueryVisualizationReady(payload);
+		var targetPlot = plotTarget.type;
+		if (targetPlot === 'sunburst') {
+			var plotType = plotTarget.plot;
+			if (plotType === 'origin') {
+				this.refs.sunburstOrigin.resetPlot();
+			} else {
+				this.refs.sunburstSong.resetPlot();
+				this.refs.ranking.resetPlot();
+			}
+		} else if (targetPlot === 'heatMap') {
+			this.refs.heatMapDOM.resetPlot();
+			this.refs.heatMapDOW.resetPlot();
+		}
 	}
 
 
@@ -305,9 +264,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		// console.log('Render')
-		// console.log(this.state)
-		// console.log('End Render')
 		return (
 			<div>
 				<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" /></div>

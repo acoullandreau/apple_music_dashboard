@@ -22,6 +22,11 @@ class RankingList extends React.Component {
 		}
 	}
 
+	resetPlot() {
+		var data = this.state.initialData;
+		this.setState({ data });
+	}
+
 	getPlotContent() {
 		var topRanked = this.getTopRank();
 		var targetData = this.getTargetData(topRanked);
