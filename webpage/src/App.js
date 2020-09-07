@@ -19,8 +19,7 @@ class App extends React.Component {
 		'isLoading': false, 
 		'hasVisuals': false, 
 		'plotDetails': {}, 
-		'selectedBarPlot' : {}, 
-		'selectedRankingPlot' : {}, 
+		'selectedBarPlot' : {},  
 		'queryFilters':{}, 
 		'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': "", 'year': '' } 
 	};
@@ -81,7 +80,6 @@ class App extends React.Component {
 			'hasVisuals': false, 
 			'plotDetails': {}, 
 			'selectedBarPlot' : {}, 
-			'selectedRankingPlot' : {}, 
 			'queryFilters':{}
 		});
 	} 
@@ -91,10 +89,9 @@ class App extends React.Component {
 		if (target === 'bar') {
 			this.setState({ 'selectedBarPlot': parameters.payload });
 		} else if (target === 'sunburst') {
+			// we request an update of the sunburst and rankingList components with the new params
 			this.refs.sunburstSong.updatePlot(parameters);
 			this.refs.ranking.updatePlot(parameters);
-			//console.log(parameters)
-			//this.setState({ 'selectedRankingPlot': parameters.payload });
 		}
 	}
 
@@ -112,14 +109,30 @@ class App extends React.Component {
 			'hasVisuals': true,
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}, 
-			'selectedRankingPlot' : {}, 
 		 });
 	}
 
 	
 
 	onQueryVisualizationReady = (payload) => {
-		console.log(payload)
+
+		var targetPlot = payload.context.target.type;
+		if (targetPlot === 'sunburst') {
+			var plotType = payload.context.target.plot;
+			if (plotType === 'origin') {
+				this.refs.sunburstOrigin.updatePlot(payload);
+			} else {
+				this.refs.sunburstSong.updatePlot(payload);
+				this.refs.ranking.updatePlot(payload);
+			}
+		} else if (targetPlot === 'heatMap') {
+			console.log(payload)
+			//update the heatMap
+			//this.refs.heatMapDOM.updatePlot(payload);
+			//this.refs.heatMapDOW.updatePlot(payload);
+		}
+
+
 		// var plotDetails = { ...this.state.plotDetails };
 		// var queryParams = payload.context;
 		// var data = payload.data;
@@ -142,28 +155,6 @@ class App extends React.Component {
 		// 		plotDetails.sunburst['title'] = data['sunburst']['title'];
 		// 		this.setState({ plotDetails }, () => console.log(this.state));
 		// 	}
-		// }
-	}
-
-	updatePlotData = (parameters) => {
-		console.log(parameters)
-		switch (parameters.target.type) {
-			case "sunburst":
-				console.log(this.refs)
-				break;
-			case "ranking":
-				break;
-			case "heatMap":
-				break;
-			case "bar":
-				break;
-		}
-		//console.log(this.refs)
-		
-		// if (parameters.type === 'bar') {
-		// 	this.setState({ 'selectedBarPlot': parameters.payload });
-		// } else if (parameters.type === 'sunburst') {
-		// 	this.setState({ 'selectedRankingPlot': parameters.payload });
 		// }
 	}
 
@@ -219,40 +210,19 @@ class App extends React.Component {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
 				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} ref='barTime' />
+					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
 					<BarPlotFilter target='month' onChange={this.onSelectPlot} />
 				</div>
 			)
 		} else {
 			return (
 				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} ref='barTime' />
+					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
 					<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 				</div>
 			)
 		}
 
-	}
-
-
-	renderRankingPlot = () => {
-		if (Object.keys(this.state.selectedRankingPlot).length === 0) {
-			return (
-				<div>
-					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref='sunburstSong'/>
-					<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref='ranking' />
-				</div>
-			)
-		} else {
-			return (
-				<div>
-					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedRankingPlot} ref='sunburstSong' />
-					<SunburstPlotFilter target={this.state.selectedRankingPlot} onChange={this.onSelectPlot} />
-					<RankingList data={this.state.plotDetails['rankingDict']} target={this.state.selectedRankingPlot} ref='ranking' />
-				</div>
-			)
-		}
 	}
 
 	renderScreen = () => {
@@ -281,7 +251,9 @@ class App extends React.Component {
 						/>
 					</div>
 					<div>
-						{ this.renderRankingPlot() }
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref='sunburstSong'/>
+						<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref='ranking' />
 					</div>					
 					<div>
 						<QueryFilter 
@@ -298,8 +270,8 @@ class App extends React.Component {
 					<div> 
 						<div>
 							<div>
-								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} ref='pieYear' />
-								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} ref='pieDevice' />
+								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 							</div>
 						</div>
 					</div>
@@ -321,7 +293,7 @@ class App extends React.Component {
 					</div>
 					<div> 
 						<div>
-							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} ref="barSkipped" />
+							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
 						</div>
 					</div>
 				</div>

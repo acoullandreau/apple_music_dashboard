@@ -6,15 +6,17 @@ class SunburstPlot extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data[this.props.target.type], 'type':this.props.target.type }
+		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type }
 	}
 
 	updatePlot(parameters) {
 		if ('data' in parameters) {
 			//we expect this update to concern the data (query)
+			var data = parameters.data.sunburst;
+			this.setState({ 'data':data });
 		} else {
 			// it is just a new selection of the plot to render
-			var data = this.state.initialData[parameters.payload.type]
+			var data = this.state.initialData
 			this.setState({'data':data, 'type':parameters.payload.type});
 		}
 	}
@@ -23,7 +25,7 @@ class SunburstPlot extends React.Component {
 		var type = this.state.type;
 		var targetPlot = type+'Sunburst';
 		var title = plotConfig['sunburstPlot'][targetPlot]['title'];
-		var data = this.state.data;
+		var data = this.state.data[type];
 		// var style = plotConfig['sunburstPlot'][targetPlot]['style'];
 
 		return (
