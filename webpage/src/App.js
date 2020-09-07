@@ -15,6 +15,7 @@ import QueryFilter from './QueryFilter.js';
 class App extends React.Component {
 
 	state = { 
+		'archive':'',
 		'isLoading': false, 
 		'hasVisuals': false, 
 		'plotDetails': {}, 
@@ -31,17 +32,12 @@ class App extends React.Component {
 			}
 		})
 		this.worker = new Worker('./worker.js', { type: 'module' });
-	}
-
-	onFileLoad = (archive) => {
-		// we ask the worker to prepare the files
-		this.worker.postMessage({'type':'filePreparation', 'payload':archive});
 
 		this.worker.addEventListener('message', event => {
 			switch (event.data['type']) {
 				case 'archiveValidated':
 					// we know the format of the archive was the right one, we can proceed with file parsing
-					this.refs.fileSelector.storeArchive(archive);
+					this.refs.fileSelector.storeArchive(this.state.archive);
 					this.setState({'isLoading': true});
 					break;
 				case 'archiveRejected':
@@ -57,69 +53,118 @@ class App extends React.Component {
 					this.worker.postMessage({'type':'visualization', 'payload':''});
 					break;
 				case 'visualizationsReady':
-					// visualizations can be rendered, so we update our App state to render the new component
-					this.onVisualizationsReady(event.data['payload']);
+					if (event.data['payload']['context']=== 'all') {
+						// initial visualizations can be rendered, so we update our App state to render the new component
+						this.onVisualizationsReady(event.data['payload']);
+					} else {
+						// visualizations matching the query are ready, so we update App state to rerender the component
+						this.onQueryVisualizationReady(event.data['payload']);
+					}
 					break;
 			}
-
 		});
-		
+
+	}
+
+	onFileLoad = (archive) => {
+		// we ask the worker to prepare the files
+		this.setState({'archive':archive}, () => {
+			this.worker.postMessage({'type':'filePreparation', 'payload':archive});
+		})
 	}
 
 	onReset = () => {
 		connectorInstance.deleteStore();
-		this.setState({'isLoading': false, 'hasVisuals': false, 'plotDetails': {} });
+		this.setState({
+			'archive':'',
+			'isLoading': false, 
+			'hasVisuals': false, 
+			'plotDetails': {}, 
+			'selectedBarPlot' : {}, 
+			'selectedRankingPlot' : {}, 
+			'queryFilters':{}
+		});
 	} 
+
+	onSelectPlot = (parameters) => {
+		var target = parameters.type;
+		if (target === 'bar') {
+			this.setState({ 'selectedBarPlot': parameters.payload });
+		} else if (target === 'sunburst') {
+			this.refs.sunburstSong.updatePlot(parameters);
+			this.refs.ranking.updatePlot(parameters);
+			//console.log(parameters)
+			//this.setState({ 'selectedRankingPlot': parameters.payload });
+		}
+	}
 
 	reloadViz = () => {
 		// display loading screen again while visualizations are recomputed
 		this.setState({'isLoading': true, 'hasVisuals': false });
 		// request from loader to recompute the visualizations
 		this.worker.postMessage({'type':'visualization', 'payload':''});
-
-		this.worker.addEventListener('message', event => {
-			switch (event.data['type']) {
-				case 'visualizationsReady':
-					this.onVisualizationsReady(event.data['payload']);
-					break;
-			}
-		})
 	}
 
 	onVisualizationsReady = (payload) => {
 		// visualizations can be rendered, so we update our App state to render the new component
-		this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': payload.data });
+		this.setState({
+			'isLoading': false,
+			'hasVisuals': true,
+			'plotDetails': Object.assign({}, payload.data),
+			'selectedBarPlot' : {}, 
+			'selectedRankingPlot' : {}, 
+		 });
 	}
+
+	
 
 	onQueryVisualizationReady = (payload) => {
-		var plotDetails = { ...this.state.plotDetails };
-		var queryParams = payload.context;
-		var data = payload.data;
-		if (queryParams.target.type === 'heatMap') {
-			//update plotDetails with heatMap
-			plotDetails.heatMapPlot = data['heatMapPlot'];
-			this.setState({ plotDetails });
-		} else if (queryParams.target.type === 'sunburst') {
-			if (queryParams.target.plot === 'origin') {
-				//update plotDetails with sunburst for origin only
-				plotDetails.sunburst['origin'] = data['sunburst']['origin'];
-				this.setState({ plotDetails });
-			} else {
-				// update plotDetails with sunburst for genre, artist and title
-				plotDetails.sunburst['genre'] = data['sunburst']['genre'];
-				plotDetails.sunburst['artist'] = data['sunburst']['artist'];
-				plotDetails.sunburst['title'] = data['sunburst']['title'];
-				this.setState({ plotDetails });
-			}
-		}
+		console.log(payload)
+		// var plotDetails = { ...this.state.plotDetails };
+		// var queryParams = payload.context;
+		// var data = payload.data;
+		
+		// if (queryParams.target.type === 'heatMap') {
+		// 	//update plotDetails with heatMap
+		// 	plotDetails.heatMapPlot = data['heatMapPlot'];
+		// 	this.setState({ plotDetails });
+		// } else if (queryParams.target.type === 'sunburst') {
+		// 	// we update the rankingDict
+		// 	plotDetails.rankingDict = data['rankingDict'];
+		// 	if (queryParams.target.plot === 'origin') {
+		// 		//update plotDetails with sunburst for origin only
+		// 		plotDetails.sunburst['origin'] = data['sunburst']['origin'];
+		// 		this.setState({ plotDetails });
+		// 	} else {
+		// 		// update plotDetails with sunburst for genre, artist and title
+		// 		plotDetails.sunburst['genre'] = data['sunburst']['genre'];
+		// 		plotDetails.sunburst['artist'] = data['sunburst']['artist'];
+		// 		plotDetails.sunburst['title'] = data['sunburst']['title'];
+		// 		this.setState({ plotDetails }, () => console.log(this.state));
+		// 	}
+		// }
 	}
 
-	updatePlot = (parameters) => {
-		if (parameters.type === 'bar') {
-			this.setState({ 'selectedBarPlot': parameters.payload });
-		} else if (parameters.type === 'sunburst') {
-			this.setState({ 'selectedRankingPlot': parameters.payload });
+	updatePlotData = (parameters) => {
+		console.log(parameters)
+		switch (parameters.target.type) {
+			case "sunburst":
+				console.log(this.refs)
+				break;
+			case "ranking":
+				break;
+			case "heatMap":
+				break;
+			case "bar":
+				break;
 		}
+		//console.log(this.refs)
+		
+		// if (parameters.type === 'bar') {
+		// 	this.setState({ 'selectedBarPlot': parameters.payload });
+		// } else if (parameters.type === 'sunburst') {
+		// 	this.setState({ 'selectedRankingPlot': parameters.payload });
+		// }
 	}
 
 
@@ -129,30 +174,12 @@ class App extends React.Component {
 			this.setState({ 'queryFilters': parameters });
 			this.worker.postMessage({'type':'query', 'payload':parameters});
 		} else {
-			this.onQueryReset();
+			if (this.state.queryFilters !== {}) {
+				// in this case there was a query that is being reseted
+				this.onQueryReset(parameters);
+			}
+
 		}
-
-		this.worker.addEventListener('message', event => {
-			switch (event.data['type']) {
-				case 'visualizationsReady':
-					this.onQueryVisualizationReady(event.data['payload']);
-					break;
-			}
-		})
-	}
-
-	onQueryReset = (parameters) => {
-		this.setState({ 'queryFilters': this.state.queryFiltersDefault });
-		this.worker.postMessage({ 'type':'resetQuery', 'payload':parameters });
-
-		this.worker.addEventListener('message', event => {
-			switch (event.data['type']) {
-				case 'visualizationsReady':
-					this.onQueryVisualizationReady(event.data['payload']);
-					break;
-			}
-		})
-
 	}
 
 	hasQueryFilters = (queryDict) => {
@@ -163,20 +190,44 @@ class App extends React.Component {
 		}
 		return false;
 	}
+	
+
+	onQueryReset = (plotTarget) => {
+		console.log(plotTarget)
+		//this.updatePlot(plotTarget)
+		// console.log('Reset')
+		// // we build a payload containing the plotDetailsInit values for the plot being reseted
+		// var payload = { 'context':{'data':{}, 'target':plotTarget}, 'data':{} };
+		// if (plotTarget.type === 'heatMapPlot') {
+		// 	payload['data']['heatMapPlot'] = Object.assign({}, this.state.plotDetailsInit['heatMapPlot']);
+		// } else if (plotTarget.type === 'sunburst') {
+		// 	payload['data']['rankingDict'] = Object.assign({}, this.state.plotDetailsInit['rankingDict']);
+		// 	payload['data']['sunburst'] = {};
+		// 	if (plotTarget.plot === 'origin') {
+		// 		payload['data']['sunburst']['origin'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['origin']);
+		// 	} else {
+		// 		payload['data']['sunburst']['genre'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['genre']);
+		// 		payload['data']['sunburst']['artist'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['artist']);
+		// 		payload['data']['sunburst']['title'] = Object.assign({}, this.state.plotDetailsInit['sunburst']['title']);
+		// 	}
+		// }
+		// this.onQueryVisualizationReady(payload);
+	}
+
 
 	renderTimeBarPlot = () => {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
 				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
-					<BarPlotFilter target='month' onChange={this.updatePlot} />
+					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} ref='barTime' />
+					<BarPlotFilter target='month' onChange={this.onSelectPlot} />
 				</div>
 			)
 		} else {
 			return (
 				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
-					<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.updatePlot} />
+					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} ref='barTime' />
+					<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 				</div>
 			)
 		}
@@ -188,17 +239,17 @@ class App extends React.Component {
 		if (Object.keys(this.state.selectedRankingPlot).length === 0) {
 			return (
 				<div>
-					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}}/>
-					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}}/>
-					<SunburstPlotFilter target='genre' onChange={this.updatePlot} />
+					<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref='sunburstSong'/>
+					<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+					<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref='ranking' />
 				</div>
 			)
 		} else {
 			return (
 				<div>
-					<RankingList data={this.state.plotDetails['rankingDict']} target={this.state.selectedRankingPlot}/>
-					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedRankingPlot} />
-					<SunburstPlotFilter target={this.state.selectedRankingPlot} onChange={this.updatePlot} />
+					<SunburstPlot data={this.state.plotDetails['sunburst']} target={this.state.selectedRankingPlot} ref='sunburstSong' />
+					<SunburstPlotFilter target={this.state.selectedRankingPlot} onChange={this.onSelectPlot} />
+					<RankingList data={this.state.plotDetails['rankingDict']} target={this.state.selectedRankingPlot} ref='ranking' />
 				</div>
 			)
 		}
@@ -241,14 +292,14 @@ class App extends React.Component {
 						/>
 					</div>
 					<div> 
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}}/>
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}}/>
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref='heatMapDOM' />
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref='heatMapDOW' />
 					</div>
 					<div> 
 						<div>
 							<div>
-								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
-								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
+								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} ref='pieYear' />
+								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} ref='pieDevice' />
 							</div>
 						</div>
 					</div>
@@ -266,11 +317,11 @@ class App extends React.Component {
 						/>
 					</div>
 					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}}/>
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref="sunburstOrigin"/>
 					</div>
 					<div> 
 						<div>
-							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} ref="barSkipped" />
 						</div>
 					</div>
 				</div>
@@ -282,7 +333,9 @@ class App extends React.Component {
 	}
 
 	render() {
-
+		// console.log('Render')
+		// console.log(this.state)
+		// console.log('End Render')
 		return (
 			<div>
 				<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" /></div>

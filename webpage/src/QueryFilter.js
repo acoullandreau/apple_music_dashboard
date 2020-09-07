@@ -4,7 +4,13 @@ import { Button, Dropdown } from 'semantic-ui-react';
 
 class QueryFilter extends React.Component {
 
-	state = { 'target':'', 'data':{'rating':'', 'offline':'', 'origin':'', 'skipped':'', 'inlib':'', 'year':'', 'genre':'', 'artist':'', 'title':''} };
+    constructor(props) {
+        super(props);
+        this.state = { 
+            'target':'', 
+            'data':{'rating':'', 'offline':'', 'origin':'', 'skipped':'', 'inlib':'', 'year':'', 'genre':'', 'artist':'', 'title':''} 
+        };
+    }
 
     componentDidMount() {
         this.setState({ 'target' : this.props.target });
@@ -25,9 +31,8 @@ class QueryFilter extends React.Component {
         for (var filter in data) {
             data[filter] = '';
         }
-        console.log(data)
-        //this.setState({ data });
-        //this.props.onReset(this.state);
+        this.setState({ data })
+        this.props.onReset(this.state.target);
     }
 
     fetchOptionsRating = () =>  {

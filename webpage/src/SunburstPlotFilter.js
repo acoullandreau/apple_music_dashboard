@@ -36,3 +36,22 @@ class SunburstPlotFilter extends React.Component {
 }
 
 export default SunburstPlotFilter;
+
+    //     if (selection) {
+    //         // handle the type selection using buttons
+    //         this.setState({ 'target': selection.value }, () => {
+    //             this.props.onChange({ 
+    //                 'target': { 'type': 'sunburst', 'plot': selection.value }, 
+    //                 'data': { 'numItems': this.state.numItems, 'type': selection.value } 
+    //             })
+    //         });
+    //     } else {
+    //         // handles the number input field change
+    //         this.setState({ 'target': selection.value }, () => {
+    //             this.props.onChange({ 
+    //                 'target': { 'type': 'ranking', 'plot': this.state.target }, 
+    //                 'data': { 'numItems': e.target.value, 'type': this.state.target } 
+    //             })
+    //         });
+    //     }
+    // }

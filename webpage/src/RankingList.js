@@ -5,6 +5,22 @@ import Utils from './Utils.js';
 
 class RankingList extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.state = { 'initialData': this.props.data, 'data':this.props.data[this.props.target.type], 'type':this.props.target.type,  'numItems':this.props.target.numItems }
+	}
+
+	updatePlot(parameters) {
+		if ('data' in parameters) {
+			//we expect this update to concern the data (query)
+		} else {
+			// it is just a new selection of the plot to render
+			var data = this.state.initialData[parameters.payload.type]
+			this.setState({'data':data, 'type':parameters.payload.type, 'numItems': parameters.payload.numItems});
+		}
+	}
+
+
 	getPlotContent() {
 		var topRanked = this.getTopRank();
 		var targetData = this.getTargetData(topRanked);
@@ -26,14 +42,13 @@ class RankingList extends React.Component {
 	}
 
 	getTargetData(topRanked) {
-		var type = this.props.target.type;
 		var targetDataDict = {};
 
-		for (var year in this.props.data[type]) {
+		for (var year in this.state.data) {
 			targetDataDict[year] = {};
 			for (var item in topRanked) {
 				var rankedItem = topRanked[item];
-				var rankedCount = this.props.data[type][year]['counts'][rankedItem];
+				var rankedCount = this.state.data[year]['counts'][rankedItem];
 				targetDataDict[year][rankedItem] = rankedCount;
 			}
 		}
@@ -42,9 +57,8 @@ class RankingList extends React.Component {
 	}
 
 	getTopRank() {
-		var type = this.props.target.type;
-		var numItems = this.props.target.numItems;
-		var targetData = this.props.data[type];
+		var numItems = this.state.numItems;
+		var targetData = this.state.data;
 		var topRankedDict = {};
 
 		for (var year in targetData) {

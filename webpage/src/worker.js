@@ -99,15 +99,9 @@ self.addEventListener('message', function(e) {
 			postMessage({'type':'visualizationsReady', 'payload':{'context':'all', 'data':result}});
 		})
 	} else if (e.data['type'] === 'query') {
-		console.log(e.data['payload'])
 		QueryEngine.queryPlots(e.data['payload']).then(result => {
 			postMessage({'type':'visualizationsReady', 'payload':{'context':e.data['payload'], 'data':result}});
         })
-	} else if (e.data['type'] === 'resetQuery') {
-		console.log(e.data['payload'])
-		// QueryEngine.queryPlots(e.data['payload']).then(result => {
-		// 	postMessage({'type':'visualizationsReady', 'payload':result});
-  //       })
 	}
 
 })

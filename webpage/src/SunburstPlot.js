@@ -4,12 +4,27 @@ import plotConfig from './plotConfig.json';
 
 class SunburstPlot extends React.Component {
 
+	constructor(props) {
+		super(props);
+		this.state = { 'initialData': this.props.data, 'data':this.props.data[this.props.target.type], 'type':this.props.target.type }
+	}
+
+	updatePlot(parameters) {
+		if ('data' in parameters) {
+			//we expect this update to concern the data (query)
+		} else {
+			// it is just a new selection of the plot to render
+			var data = this.state.initialData[parameters.payload.type]
+			this.setState({'data':data, 'type':parameters.payload.type});
+		}
+	}
+
 	render() {
-		var type = this.props.target.type;
+		var type = this.state.type;
 		var targetPlot = type+'Sunburst';
 		var title = plotConfig['sunburstPlot'][targetPlot]['title'];
+		var data = this.state.data;
 		// var style = plotConfig['sunburstPlot'][targetPlot]['style'];
-		var data = this.props.data[type];
 
 		return (
 			<Plot
