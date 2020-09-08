@@ -1,6 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Button, Dropdown } from 'semantic-ui-react';
+import { Button, Dropdown, Checkbox } from 'semantic-ui-react';
 
 class QueryFilter extends React.Component {
 
@@ -57,8 +57,8 @@ class QueryFilter extends React.Component {
 
     fetchOptionsOffline = () =>  {
     	var options = [
-    		{ key: 1, text: 'Yes', value: true },
-    		{ key: 2, text: 'No', value: false }
+    		{ key: 4, text: 'Yes', value: true },
+    		{ key: 5, text: 'No', value: false }
     	];
 
     	return options;
@@ -68,8 +68,8 @@ class QueryFilter extends React.Component {
     fetchOptionsSkipped = () =>  {
         // column in file is 'Played Completely', so the value is the inverse than the answer to 'Skipped'
     	var options = [
-    		{ key: 1, text: 'Yes', value: false },
-    		{ key: 2, text: 'No', value: true }
+    		{ key: 6, text: 'Yes', value: false },
+    		{ key: 7, text: 'No', value: true }
     	];
 
     	return options;
@@ -77,8 +77,8 @@ class QueryFilter extends React.Component {
 
 	fetchOptionsLibrary = () => {
     	var options = [
-    		{ key: 1, text: 'Yes', value: true },
-    		{ key: 2, text: 'No', value: false }
+    		{ key: 8, text: 'Yes', value: true },
+    		{ key: 9, text: 'No', value: false }
     	];
 
     	return options;
@@ -86,7 +86,7 @@ class QueryFilter extends React.Component {
 
     fetchOptionsOrigin = () => {
         var options = [];
-        var k=1;
+        var k=10;
         var origins = this.props.data['origin'];
         for (var i in origins) {
             var option = { key: k, text: origins[i], value: origins[i] };
@@ -99,7 +99,7 @@ class QueryFilter extends React.Component {
 
     fetchOptionsYear = () => {
         var options = [];
-        var k=1;
+        var k=50;
         var years = this.props.data['year'];
         for (var i in years) {
             var option = { key: k, text: years[i], value: years[i] };
@@ -112,7 +112,7 @@ class QueryFilter extends React.Component {
 
     fetchOptionsGenre = () => {
         var options = [];
-        var k=1;
+        var k=100;
         var genres = this.props.data['genre'];
         for (var i in genres) {
             var option = { key: k, text: genres[i], value: genres[i] };
@@ -125,7 +125,7 @@ class QueryFilter extends React.Component {
 
     fetchOptionsArtist = () => {
         var options = [];
-        var k=1;
+        var k=1000;
         var artists = this.props.data['artist'];
         for (var i in artists) {
             var option = { key: k, text: artists[i], value: artists[i] };
@@ -136,6 +136,7 @@ class QueryFilter extends React.Component {
         return options;
     }
 
+
     renderQueryHeatMap() {
         var renderingDict = {
             'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
@@ -144,9 +145,9 @@ class QueryFilter extends React.Component {
             'origin': { 'placeholder':'Origin', 'multiple':true, 'options':this.fetchOptionsOrigin() },
             'inlib': { 'placeholder':'Library Track', 'multiple':false, 'options':this.fetchOptionsLibrary() },
             'year': { 'placeholder':'Year', 'multiple':true, 'options':this.fetchOptionsYear() },
+            'genre': { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() },
+            'artist': { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() },
         }
-            // 'genre': { 'placeholder':'Genre', 'value':this.state.data['genre'], 'multiple':true, 'options':this.fetchOptionsGenre() },
-            // 'artist': { 'placeholder':'Artist', 'value':this.state.data['artist'], 'multiple':true, 'options':this.fetchOptionsArtist() },
 
         return (
             <div>
@@ -156,21 +157,42 @@ class QueryFilter extends React.Component {
                         Object.keys(renderingDict).map((item, i) => {
                             var ref = "dropdown" + i;
                             if (renderingDict[item]['multiple']) {
-                                return (
-                                    <li style={{listStyleType:"none"}}>
-                                        <Dropdown
-                                            placeholder={renderingDict[item]['placeholder']}
-                                            name={item}
-                                            onChange={this.handleChange}
-                                            selection
-                                            clearable
-                                            search
-                                            multiple
-                                            options={renderingDict[item]['options']}
-                                            ref={ref}
-                                        />
-                                    </li>
-                                )
+                                if (renderingDict[item]['checklist']) {
+                                    return (
+                                        <li style={{listStyleType:"none"}}>
+                                            <div style={{ maxHeight: 300, maxWidth:'25%', overflow:'scroll' }}>
+                                                <ul style={{display: "inline"}}>
+                                                    {renderingDict[item]['options'].map(elem => {
+                                                        return (
+                                                            <li key={elem['key']} style={{listStyleType:"none"}}>
+                                                                <Checkbox 
+                                                                    label={elem['text']}
+                                                                    onChange={this.handleChange}
+                                                                />
+                                                            </li>
+                                                        )
+                                                    })}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    )
+                                } else {
+                                    return (
+                                        <li style={{listStyleType:"none"}}>
+                                            <Dropdown
+                                                placeholder={renderingDict[item]['placeholder']}
+                                                name={item}
+                                                onChange={this.handleChange}
+                                                selection
+                                                clearable
+                                                search
+                                                multiple
+                                                options={renderingDict[item]['options']}
+                                                ref={ref}
+                                            />
+                                        </li>
+                                    )
+                                }
                             } else {
                                 return (
                                     <li style={{listStyleType:"none"}}>
