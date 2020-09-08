@@ -30,6 +30,12 @@ class QueryFilter extends React.Component {
     }
 
     onReset = () => {
+        for (var ref in this.refs) {
+            if (ref.includes('dropdown')) {
+                this.refs[ref].clearValue();
+            }
+        }
+        
         var data = {...this.state.data};
         for (var filter in data) {
             data[filter] = '';
@@ -132,12 +138,12 @@ class QueryFilter extends React.Component {
 
     renderQueryHeatMap() {
         var renderingDict = {
-            'rating': { 'placeholder':'Rating', 'value':this.state.data['rating'], 'multiple':false, 'options':this.fetchOptionsRating() },
-            'offline': { 'placeholder':'Offline', 'value':this.state.data['offline'], 'multiple':false, 'options':this.fetchOptionsOffline() },
-            'skipped': { 'placeholder':'Skipped', 'value':this.state.data['skipped'], 'multiple':false, 'options':this.fetchOptionsSkipped() },
-            'origin': { 'placeholder':'Origin', 'value':this.state.data['origin'], 'multiple':true, 'options':this.fetchOptionsOrigin() },
-            'inlib': { 'placeholder':'Library Track', 'value':this.state.data['inlib'], 'multiple':false, 'options':this.fetchOptionsLibrary() },
-            'year': { 'placeholder':'Year', 'value':this.state.data['year'], 'multiple':true, 'options':this.fetchOptionsYear() },
+            'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
+            'offline': { 'placeholder':'Offline', 'multiple':false, 'options':this.fetchOptionsOffline() },
+            'skipped': { 'placeholder':'Skipped', 'multiple':false, 'options':this.fetchOptionsSkipped() },
+            'origin': { 'placeholder':'Origin', 'multiple':true, 'options':this.fetchOptionsOrigin() },
+            'inlib': { 'placeholder':'Library Track', 'multiple':false, 'options':this.fetchOptionsLibrary() },
+            'year': { 'placeholder':'Year', 'multiple':true, 'options':this.fetchOptionsYear() },
         }
             // 'genre': { 'placeholder':'Genre', 'value':this.state.data['genre'], 'multiple':true, 'options':this.fetchOptionsGenre() },
             // 'artist': { 'placeholder':'Artist', 'value':this.state.data['artist'], 'multiple':true, 'options':this.fetchOptionsArtist() },
@@ -148,6 +154,7 @@ class QueryFilter extends React.Component {
                   {
                     React.Children.toArray(
                         Object.keys(renderingDict).map((item, i) => {
+                            var ref = "dropdown" + i;
                             if (renderingDict[item]['multiple']) {
                                 return (
                                     <li style={{listStyleType:"none"}}>
@@ -155,10 +162,12 @@ class QueryFilter extends React.Component {
                                             placeholder={renderingDict[item]['placeholder']}
                                             name={item}
                                             onChange={this.handleChange}
+                                            selection
                                             clearable
                                             search
                                             multiple
                                             options={renderingDict[item]['options']}
+                                            ref={ref}
                                         />
                                     </li>
                                 )
@@ -169,9 +178,11 @@ class QueryFilter extends React.Component {
                                             placeholder={renderingDict[item]['placeholder']}
                                             name={item}
                                             onChange={this.handleChange}
+                                            selection
                                             clearable
                                             search
                                             options={renderingDict[item]['options']}
+                                            ref={ref}
                                         />
                                     </li>
                                 )
@@ -188,11 +199,11 @@ class QueryFilter extends React.Component {
     renderQuerySunburst() {
 
         var renderingDict = {
-            'rating': { 'placeholder':'Rating', 'value':this.state.data['rating'], 'multiple':false, 'options':this.fetchOptionsRating() },
-            'offline': { 'placeholder':'Offline', 'value':this.state.data['offline'], 'multiple':false, 'options':this.fetchOptionsOffline() },
-            'skipped': { 'placeholder':'Skipped', 'value':this.state.data['skipped'], 'multiple':false, 'options':this.fetchOptionsSkipped() },
-            'origin': { 'placeholder':'Origin', 'value':this.state.data['origin'], 'multiple':true, 'options':this.fetchOptionsOrigin() },
-            'inlib': { 'placeholder':'Library Track', 'value':this.state.data['inlib'], 'multiple':false, 'options':this.fetchOptionsLibrary() },
+            'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
+            'offline': { 'placeholder':'Offline', 'multiple':false, 'options':this.fetchOptionsOffline() },
+            'skipped': { 'placeholder':'Skipped', 'multiple':false, 'options':this.fetchOptionsSkipped() },
+            'origin': { 'placeholder':'Origin', 'multiple':true, 'options':this.fetchOptionsOrigin() },
+            'inlib': { 'placeholder':'Library Track', 'multiple':false, 'options':this.fetchOptionsLibrary() },
         }
 
         return (
@@ -201,6 +212,7 @@ class QueryFilter extends React.Component {
                   {
                     React.Children.toArray(
                         Object.keys(renderingDict).map((item, i) => {
+                            var ref = "dropdown" + i;
                             if (renderingDict[item]['multiple']) {
                                 return (
                                     <li style={{listStyleType:"none"}}>
@@ -208,10 +220,12 @@ class QueryFilter extends React.Component {
                                             placeholder={renderingDict[item]['placeholder']}
                                             name={item}
                                             onChange={this.handleChange}
+                                            selection
                                             clearable
                                             search
                                             multiple
                                             options={renderingDict[item]['options']}
+                                            ref={ref}
                                         />
                                     </li>
                                 )
@@ -222,9 +236,11 @@ class QueryFilter extends React.Component {
                                             placeholder={renderingDict[item]['placeholder']}
                                             name={item}
                                             onChange={this.handleChange}
+                                            selection
                                             clearable
                                             search
                                             options={renderingDict[item]['options']}
+                                            ref={ref}
                                         />
                                     </li>
                                 )
@@ -256,7 +272,6 @@ class QueryFilter extends React.Component {
     }
 
     render() {
-        console.log(this.props)
     	if (this.props.target.type === 'heatMap') {
     		return (
     			<div>
