@@ -1,7 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Button, Dropdown } from 'semantic-ui-react';
-import Table from './Table.js';
+import { Button, Dropdown, Search } from 'semantic-ui-react';
+//import Table from './Table.js';
+import SearchList from './SearchList.js';
 
 class QueryFilter extends React.Component {
 
@@ -195,8 +196,29 @@ class QueryFilter extends React.Component {
 
     }
 
-    onListSelect(selection) {
-        console.log(selection)
+    // onListSelect = (selection) => {
+    //     var selectedList = selection.map(elem => {
+    //         return elem['name']
+    //     });
+        
+    //     var data = {...this.state.data};
+    //     data['genre'] = selectedList;
+    //     this.setState({ data });
+        
+    // }
+
+                // <div style={{maxHeight: 300, maxWidth:'25%', overflow:'scroll'}} >
+                //     <Table data={genres.options} />
+                // </div>
+
+
+
+    renderSearchList(source) {
+        return (
+            <div>
+                <SearchList data={source} />
+            </div>
+        )
     }
 
 
@@ -207,13 +229,18 @@ class QueryFilter extends React.Component {
         return (
             <div>
                 { this.renderDropdown() }
-                <div style={{maxHeight: 300, maxWidth:'25%', overflow:'scroll'}} >
-                   <Table data={genres.options} onSelect={this.onListSelect} />
+                { this.renderSearchList(genres.options) }
+                <div>
+                    Genre keyword
+                </div>
+                <div>
+                    Artist keyword
+                </div>
+                <div>
+                    Title keyword
                 </div>
             </div>
         )
-                // { this.renderCheckList(artists.options) }
-                  // <li>Placeholder for text input for Title keyword</li>
     }
 
     renderQuerySunburst() {

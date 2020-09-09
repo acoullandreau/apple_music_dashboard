@@ -1,33 +1,66 @@
 import React from 'react';
-import DataTable from 'react-data-table-component';
+import Table, { Column } from 'react-base-table';
 
 
-class Table extends React.Component {
+function TableComponent(props) {
 
-	handleChange = (selection) => {
-		this.props.onSelect(selection.selectedRows);
-	};
+	const data = React.useMemo(
+	    () => props.data.map(elem => {
+	        return(
+		        {
+		            col0: elem['text']
+		        }
+		    )
+	    }),
+	    []
+	)
 
-	render() {
-		return (
-		  <DataTable
-		    columns={[{
-			    name: 'Select all',
-			    selector: 'select',
-			    sortable: true,
-			}]}
-		    data={this.props.data.map(elem => {
-		        return(
-			        {
-			            select: elem['text']
-			        }
-			    )
-	    	})}
-		    selectableRows // add for checkbox selection
-		    onSelectedRowsChange={this.handleChange}
-		  />
-		)
-	}
-};
+	const columns = React.useMemo(
+	    () => [{key: 'col0', dataKey:"col0"}],
+	    []
+	)
 
-export default Table;
+	return (
+		<Table data={data}>
+    		<Column {...columns[0]} width={100} flexGrow={1} flexShrink={0} />
+    	</ Table>
+	)
+
+}
+
+export default TableComponent;
+
+
+
+
+
+
+// class Table extends React.Component {
+
+// 	handleChange = (selection) => {
+// 		this.props.onSelect(selection.selectedRows);
+// 	};
+
+// 	render() {
+// 		return (
+// 		  <DataTable
+// 		    columns={[{
+// 			    name: 'Select all',
+// 			    selector: 'name',
+// 			    sortable: true,
+// 			}]}
+// 		    data={this.props.data.map(elem => {
+// 		        return(
+// 			        {
+// 			            name: elem['text']
+// 			        }
+// 			    )
+// 	    	})}
+// 		    selectableRows // add for checkbox selection
+// 		    onSelectedRowsChange={this.handleChange}
+// 		  />
+// 		)
+// 	}
+// };
+
+// export default Table;

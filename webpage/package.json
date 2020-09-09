@@ -10,15 +10,12 @@
     "papaparse": "^5.2.0",
     "plotly.js": "^1.54.7",
     "react": "^16.13.1",
-    "react-data-table-component": "^6.11.3",
     "react-dom": "^16.13.1",
     "react-plotly.js": "^2.4.0",
     "react-scripts": "3.4.1",
-    "react-table": "^7.5.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.1",
-    "string-similarity": "^4.0.2",
-    "styled-components": "^5.2.0"
+    "string-similarity": "^4.0.2"
   },
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
@@ -29,18 +26,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "webpack-cli": "^3.3.12",
