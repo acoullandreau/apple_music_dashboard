@@ -1,6 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Button, Dropdown, Checkbox } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
+import Table from './Table.js';
 
 class QueryFilter extends React.Component {
 
@@ -18,6 +19,7 @@ class QueryFilter extends React.Component {
     }
 
     handleChange = (e, selection) => {
+        console.log(selection)
         var data = {...this.state.data};
         data[selection.name] = selection.value;
         this.setState({ data });
@@ -136,90 +138,7 @@ class QueryFilter extends React.Component {
         return options;
     }
 
-
-    renderQueryHeatMap() {
-        var renderingDict = {
-            'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
-            'offline': { 'placeholder':'Offline', 'multiple':false, 'options':this.fetchOptionsOffline() },
-            'skipped': { 'placeholder':'Skipped', 'multiple':false, 'options':this.fetchOptionsSkipped() },
-            'origin': { 'placeholder':'Origin', 'multiple':true, 'options':this.fetchOptionsOrigin() },
-            'inlib': { 'placeholder':'Library Track', 'multiple':false, 'options':this.fetchOptionsLibrary() },
-            'year': { 'placeholder':'Year', 'multiple':true, 'options':this.fetchOptionsYear() },
-            'genre': { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() },
-            'artist': { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() },
-        }
-
-        return (
-            <div>
-                <ul style={{display: "inline"}}>
-                  {
-                    React.Children.toArray(
-                        Object.keys(renderingDict).map((item, i) => {
-                            var ref = "dropdown" + i;
-                            if (renderingDict[item]['multiple']) {
-                                if (renderingDict[item]['checklist']) {
-                                    return (
-                                        <li style={{listStyleType:"none"}}>
-                                            <div style={{ maxHeight: 300, maxWidth:'25%', overflow:'scroll' }}>
-                                                <ul style={{display: "inline"}}>
-                                                    {renderingDict[item]['options'].map(elem => {
-                                                        return (
-                                                            <li key={elem['key']} style={{listStyleType:"none"}}>
-                                                                <Checkbox 
-                                                                    label={elem['text']}
-                                                                    onChange={this.handleChange}
-                                                                />
-                                                            </li>
-                                                        )
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    )
-                                } else {
-                                    return (
-                                        <li style={{listStyleType:"none"}}>
-                                            <Dropdown
-                                                placeholder={renderingDict[item]['placeholder']}
-                                                name={item}
-                                                onChange={this.handleChange}
-                                                selection
-                                                clearable
-                                                search
-                                                multiple
-                                                options={renderingDict[item]['options']}
-                                                ref={ref}
-                                            />
-                                        </li>
-                                    )
-                                }
-                            } else {
-                                return (
-                                    <li style={{listStyleType:"none"}}>
-                                        <Dropdown
-                                            placeholder={renderingDict[item]['placeholder']}
-                                            name={item}
-                                            onChange={this.handleChange}
-                                            selection
-                                            clearable
-                                            search
-                                            options={renderingDict[item]['options']}
-                                            ref={ref}
-                                        />
-                                    </li>
-                                )
-                            }
-                        })
-                    )
-                  }
-                </ul>
-            </div>
-        )
-                  // <li>Placeholder for text input for Title keyword</li>
-    }
-
-    renderQuerySunburst() {
-
+    renderDropdown() {
         var renderingDict = {
             'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
             'offline': { 'placeholder':'Offline', 'multiple':false, 'options':this.fetchOptionsOffline() },
@@ -271,6 +190,36 @@ class QueryFilter extends React.Component {
                     )
                   }
                 </ul>
+            </div>
+        )
+
+    }
+
+    onListSelect(selection) {
+        console.log(selection)
+    }
+
+
+    renderQueryHeatMap() {
+        var genres = { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() }
+        var artists = { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }
+
+        return (
+            <div>
+                { this.renderDropdown() }
+                <div style={{maxHeight: 300, maxWidth:'25%', overflow:'scroll'}} >
+                   <Table data={genres.options} onSelect={this.onListSelect} />
+                </div>
+            </div>
+        )
+                // { this.renderCheckList(artists.options) }
+                  // <li>Placeholder for text input for Title keyword</li>
+    }
+
+    renderQuerySunburst() {
+        return (
+            <div>
+                { this.renderDropdown() }
             </div>
         )
     }
