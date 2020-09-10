@@ -6,7 +6,7 @@ import { Search, Label } from 'semantic-ui-react';
 const initialState = {
   loading: false,
   results: [],
-  value: '',
+  value: ''
 }
 
 
@@ -66,12 +66,15 @@ function SearchList(props) {
   }, [])
 
   const handleSelect = React.useCallback((e, data) => {
-    console.log(e, data)
     // update state with the selected value
-    dispatch({ type: 'UPDATE_SELECTION', selection: data.result.text });
-    console.log(props)
-    console.log(value)
+    var test = dispatch({ type: 'UPDATE_SELECTION', selection: data.result.text });
+    console.log(test)
+
+    // pass back the selection to the parent
+    props.onSelect(state)
   })
+
+  console.log(state)
 
   return (
       <Search

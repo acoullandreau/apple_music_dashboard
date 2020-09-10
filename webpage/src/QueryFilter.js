@@ -209,6 +209,10 @@ class QueryFilter extends React.Component {
 
     }
 
+    onSelect = (selection) => {
+        console.log(selection)
+    }
+
     renderQueryHeatMap() {
         var genres = { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() }
         var artists = { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }
@@ -229,10 +233,10 @@ class QueryFilter extends React.Component {
                     />
                 </div>
                 <div>
-                    <SearchList data={this.fetchOptionsArtist()} />
+                    <SearchList data={this.fetchOptionsArtist()} onSelect={this.onSelect} />
                 </div>
                 <div>
-                    <SearchList data={this.fetchOptionsTitle()} />
+                    <SearchList data={this.fetchOptionsTitle()} onSelect={this.onSelect} />
                 </div>
             </div>
         )
