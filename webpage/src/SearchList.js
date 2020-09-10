@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search } from 'semantic-ui-react';
+import { Search, Label } from 'semantic-ui-react';
 
 const initialState = {
   loading: false,
@@ -7,7 +7,7 @@ const initialState = {
   value: '',
 }
 
-function exampleReducer(state, action) {
+function reducer(state, action) {
   switch (action.type) {
     case 'CLEAN_QUERY':
       return initialState;
@@ -23,12 +23,13 @@ function exampleReducer(state, action) {
   }
 }
 
+const resultRenderer = ({ text }) => <p>{text}</p>    
+
 function SearchList(props) {
 
   const source = props.data;
-  const [state, dispatch] = React.useReducer(exampleReducer, initialState)
+  const [state, dispatch] = React.useReducer(reducer, initialState)
   const { loading, results, value } = state
-
   const timeoutRef = React.useRef()
   const handleSearchChange = React.useCallback((e, data) => {
     clearTimeout(timeoutRef.current)
@@ -40,17 +41,13 @@ function SearchList(props) {
         return
       }
 
-      const re = new RegExp(data.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
-      const isMatch = (result) => re.test(result.text)
-
-      console.log(source)
-      console.log(isMatch(source))
-
+      const re = new RegExp(data.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') // i for case-insensitive search
 
       dispatch({
         type: 'FINISH_SEARCH',
-        //results: source.filter(isMatch),
+        results: source.filter((result) => re.test(result.text)),
       })
+
     }, 300)
   }, [])
   React.useEffect(() => {
@@ -63,9 +60,10 @@ function SearchList(props) {
       <Search
         loading={loading}
         onResultSelect={(e, data) =>
-          dispatch({ type: 'UPDATE_SELECTION', selection: data.result.title })
+          dispatch({ type: 'UPDATE_SELECTION', selection: data.result.text })
         }
         onSearchChange={handleSearchChange}
+        resultRenderer={resultRenderer}
         results={results}
         value={value}
       />
@@ -73,17 +71,5 @@ function SearchList(props) {
   )
 }
 
-    //   <Grid.Column width={10}>
-    //     <Segment>
-    //       <Header>State</Header>
-    //       <pre style={{ overflowX: 'auto' }}>
-    //         {JSON.stringify({ loading, results, value }, null, 2)}
-    //       </pre>
-    //       <Header>Options</Header>
-    //       <pre style={{ overflowX: 'auto' }}>
-    //         {JSON.stringify(source, null, 2)}
-    //       </pre>
-    //     </Segment>
-    //   </Grid.Column>
-    // </Grid>
+
 export default SearchList;

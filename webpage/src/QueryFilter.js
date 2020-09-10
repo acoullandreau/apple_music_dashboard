@@ -196,23 +196,6 @@ class QueryFilter extends React.Component {
 
     }
 
-    // onListSelect = (selection) => {
-    //     var selectedList = selection.map(elem => {
-    //         return elem['name']
-    //     });
-        
-    //     var data = {...this.state.data};
-    //     data['genre'] = selectedList;
-    //     this.setState({ data });
-        
-    // }
-
-                // <div style={{maxHeight: 300, maxWidth:'25%', overflow:'scroll'}} >
-                //     <Table data={genres.options} />
-                // </div>
-
-
-
     renderSearchList(source) {
         return (
             <div>
@@ -229,7 +212,27 @@ class QueryFilter extends React.Component {
         return (
             <div>
                 { this.renderDropdown() }
-                { this.renderSearchList(genres.options) }
+                <Dropdown
+                    placeholder='Select genres'
+                    onChange={this.handleChange}
+                    selection
+                    clearable
+                    search
+                    multiple
+                    options={genres.options}
+                />
+                <Dropdown
+                    placeholder='Select artists'
+                    onChange={this.handleChange}
+                    selection
+                    clearable
+                    search
+                    multiple
+                    options={artists.options}
+                />
+
+
+                { this.renderSearchList(artists.options) }
                 <div>
                     Genre keyword
                 </div>
