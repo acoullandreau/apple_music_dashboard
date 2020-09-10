@@ -1,6 +1,6 @@
 
 .ui.search>.results {
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-height: 250px;
 }
 

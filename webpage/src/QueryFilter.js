@@ -131,7 +131,20 @@ class QueryFilter extends React.Component {
         var k=1000;
         var artists = this.props.data['artist'];
         for (var i in artists) {
-            var option = { key: k, text: artists[i], value: artists[i] };
+            var option = { key: k, title: artists[i], text: artists[i], value: artists[i] };
+            options.push(option)
+            k++;
+        }
+
+        return options;
+    }
+
+    fetchOptionsTitle = () => {
+        var options = [];
+        var k=10000;
+        var titles = this.props.data['title'];
+        for (var i in titles) {
+            var option = { key: k, title: titles[i], text: titles[i], value: titles[i] };
             options.push(option)
             k++;
         }
@@ -196,51 +209,30 @@ class QueryFilter extends React.Component {
 
     }
 
-    renderSearchList(source) {
-        return (
-            <div>
-                <SearchList data={source} />
-            </div>
-        )
-    }
-
-
     renderQueryHeatMap() {
         var genres = { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() }
         var artists = { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }
+        var titles = { 'placeholder':'Title', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }   
 
         return (
             <div>
                 { this.renderDropdown() }
-                <Dropdown
-                    placeholder='Select genres'
-                    onChange={this.handleChange}
-                    selection
-                    clearable
-                    search
-                    multiple
-                    options={genres.options}
-                />
-                <Dropdown
-                    placeholder='Select artists'
-                    onChange={this.handleChange}
-                    selection
-                    clearable
-                    search
-                    multiple
-                    options={artists.options}
-                />
-
-
-                { this.renderSearchList(artists.options) }
                 <div>
-                    Genre keyword
+                    <Dropdown
+                        placeholder='Select genres'
+                        onChange={this.handleChange}
+                        selection
+                        clearable
+                        search
+                        multiple
+                        options={this.fetchOptionsGenre()}
+                    />
                 </div>
                 <div>
-                    Artist keyword
+                    <SearchList data={this.fetchOptionsArtist()} />
                 </div>
                 <div>
-                    Title keyword
+                    <SearchList data={this.fetchOptionsTitle()} />
                 </div>
             </div>
         )
