@@ -73,12 +73,13 @@ class VisualizationDetailsBuilder {
 
 		this.getTargetFilterValues('year', data['visualizationFile'], plotDetails['filters'] )
 		this.getTargetFilterValues('artist', data['visualizationFile'], plotDetails['filters'] )
+		this.getTargetFilterValues('title', data['visualizationFile'], plotDetails['filters'] )
 		this.getTargetFilterValues('origin', data['visualizationFile'], plotDetails['filters'] )
 
 	}
 
 	static getTargetFilterValues(target, inputData, targetDict) {
-		var columns = {'year':'Play Year', 'artist':'Artist', 'origin':'Track origin'};
+		var columns = {'year':'Play Year', 'artist':'Artist', 'origin':'Track origin', 'title':'Title'};
 		targetDict[target] = [];
 		for (var row in inputData) {
 			var targetColumn = columns[target];

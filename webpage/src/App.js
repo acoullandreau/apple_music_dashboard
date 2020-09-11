@@ -110,10 +110,7 @@ class App extends React.Component {
 		 });
 	}
 
-	
-
 	onQueryVisualizationReady = (payload) => {
-
 		var targetPlot = payload.context.target.type;
 		if (targetPlot === 'sunburst') {
 			var plotType = payload.context.target.plot;

@@ -1,8 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Button, Dropdown, Search } from 'semantic-ui-react';
-//import Table from './Table.js';
+import { Button, Dropdown, Search, List } from 'semantic-ui-react';
 import SearchList from './SearchList.js';
+//import Table from './Table.js';
 
 class QueryFilter extends React.Component {
 
@@ -24,6 +24,16 @@ class QueryFilter extends React.Component {
         var data = {...this.state.data};
         data[selection.name] = selection.value;
         this.setState({ data });
+    }
+
+    onSearchSelect = (selection) => {
+        var data = {...this.state.data};
+        if (data[selection.type] === '') {
+            data[selection.type] = [];
+        }
+        data[selection.type].push(selection.data);
+        this.setState({ data }, () => console.log(this.state));
+
     }
 
     onSubmit = () => {
@@ -148,7 +158,6 @@ class QueryFilter extends React.Component {
             options.push(option)
             k++;
         }
-
         return options;
     }
 
@@ -214,25 +223,58 @@ class QueryFilter extends React.Component {
 
     }
 
-    onSelect = (selection) => {
-        if (selection.type === 'artist') {
-
-        } else if (selection.type === 'title') {
-
+    removeSearchItem = (e, data) => {
+        console.log(data)
+        var listData = this.state.data[data.target];
+        var indexToRemove = listData.indexOf(data.item)
+        if (indexToRemove > -1) {
+          listData.splice(indexToRemove, 1);
         }
+        this.setState({'data':listData})
 
+
+        //target={target} item={item} onClick={this.removeSearchItem}
     }
 
-    renderQueryHeatMap() {
+    renderSearchListItems = (target) => {
+        if (this.state.data[target] !== '') {
+            var itemList = this.state.data[target];
+            return (
+                <div style={{maxWidth:"15%"}}>
+                    <List>
+                        {
+                            React.Children.toArray(
+                                itemList.map((item, i) => {
+                                    return(
+                                        <List.Item onClick={this.removeSearchItem}>
+                                            <List.Content floated='right'>
+                                                <Button basic compact circular size='mini'>x</Button>
+                                            </List.Content>
+                                            <List.Content>{item}</List.Content>
+                                        </List.Item>
+                                    )
+                                })
+                            )
+                        }
 
+                    </List>
+                </div>
+            )
+        }
+    }
+
+
+    renderQueryHeatMap() {
         return (
             <div>
                 { this.renderDropdown('heatMap') }
                 <div>
-                    <SearchList type='artist' data={this.fetchOptionsArtist()} onSelect={this.onSelect} />
+                    <SearchList type='artist' data={this.fetchOptionsArtist()} onSelect={this.onSearchSelect} />
+                    { this.renderSearchListItems('artist') }
                 </div>
                 <div>
-                    <SearchList type='title' data={this.fetchOptionsTitle()} onSelect={this.onSelect} />
+                    <SearchList type='title' data={this.fetchOptionsTitle()} onSelect={this.onSearchSelect} />
+                    { this.renderSearchListItems('title') }
                 </div>
             </div>
         )
