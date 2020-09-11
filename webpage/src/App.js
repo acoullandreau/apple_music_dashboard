@@ -116,28 +116,16 @@ class App extends React.Component {
 
 		var targetPlot = payload.context.target.type;
 		if (targetPlot === 'sunburst') {
-			const sunburstHasUpdate = payload.data.rankingDict.genre?Object.keys(payload.data.rankingDict.genre):false;
-			if (sunburstHasUpdate.length > 0) {
-				var plotType = payload.context.target.plot;
-				if (plotType === 'origin') {
-					this.refs.sunburstOrigin.updatePlot(payload);
-				} else {
-					this.refs.sunburstSong.updatePlot(payload);
-					this.refs.ranking.updatePlot(payload);
-				}
+			var plotType = payload.context.target.plot;
+			if (plotType === 'origin') {
+				this.refs.sunburstOrigin.updatePlot(payload);
 			} else {
-				console.log('Add message no matching plot')
+				this.refs.sunburstSong.updatePlot(payload);
+				this.refs.ranking.updatePlot(payload);
 			}
-
 		} else if (targetPlot === 'heatMap') {
-			const heatMapHasUpdate = payload.data.heatMapPlot.heatMapDOW?Object.keys(payload.data.heatMapPlot.heatMapDOW):false
-
-			if (heatMapHasUpdate.length > 0) {
-				this.refs.heatMapDOM.updatePlot(payload);
-				this.refs.heatMapDOW.updatePlot(payload);
-			} else {
-				console.log('Add message no matching plot')
-			}
+			this.refs.heatMapDOM.updatePlot(payload);
+			this.refs.heatMapDOW.updatePlot(payload);
 		}
 	}
 

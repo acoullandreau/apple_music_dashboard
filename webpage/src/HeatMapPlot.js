@@ -7,14 +7,21 @@ class HeatMapPlot extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type }
+		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false }
 	}
 
 	updatePlot(parameters) {
 		if ('data' in parameters) {
-			//we expect this update to concern the data (query)
-			var data = parameters.data.heatMapPlot;
-			this.setState({ 'data':data });
+			// check is there is a match to plot
+			var heatMapHasUpdate = parameters.data.heatMapPlot.heatMapDOW?Object.keys(parameters.data.heatMapPlot.heatMapDOW):false
+			if (heatMapHasUpdate.length > 0) {
+				//we expect this update to concern the data (query)
+				var data = parameters.data.heatMapPlot;
+				this.setState({ 'data':data });
+			}
+			else {
+				this.setState({ 'renderNone':true });
+			}
 		} else {
 			// it is just a new selection of the plot to render
 			var data = this.state.initialData
@@ -114,11 +121,19 @@ class HeatMapPlot extends React.Component {
 	}
 
 	render() {
-		return (
-			<div>
-				<div>{this.renderPlot()}</div>
-			</div>
-		);
+		if (this.state.renderNone) {
+			return (
+				<div>
+					<p>There is no match to the filters you selected. Please try another query!</p>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<div>{this.renderPlot()}</div>
+				</div>
+			);
+		}
 	}
 
 }

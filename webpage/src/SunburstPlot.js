@@ -6,14 +6,21 @@ class SunburstPlot extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type }
+		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false }
 	}
 
 	updatePlot(parameters) {
 		if ('data' in parameters) {
-			//we expect this update to concern the data (query)
-			var data = parameters.data.sunburst;
-			this.setState({ 'data':data });
+			// check is there is a match to plot
+			var sunburstHasUpdate = parameters.data.rankingDict.genre?Object.keys(parameters.data.rankingDict.genre):false
+			if (sunburstHasUpdate.length > 0) {
+				//we expect this update to concern the data (query)
+				var data = parameters.data.sunburst;
+				this.setState({ 'data':data });
+			}
+			else {
+				this.setState({ 'renderNone':true });
+			}
 		} else {
 			// it is just a new selection of the plot to render
 			var data = this.state.data
@@ -33,22 +40,33 @@ class SunburstPlot extends React.Component {
 		var data = this.state.data[type];
 		// var style = plotConfig['sunburstPlot'][targetPlot]['style'];
 
-		return (
-			<Plot
-				data={[
-					{
-						values: data['values'],
-						labels: data['labels'],
-						ids:data['ids'],
-						parents:data['parents'],
-						type: "sunburst",
-						branchvalues: "total",
-						insidetextorientation: "radial",
-					},
-				]}
-				layout={{title: title, autosize:true}}
-			/>
-		);
+		if (this.state.renderNone) {
+			return (
+				<div>
+					<p>There is no match to the filters you selected. Please try another query!</p>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<Plot
+						data={[
+							{
+								values: data['values'],
+								labels: data['labels'],
+								ids:data['ids'],
+								parents:data['parents'],
+								type: "sunburst",
+								branchvalues: "total",
+								insidetextorientation: "radial",
+							},
+						]}
+						layout={{title: title, autosize:true}}
+					/>
+				</div>
+			);
+		}
+
 	}
 }
 
