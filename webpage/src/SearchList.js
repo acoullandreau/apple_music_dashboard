@@ -35,6 +35,7 @@ const resultRenderer = ({ text }) => <p>{text}</p>
 function SearchList(props) {
 
   const source = props.data;
+  const placeholder = 'Search '+ props.type;
   const [state, dispatch] = React.useReducer(reducer, initialState)
   const { loading, results, value } = state
 
@@ -46,7 +47,7 @@ function SearchList(props) {
 
     timeoutRef.current = setTimeout(() => {
       if (data.value.length === 0) {
-        dispatch({ type: 'CLEAN_QUERY' })
+        dispatch({ type: 'CLEAN_QUERY', query: props.type })
         return
       }
 
@@ -79,6 +80,7 @@ function SearchList(props) {
         resultRenderer={resultRenderer}
         results={results}
         value={value}
+        placeholder={placeholder}
       />
 
   )
