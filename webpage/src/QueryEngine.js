@@ -6,7 +6,7 @@ class QueryEngine  {
     static getFilteredFile(queryDict) {
         var matchColumnName = {
             'artist': 'Artist', 
-            'genre': 'Genres', 
+            'genre': 'Genre', 
             'inlib': 'Library Track', 
             'offline': 'Offline', 
             'origin': 'Track origin', 
@@ -23,10 +23,26 @@ class QueryEngine  {
                         var targetColumn = matchColumnName[item]
                         if (Array.isArray(queryDict[item])) {
                             // the query is on the union of several values for one column
-                            if (!queryDict[item].includes(filteredFile[row][targetColumn])) {
-                                delete filteredFile[row];
-                                break;
+                            if (item === 'genre') {
+                                // special case of the genre column that may contain more than one value separated by '&&'
+                                var rowGenres = filteredFile[row][targetColumn].split(' && ');
+                                var rowtoKeep = 0;
+                                for (var i = 0 ; i<rowGenres.length; i++) {
+                                    if (queryDict[item].includes(rowGenres[i].trim())) {
+                                        rowtoKeep++;
+                                    } 
+                                }
+                                if (rowtoKeep === 0) {
+                                    delete filteredFile[row];
+                                    break;
+                                }
+                            } else {
+                                if (!queryDict[item].includes(filteredFile[row][targetColumn])) {
+                                    delete filteredFile[row];
+                                    break;
+                                }
                             }
+
                         } else {
                             // the query is on a single value per column, so exclusive value
                             if (filteredFile[row][targetColumn] !== queryDict[item]) {

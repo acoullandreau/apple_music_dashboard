@@ -152,13 +152,18 @@ class QueryFilter extends React.Component {
         return options;
     }
 
-    renderDropdown() {
+    renderDropdown(target) {
         var renderingDict = {
             'rating': { 'placeholder':'Rating', 'multiple':false, 'options':this.fetchOptionsRating() },
             'offline': { 'placeholder':'Offline', 'multiple':false, 'options':this.fetchOptionsOffline() },
             'skipped': { 'placeholder':'Skipped', 'multiple':false, 'options':this.fetchOptionsSkipped() },
             'origin': { 'placeholder':'Origin', 'multiple':true, 'options':this.fetchOptionsOrigin() },
             'inlib': { 'placeholder':'Library Track', 'multiple':false, 'options':this.fetchOptionsLibrary() },
+        }
+
+        if (target === 'heatMap') {
+            renderingDict['year'] = { 'placeholder':'Year', 'multiple':true, 'options':this.fetchOptionsYear() };
+            renderingDict['genre'] = { 'placeholder':'Genre', 'multiple':true, 'options':this.fetchOptionsGenre() };
         }
 
         return (
@@ -210,33 +215,24 @@ class QueryFilter extends React.Component {
     }
 
     onSelect = (selection) => {
-        console.log(selection)
+        if (selection.type === 'artist') {
+
+        } else if (selection.type === 'title') {
+
+        }
+
     }
 
     renderQueryHeatMap() {
-        var genres = { 'placeholder':'Genre', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsGenre() }
-        var artists = { 'placeholder':'Artist', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }
-        var titles = { 'placeholder':'Title', 'checklist':true, 'multiple':true, 'options':this.fetchOptionsArtist() }   
 
         return (
             <div>
-                { this.renderDropdown() }
+                { this.renderDropdown('heatMap') }
                 <div>
-                    <Dropdown
-                        placeholder='Select genres'
-                        onChange={this.handleChange}
-                        selection
-                        clearable
-                        search
-                        multiple
-                        options={this.fetchOptionsGenre()}
-                    />
+                    <SearchList type='artist' data={this.fetchOptionsArtist()} onSelect={this.onSelect} />
                 </div>
                 <div>
-                    <SearchList data={this.fetchOptionsArtist()} onSelect={this.onSelect} />
-                </div>
-                <div>
-                    <SearchList data={this.fetchOptionsTitle()} onSelect={this.onSelect} />
+                    <SearchList type='title' data={this.fetchOptionsTitle()} onSelect={this.onSelect} />
                 </div>
             </div>
         )
@@ -245,7 +241,7 @@ class QueryFilter extends React.Component {
     renderQuerySunburst() {
         return (
             <div>
-                { this.renderDropdown() }
+                { this.renderDropdown('sunburst') }
             </div>
         )
     }

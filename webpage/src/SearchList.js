@@ -19,8 +19,8 @@ function reducer(state, action) {
       return { ...state, loading: true, value: action.query };
     case 'FINISH_SEARCH':
       return { ...state, loading: false, results: action.results };
-    case 'UPDATE_SELECTION':
-      return { ...state, value: action.selection };
+    // case 'UPDATE_SELECTION':
+    //   return { ...state, value: action.selection };
 
     default:
       throw new Error();
@@ -65,16 +65,11 @@ function SearchList(props) {
     }
   }, [])
 
-  const handleSelect = React.useCallback((e, data) => {
-    // update state with the selected value
-    var test = dispatch({ type: 'UPDATE_SELECTION', selection: data.result.text });
-    console.log(test)
+  function handleSelect(e, data) {
+      dispatch({ type: 'CLEAN_QUERY' })
+      props.onSelect({'type':props.type, 'data': data.result.text})
+  }
 
-    // pass back the selection to the parent
-    props.onSelect(state)
-  })
-
-  console.log(state)
 
   return (
       <Search

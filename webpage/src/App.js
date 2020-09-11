@@ -20,7 +20,7 @@ class App extends React.Component {
 		'hasVisuals': false, 
 		'plotDetails': {}, 
 		'selectedBarPlot' : {},  
-		'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': "", 'year': '' } 
+		'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] } 
 	};
 
 	componentDidMount = () => {
