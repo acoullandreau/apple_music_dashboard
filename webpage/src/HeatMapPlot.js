@@ -31,7 +31,7 @@ class HeatMapPlot extends React.Component {
 	
 	resetPlot() {
 		var data = this.state.initialData;
-		this.setState({ data });
+		this.setState({ 'data':data, 'renderNone':false });
 	}
 
 	getLabels(targetDataName) {
