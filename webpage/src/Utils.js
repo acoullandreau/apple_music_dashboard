@@ -68,8 +68,11 @@ class Utils {
 			reducedRankingDict[year]['rankOrder'] = []
 			for (var k=0 ; k<numEntries ; k++) {
 				var key =  rankingDict[year]['rankOrder'][k];
-				reducedRankingDict[year]['counts'][key] = rankingDict[year]['counts'][key];
-				reducedRankingDict[year]['rankOrder'].push(key)
+				// this "if" is in case the input data doesn't contain enough items, i.e its length is less than numEntries
+				if (typeof(key) !== 'undefined') {
+					reducedRankingDict[year]['counts'][key] = rankingDict[year]['counts'][key];
+					reducedRankingDict[year]['rankOrder'].push(key)
+				}
 			}
 		}
 		return reducedRankingDict;

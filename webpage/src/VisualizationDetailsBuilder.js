@@ -103,11 +103,11 @@ class VisualizationDetailsBuilder {
 		this.buildSunburstArrays('Genre', plotDetails['rankingDict']['genre'], plotDetails['sunburst']['genre']);
 		this.buildSunburstArrays('Track Origin', plotDetails['rankingDict']['origin'], plotDetails['sunburst']['origin']);
 
-		// we get a limited version of the artist ranking dict, limited to the top 100 entries
+		// we get a limited version of the artist ranking dict, limited to the top 50 entries
 		var artistRankingDict = Utils.reduceRankingDict(plotDetails['rankingDict']['artist'], 50);
 		this.buildSunburstArrays('Artist', artistRankingDict, plotDetails['sunburst']['artist']);
 
-		// we get a limited version of the title ranking dict, limited to the top 100 entries
+		// we get a limited version of the title ranking dict, limited to the top 50 entries
 		var titleRankingDict = Utils.reduceRankingDict(plotDetails['rankingDict']['title'], 50);
 		this.buildSunburstArrays('Title', titleRankingDict, plotDetails['sunburst']['title']);
 
