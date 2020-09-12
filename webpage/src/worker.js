@@ -100,6 +100,7 @@ self.addEventListener('message', function(e) {
 		})
 	} else if (e.data['type'] === 'query') {
 		QueryEngine.queryPlots(e.data['payload']).then(result => {
+			console.log(result)
 			postMessage({'type':'visualizationsReady', 'payload':{'context':e.data['payload'], 'data':result}});
         })
 	}

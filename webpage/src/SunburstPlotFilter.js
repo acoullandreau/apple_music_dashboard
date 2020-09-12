@@ -13,11 +13,19 @@ class SunburstPlotFilter extends React.Component {
         	payload['type'] = selection.value
     	} else {
     		// handles the number input field change
-    		this.setState({ 'numItems': e.target.value });
-    		payload['numItems'] = e.target.value;
+    		if (e.target.validity.valid) {
+                this.setState({ 'numItems': e.target.value });
+                if (e.target.value !== '') {
+                    payload['numItems'] = e.target.value;
+                }
+            } else {
+                this.setState({ 'numItems': '5' });
+                payload['numItems'] = '5';
+            }
     	}
         this.props.onChange({ 'type': 'sunburst', 'payload': payload })
     }
+
 
     render() {
         return (

@@ -20,7 +20,6 @@ class QueryFilter extends React.Component {
     }
 
     handleChange = (e, selection) => {
-        console.log(selection)
         var data = {...this.state.data};
         data[selection.name] = selection.value;
         this.setState({ data });
@@ -32,7 +31,7 @@ class QueryFilter extends React.Component {
             data[selection.type] = [];
         }
         data[selection.type].push(selection.data);
-        this.setState({ data }, () => console.log(this.state));
+        this.setState({ data });
 
     }
 
@@ -224,16 +223,15 @@ class QueryFilter extends React.Component {
     }
 
     removeSearchItem = (e, data) => {
-        console.log(data)
-        var listData = this.state.data[data.target];
-        var indexToRemove = listData.indexOf(data.item)
-        if (indexToRemove > -1) {
-          listData.splice(indexToRemove, 1);
-        }
-        this.setState({'data':listData})
-
-
-        //target={target} item={item} onClick={this.removeSearchItem}
+        var listData = {...this.state.data};
+        var updatedList = [];
+        for (var i in listData[data.target]) {
+            if (listData[data.target][i] !== data.item) {
+                updatedList.push(listData[data.target][i]);
+            }
+        };
+        listData[data.target] = updatedList;
+        this.setState({'data':listData});
     }
 
     renderSearchListItems = (target) => {
@@ -246,9 +244,9 @@ class QueryFilter extends React.Component {
                             React.Children.toArray(
                                 itemList.map((item, i) => {
                                     return(
-                                        <List.Item onClick={this.removeSearchItem}>
+                                        <List.Item>
                                             <List.Content floated='right'>
-                                                <Button basic compact circular size='mini'>x</Button>
+                                                <Button basic compact circular size='mini' target={target} item={item} onClick={this.removeSearchItem}>x</Button>
                                             </List.Content>
                                             <List.Content>{item}</List.Content>
                                         </List.Item>
