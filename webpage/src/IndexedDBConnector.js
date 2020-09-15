@@ -7,14 +7,14 @@ class IndexedDBConnector {
 		this.dbName = 'UserDataStorage';
 		this.dbVersion = 1;
 		this.storeName = 'UserFiles';
-    	this.db = null;
-  	}
+		this.db = null;
+	}
 
 
 	connection() {
 
 		if (this.isConnected === true) {
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				resolve(this.db);
 			});
 		} else {
@@ -22,7 +22,7 @@ class IndexedDBConnector {
 				var request = indexedDB.open(this.dbName, this.dbVersion);
 
 				// if db doesn't exist
-				request.onupgradeneeded = (event) => {
+				request.onupgradeneeded = () => {
 					this.db = request.result;
 
 					//check if store exist, if not create store
@@ -32,15 +32,15 @@ class IndexedDBConnector {
 				}
 
 				// if db exists, success and error functions
-				request.onsuccess = function(event) {
+				request.onsuccess = function() {
 					this.db = request.result;
 					this.isConnected = true;
 					resolve(this.db);
 				}
 
-				request.onerror = function(event) {
-				  alert('error opening database ' + event.target.errorCode);
-				  reject(event.target.errorCode)
+				request.onerror = function() {
+					alert('error opening database ' + event.target.errorCode);
+					reject(event.target.errorCode)
 				}
 			})
 		}
@@ -48,14 +48,14 @@ class IndexedDBConnector {
 	}
 
 	checkIfVizAvailable() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.connection().then(db => {
 					var transaction = db.transaction(this.storeName, "readonly");
 					var objectStore = transaction.objectStore(this.storeName);
 					var objectStoreRequest = objectStore.get('plotDetails');
-					objectStoreRequest.onsuccess = function(event) {
+					objectStoreRequest.onsuccess = function() {
 						resolve(objectStoreRequest.result);
-		  			};
+					};
 			})
 		})
 	}
@@ -91,22 +91,15 @@ class IndexedDBConnector {
 	}
 
 	readObjectFromDB(objectName) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.connection().then(db => {
 					var transaction = db.transaction(this.storeName, "readwrite");
 					var objectStore = transaction.objectStore(this.storeName);
 					var objectStoreRequest = objectStore.get(objectName);
-					objectStoreRequest.onsuccess = function(event) {
+					objectStoreRequest.onsuccess = function() {
 						resolve(objectStoreRequest.result);
-		  			};
+					};
 			})
-		})
-	}
-
-	removeObjectFromDB(objectName) {
-		//check if index exist, delete if it does
-		this.connection().then(db => {
-
 		})
 	}
 

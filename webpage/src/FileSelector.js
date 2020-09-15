@@ -37,21 +37,22 @@ class FileSelector extends React.Component {
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
 				this.props.onFileLoad(archive);
-
+				resolve();
 			} else {
 				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
 				this.setState({'errorMessage': errorMessage });
+				reject();
 			}
 		});
 	}
 
 	storeArchive = (archive) => {
 		if (typeof(archive) !== "undefined") {
-	    	localStorage.setItem('hasUploadedArchive', true);
-	    	localStorage.setItem('archive', JSON.stringify(archive));
-	    	localStorage.setItem('archiveName', archive[0].name);
-	    	this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive[0].name });
-	    }
+			localStorage.setItem('hasUploadedArchive', true);
+			localStorage.setItem('archive', JSON.stringify(archive));
+			localStorage.setItem('archiveName', archive[0].name);
+			this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive[0].name });
+		}
 
 	}
 
@@ -75,28 +76,28 @@ class FileSelector extends React.Component {
 		if ( hasUploadedArchive === true && errorMessage === '') {
 			fileSelector = (
 				<div>
-				    <label className="custom-file-upload">
-				    	<div>You have loaded an archive {this.state.archiveName}</div>
-	          			<div><input type="button" onClick={this.onReset} value="Load another archive" /></div>
-	        		</label>
+					<label className="custom-file-upload">
+						<div>You have loaded an archive {this.state.archiveName}</div>
+						<div><input type="button" onClick={this.onReset} value="Load another archive" /></div>
+					</label>
 				</div>
 			)
 		} else if ( errorMessage !== '') {
 			fileSelector = (
 				<div>
-				    <label className="custom-file-upload">
-				    	<div>The format of the archive you passed is wrong: {errorMessage}</div>
-				    	<div>Please check the documentation.</div>
-	          			<div><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
-	        		</label>
+					<label className="custom-file-upload">
+						<div>The format of the archive you passed is wrong: {errorMessage}</div>
+						<div>Please check the documentation.</div>
+						<div><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
+					</label>
 				</div>
 			)
 		} else {
 			fileSelector = (
 				<div> 
-	        		<label className="custom-file-upload">
-	          			<input type="file" onChange={this.onFileSelection}/>
-	        		</label>
+					<label className="custom-file-upload">
+						<input type="file" onChange={this.onFileSelection}/>
+					</label>
 				</div>
 			)
 		}

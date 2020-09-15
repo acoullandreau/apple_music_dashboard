@@ -42,12 +42,12 @@ class HeatMapPlot extends React.Component {
 	getHoverTemplate(year) {
 		if (this.state.type === 'DOM') {
 			return ("<b>%{y} %{x}</b><b> "+ year.toString()+"<b><br>" +
-	            	"Time listening: %{z:,.0f} minutes<br>" +
-	            	"<extra></extra>")
+					"Time listening: %{z:,.0f} minutes<br>" +
+					"<extra></extra>")
 		} else if (this.state.type === 'DOW') {
 			return (year.toString()+" - %{x}s, %{y}h<b><br>" +
-	            	"Time listening: %{z:,.0f} minutes<br>" +
-	            	"<extra></extra>")
+					"Time listening: %{z:,.0f} minutes<br>" +
+					"<extra></extra>")
 		}
 	}
 
@@ -93,28 +93,28 @@ class HeatMapPlot extends React.Component {
 
 		for (var plot in plots) {
 			histPlots.push(
-				(<div><Plot
-				  data={[plots[plot]]}
-				  layout={{
-				  	title: plot, 
-				  	autosize:true, 
-				  	xaxis:xaxis, 
-				  	yaxis:yaxis,
-				  }}
-				/></div>)
+				(<div>
+					<Plot
+						data={[plots[plot]]}
+						layout={{
+							title: plot, 
+							autosize:true, 
+							xaxis:xaxis, 
+							yaxis:yaxis
+						}}
+					/>
+				</div>)
 			)
 
 		}
 
 
 		return (<div>
-		    <ul>
-		      {
-		        React.Children.toArray(
-		          histPlots.map((item, i) => <li style={{listStyleType:"none"}}>{item}</li>)
-		        )
-		      }
-		    </ul>
+			<ul>
+				{
+					histPlots.map((item, i) => <li key={i} style={{listStyleType:"none"}}>{item}</li>)
+				}
+			</ul>
 		  </div>
 		)
 		

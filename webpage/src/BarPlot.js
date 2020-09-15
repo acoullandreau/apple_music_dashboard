@@ -85,9 +85,9 @@ class BarPlot extends React.Component {
 
 		var barPlot = (
 			<Plot
-			  data={data}
-			  layout={{title: title, barmode: barmode, autosize:true, xaxis:xaxis, yaxis:yaxis}}
-			  style={style}
+				data={data}
+				layout={{title: title, barmode: barmode, autosize:true, xaxis:xaxis, yaxis:yaxis}}
+				style={style}
 			/>
 		)
 

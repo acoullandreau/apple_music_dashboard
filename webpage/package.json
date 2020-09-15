@@ -28,8 +28,12 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "css-loader": "^4.3.0",
+    "eslint": "^7.9.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "style-loader": "^1.2.1",
     "webpack-cli": "^3.3.12",
     "worker-plugin": "^5.0.0"

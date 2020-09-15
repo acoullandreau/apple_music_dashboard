@@ -13,14 +13,26 @@ import QueryFilter from './QueryFilter.js';
 
 class App extends React.Component {
 
-	state = { 
-		'archive':'',
-		'isLoading': false, 
-		'hasVisuals': false, 
-		'plotDetails': {}, 
-		'selectedBarPlot' : {},  
-		'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] } 
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = { 
+			'archive':'',
+			'isLoading': false, 
+			'hasVisuals': false, 
+			'plotDetails': {}, 
+			'selectedBarPlot' : {},  
+			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] } 
+		};
+
+		this.fileSelectorRef = React.createRef();
+		this.sunburstSongRef = React.createRef();
+		this.rankingRef = React.createRef();
+		this.heatMapDOMRef = React.createRef();
+		this.heatMapDOWRef = React.createRef();
+		this.sunburstOriginRef = React.createRef();
+	}
+
 
 	componentDidMount = () => {
 		connectorInstance.checkIfVizAvailable().then(result => {
@@ -34,12 +46,12 @@ class App extends React.Component {
 			switch (event.data['type']) {
 				case 'archiveValidated':
 					// we know the format of the archive was the right one, we can proceed with file parsing
-					this.refs.fileSelector.storeArchive(this.state.archive);
+					this.fileSelectorRef.current.storeArchive(this.state.archive);
 					this.setState({'isLoading': true});
 					break;
 				case 'archiveRejected':
 					// there was a problem with the archive, we ask fileSelector to process the error to rerender the component
-					this.refs.fileSelector.setState({'errorMessage': event.data['payload'] })
+					this.fileSelectorRef.current.setState({'errorMessage': event.data['payload'] })
 					break;
 				case 'filesParsed':
 					// files are processed, we can clear the archive from localStorage, other files are stored in indexedDB by the worker
@@ -90,8 +102,8 @@ class App extends React.Component {
 			this.setState({ 'selectedBarPlot': parameters.payload });
 		} else if (target === 'sunburst') {
 			// we request an update of the sunburst and rankingList components with the new params
-			this.refs.sunburstSong.updatePlot(parameters);
-			this.refs.ranking.updatePlot(parameters);
+			this.sunburstSongRef.current.updatePlot(parameters);
+			this.rankingRef.current.updatePlot(parameters);
 		}
 	}
 
@@ -109,7 +121,7 @@ class App extends React.Component {
 			'hasVisuals': true,
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}, 
-		 });
+		});
 	}
 
 	onQueryVisualizationReady = (payload) => {
@@ -117,14 +129,14 @@ class App extends React.Component {
 		if (targetPlot === 'sunburst') {
 			var plotType = payload.context.target.plot;
 			if (plotType === 'origin') {
-				this.refs.sunburstOrigin.updatePlot(payload);
+				this.sunburstOriginRef.current.updatePlot(payload);
 			} else {
-				this.refs.sunburstSong.updatePlot(payload);
-				this.refs.ranking.updatePlot(payload);
+				this.sunburstSongRef.current.updatePlot(payload);
+				this.rankingRef.current.updatePlot(payload);
 			}
 		} else if (targetPlot === 'heatMap') {
-			this.refs.heatMapDOM.updatePlot(payload);
-			this.refs.heatMapDOW.updatePlot(payload);
+			this.heatMapDOMRef.current.updatePlot(payload);
+			this.heatMapDOWRef.current.updatePlot(payload);
 		}
 	}
 
@@ -153,14 +165,14 @@ class App extends React.Component {
 		if (targetPlot === 'sunburst') {
 			var plotType = plotTarget.plot;
 			if (plotType === 'origin') {
-				this.refs.sunburstOrigin.resetPlot();
+				this.sunburstOriginRef.current.resetPlot();
 			} else {
-				this.refs.sunburstSong.resetPlot();
-				this.refs.ranking.resetPlot();
+				this.sunburstSongRef.current.resetPlot();
+				this.rankingRef.current.resetPlot();
 			}
 		} else if (targetPlot === 'heatMap') {
-			this.refs.heatMapDOM.resetPlot();
-			this.refs.heatMapDOW.resetPlot();
+			this.heatMapDOMRef.current.resetPlot();
+			this.heatMapDOWRef.current.resetPlot();
 		}
 	}
 
@@ -191,7 +203,7 @@ class App extends React.Component {
 			if (this.state.isLoading) {
 				elemToRender = (
 					<div>
-					    <Loader />
+						<Loader />
 					</div>
 				)
 			}
@@ -199,7 +211,7 @@ class App extends React.Component {
 			elemToRender = (
 				<div>
 					<div>
-					    <input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
+						<input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
 					</div>
 					<div>
 						<QueryFilter 
@@ -210,10 +222,10 @@ class App extends React.Component {
 						/>
 					</div>
 					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref='sunburstSong'/>
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
 						<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref='ranking' />
-					</div>					
+						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+					</div>                  
 					<div>
 						<QueryFilter 
 							data={this.state.plotDetails['filters']} 
@@ -223,8 +235,8 @@ class App extends React.Component {
 						/>
 					</div>
 					<div> 
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref='heatMapDOM' />
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref='heatMapDOW' />
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
 					</div>
 					<div> 
 						<div>
@@ -236,7 +248,7 @@ class App extends React.Component {
 					</div>
 					<div> 
 						<div>
-					 		{ this.renderTimeBarPlot() }
+							{ this.renderTimeBarPlot() }
 						</div>
 					</div>
 					<div>
@@ -248,7 +260,7 @@ class App extends React.Component {
 						/>
 					</div>
 					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref="sunburstOrigin"/>
+						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
 					</div>
 					<div> 
 						<div>
@@ -266,7 +278,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref="fileSelector" /></div>
+				<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
 				{ this.renderScreen() }
 			</div>
 

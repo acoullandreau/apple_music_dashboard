@@ -1,4 +1,3 @@
-import React from 'react';
 import connectorInstance from './IndexedDBConnector.js';
 import Utils from './Utils.js';
 import plotConfig from './plotConfig.json';
@@ -9,8 +8,8 @@ class VisualizationDetailsBuilder {
 		var plotPromises = [];
 		var plotDetails = {};
 
-		return new Promise((resolve, reject) => {
-			var playPlotsPromise = new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
+			var playPlotsPromise = new Promise((resolve) => {
 				var playPlotDetails = {};
 				connectorInstance.readObjectFromDB('visualizationFile').then(result => {
 					// prepare year pie plot
@@ -29,7 +28,7 @@ class VisualizationDetailsBuilder {
 			})
 			plotPromises.push(playPlotsPromise);
 
-			var devicePlotPromise = new Promise((resolve, reject) => {
+			var devicePlotPromise = new Promise((resolve) => {
 				var devicePlotDetails = {};
 				connectorInstance.readObjectFromDB('libraryActivityFile').then(result => {
 					//prepare device pie plot
@@ -39,7 +38,7 @@ class VisualizationDetailsBuilder {
 			})
 			plotPromises.push(devicePlotPromise);
 
-			var filtersPromise = new Promise((resolve, reject) => {
+			var filtersPromise = new Promise((resolve) => {
 				var filtersDetails = {};
 				var dbObjects = {};
 				connectorInstance.readObjectFromDB('visualizationFile').then(result => {
@@ -195,14 +194,15 @@ class VisualizationDetailsBuilder {
 	}
 
 	static processGenreCount(genres, parametersDict) {
+		var genre;
 		if (genres.includes('&&')) {
-            var genresList = genres.split('&&');
-            for (var i in genresList) {
-            	var genre = genresList[i].trim();
-            	Utils.populateCountDict(genre, parametersDict);
-            }
+			var genresList = genres.split('&&');
+			for (var i in genresList) {
+				genre = genresList[i].trim();
+				Utils.populateCountDict(genre, parametersDict);
+			}
 		} else {
-			var genre = genres.trim();
+			genre = genres.trim();
 			Utils.populateCountDict(genre, parametersDict);
 		}
 	}
@@ -218,7 +218,6 @@ class VisualizationDetailsBuilder {
 		// we compute the count of song for each year and each time division (month, DOM, DOW, HOD) and the skipped ratio
 		for (var row in data) {
 			var year = data[row]['Play Year'];
-			var playDuration = data[row][targetZ];
 
 			if (year in plotParameters === false) {
 				plotParameters[year] = { 
@@ -266,6 +265,7 @@ class VisualizationDetailsBuilder {
 			var dow = data[row]['Play DOW'];
 			var hod = data[row]['Play HOD'];
 			var partial = data[row]['Played completely'];
+
 			if (year in plotParameters === false) {
 				plotParameters[year] = { 
 					'totalEntryCount':0,
@@ -283,7 +283,7 @@ class VisualizationDetailsBuilder {
 				plotParameters[year]['DOMCount'][dom]++;
 				plotParameters[year]['DOWCount'][dow]++;
 				plotParameters[year]['HODCount'][hod]++;
-				if (data[row]['Played completely']) {
+				if (partial) {
 					plotParameters[year]['SkippedRatioCount']['complete']++;
 				} else {
 					plotParameters[year]['SkippedRatioCount']['partial']++;
@@ -293,12 +293,12 @@ class VisualizationDetailsBuilder {
 		}
 
 		// we add the percentage version of each dictionary
-		for (var year in plotParameters) {
-			plotParameters[year]['MonthPercent'] = Utils.computePercentage(plotParameters[year]['MonthCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['DOMPercent'] = Utils.computePercentage(plotParameters[year]['DOMCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['DOWPercent'] = Utils.computePercentage(plotParameters[year]['DOWCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['HODPercent'] = Utils.computePercentage(plotParameters[year]['HODCount'], plotParameters[year]['totalEntryCount']);
-			plotParameters[year]['SkippedRatioPercent'] = Utils.computePercentage(plotParameters[year]['SkippedRatioCount'], plotParameters[year]['totalEntryCount']);
+		for (var yearPlot in plotParameters) {
+			plotParameters[yearPlot]['MonthPercent'] = Utils.computePercentage(plotParameters[yearPlot]['MonthCount'], plotParameters[yearPlot]['totalEntryCount']);
+			plotParameters[yearPlot]['DOMPercent'] = Utils.computePercentage(plotParameters[yearPlot]['DOMCount'], plotParameters[yearPlot]['totalEntryCount']);
+			plotParameters[yearPlot]['DOWPercent'] = Utils.computePercentage(plotParameters[yearPlot]['DOWCount'], plotParameters[yearPlot]['totalEntryCount']);
+			plotParameters[yearPlot]['HODPercent'] = Utils.computePercentage(plotParameters[yearPlot]['HODCount'], plotParameters[yearPlot]['totalEntryCount']);
+			plotParameters[yearPlot]['SkippedRatioPercent'] = Utils.computePercentage(plotParameters[yearPlot]['SkippedRatioCount'], plotParameters[yearPlot]['totalEntryCount']);
 		}
 
 		plotDetails['barPlot'] = {};
@@ -322,7 +322,7 @@ class VisualizationDetailsBuilder {
 	static buildPiePlot(type, data, plotDetails) {
 		var plotParameters = {};
 		var pieType;
-		var title;
+		//var title;
 		var targetColumn;
 
 		if (type === 'year') {

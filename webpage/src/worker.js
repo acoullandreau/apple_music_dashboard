@@ -9,11 +9,11 @@ import connectorInstance from './IndexedDBConnector.js';
 import QueryEngine from './QueryEngine.js';
 
 var filesInArchive = {
-    'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
-    'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
-    'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
-    'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
-    'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
+	'identifier_infos' : 'Apple_Media_Services/Apple Music Activity/Identifier Information.json.zip',
+	'library_tracks' : 'Apple_Media_Services/Apple Music Activity/Apple Music Library Tracks.json.zip',
+	'library_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Library Activity.json.zip',
+	'likes_dislikes' : 'Apple_Media_Services/Apple Music Activity/Apple Music Likes and Dislikes.csv',
+	'play_activity': 'Apple_Media_Services/Apple Music Activity/Apple Music Play Activity.csv'
 }
 
 var validateArchiveContent = (input) => {
@@ -101,7 +101,7 @@ self.addEventListener('message', function(e) {
 	} else if (e.data['type'] === 'query') {
 		QueryEngine.queryPlots(e.data['payload']).then(result => {
 			postMessage({'type':'visualizationsReady', 'payload':{'context':e.data['payload'], 'data':result}});
-        })
+		})
 	}
 
 })

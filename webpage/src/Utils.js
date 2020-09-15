@@ -48,10 +48,10 @@ class Utils {
 
 	static populateCountDict(value, counttDict) {
 		if (value in counttDict) {
-            counttDict[value] ++;
-        } else {
-           	counttDict[value] = 1;
-        }
+			counttDict[value] ++;
+		} else {
+			counttDict[value] = 1;
+		}
 	}
 
 	static sortDictKeys(dict) {

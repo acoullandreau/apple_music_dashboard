@@ -7,7 +7,7 @@ class FileParser {
 
 	static getFilesToParse(filesToParse) {
 		// this function extracts specifically the json files that are added to the archives as zip files (nested zip)
-		var getFilesPromise = new Promise((resolve, reject) => {
+		var getFilesPromise = new Promise((resolve) => {
 			var extractedFilesPromises = [];
 			var extractedFilesToParse = {};
 			for (var key in filesToParse) {
@@ -21,7 +21,7 @@ class FileParser {
 				}
 			} 
 
-			var nestedFilesPromise = new Promise((resolve, reject) => {
+			var nestedFilesPromise = new Promise((resolve) => {
 				Promise.all(extractedFilesPromises).then((result) => {
 					var extractedNestedFiles = {}
 					for (var elem in result) {
@@ -44,8 +44,8 @@ class FileParser {
 	}
 
 	static extractNestedZipFile(archive) {
-		var nestedZip = new Promise((resolve, reject) => { 
-			var extractedNestedFile = archive.async("blob")
+		var nestedZip = new Promise((resolve) => { 
+			archive.async("blob")
 			.then(jsZip.loadAsync)
 			.then(function (zip) {
 				resolve(zip.files);
@@ -55,7 +55,7 @@ class FileParser {
 	}
 
 	static readFile(file) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			if (file.name.includes('json')) {
 				resolve(file.async("text"));
 			} else if (file.name.includes('csv')) {
@@ -91,7 +91,7 @@ class FileParser {
 			filesPromises.push(files[key])
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			var parsedFiles = {};
 			var parsedFilesPromises = [];
 
@@ -103,7 +103,7 @@ class FileParser {
 				
 				}
 
-				Promise.all(parsedFilesPromises).then(result => {
+				Promise.all(parsedFilesPromises).then(() => {
 					resolve(parsedFiles);
 				})
 			})
@@ -136,7 +136,7 @@ class FileParser {
 
 
 	static parseLibraryActivity(content, parsedFiles) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			var libraryActivityFile = JSON.parse(content);
 			libraryActivityFile = this.parseLibraryActivityContent(libraryActivityFile);
 			parsedFiles['libraryActivityFile'] = libraryActivityFile;
@@ -146,7 +146,7 @@ class FileParser {
 
 
 	static parseLibraryTracks(content, parsedFiles) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			var libraryTracksFile = JSON.parse(content);
 			parsedFiles['libraryTracksFile'] = libraryTracksFile;
 			resolve(libraryTracksFile);
@@ -159,9 +159,9 @@ class FileParser {
 			header: true, 
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			// papaConfig contains "complete" callback function to execute when parsing is done
-			papaConfig['complete'] = (results, file) => {
+			papaConfig['complete'] = (results) => {
 				// parse file
 				var playActivityFile = this.parsePlayActivityContent(results.data);
 				parsedFiles['playActivityFile'] = playActivityFile;
@@ -186,9 +186,9 @@ class FileParser {
 			header: true, 
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			// papaConfig contains "complete" callback function to execute when parsing is done
-			papaConfig['complete'] = (results, file) => {
+			papaConfig['complete'] = (results) => {
 				// parse file
 				var likesDislikesFile = this.parseLikesDislikesContent(results.data)
 				parsedFiles['likesDislikesFile'] = likesDislikesFile;
@@ -200,7 +200,7 @@ class FileParser {
 	}
 
 	static parseIdentifierInfos(content, parsedFiles) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			var identifierInfosFile = JSON.parse(content);
 			parsedFiles['identifierInfosFile'] = identifierInfosFile;
 			resolve(identifierInfosFile);
@@ -413,8 +413,8 @@ class FileParser {
 	static getPercentileOutliers(playDurationsDict, percentile, rowsToDelete) {
 		var playDurations = Object.values(playDurationsDict);
 		playDurations.sort(function(a, b) {
-            return a - b;
-         });
+			return a - b;
+		});
 
 		var len =  playDurations.length;
 		var indexPercentile = Math.floor(len*percentile) - 1;

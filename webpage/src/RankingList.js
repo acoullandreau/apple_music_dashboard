@@ -94,12 +94,11 @@ class RankingList extends React.Component {
 
 		var listPlot = (
 			<Plot
-			  data={data}
-			  layout={{title: '', barmode: 'stack', autosize:true}}
+				data={data}
+				layout={{title: '', barmode: 'stack', autosize:true}}
 			/>
 		)
 
-			  // style={style}
 		return listPlot;
 	}
 

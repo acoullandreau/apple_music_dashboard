@@ -5,25 +5,25 @@ import Table, { Column } from 'react-base-table';
 function TableComponent(props) {
 
 	const data = React.useMemo(
-	    () => props.data.map(elem => {
-	        return(
-		        {
-		            col0: elem['text']
-		        }
-		    )
-	    }),
-	    []
+		() => props.data.map(elem => {
+			return(
+				{
+					col0: elem['text']
+				}
+			)
+		}),
+		[]
 	)
 
 	const columns = React.useMemo(
-	    () => [{key: 'col0', dataKey:"col0"}],
-	    []
+		() => [{key: 'col0', dataKey:"col0"}],
+		[]
 	)
 
 	return (
 		<Table data={data}>
-    		<Column {...columns[0]} width={100} flexGrow={1} flexShrink={0} />
-    	</ Table>
+			<Column {...columns[0]} width={100} flexGrow={1} flexShrink={0} />
+		</ Table>
 	)
 
 }
