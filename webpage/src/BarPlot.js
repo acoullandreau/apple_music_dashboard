@@ -30,14 +30,16 @@ class BarPlot extends React.Component {
 	getPlotContent(targetDataName) {
 		var traces = [];
 		var targetData = this.props.data[targetDataName];
+		var labels;
+
 
 		if (this.props.target.type === 'skippedRatio') {
 			var partials = [];
 			var completes = [];
-			var labels = Object.keys(targetData);
-			for (var year in targetData) {
-				partials.push(targetData[year]['partial'])
-				completes.push(targetData[year]['complete'])
+			labels = Object.keys(targetData);
+			for (var yearSkipped in targetData) {
+				partials.push(targetData[yearSkipped]['partial'])
+				completes.push(targetData[yearSkipped]['complete'])
 			}
 			var tracePartials = {
 				x: labels,
@@ -55,7 +57,7 @@ class BarPlot extends React.Component {
 			traces.push(traceCompletes);
 
 		} else {
-			var labels = this.getLabels(targetDataName);
+			labels = this.getLabels(targetDataName);
 			for (var year in targetData) {
 				var values = Object.values(targetData[year]);
 				var trace = {

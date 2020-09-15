@@ -1,6 +1,5 @@
 import React from 'react';
-import Plot from 'react-plotly.js';
-import { Button, Dropdown, Search, List } from 'semantic-ui-react';
+import { Button, Dropdown, List } from 'semantic-ui-react';
 import SearchList from './SearchList.js';
 //import Table from './Table.js';
 
@@ -180,7 +179,6 @@ class QueryFilter extends React.Component {
                   {
                     React.Children.toArray(
                         Object.keys(renderingDict).map((item, i) => {
-                            var ref = "dropdown" + i;
                             if (renderingDict[item]['multiple']) {
                                 return (
                                     <li style={{listStyleType:"none"}}>
@@ -193,7 +191,7 @@ class QueryFilter extends React.Component {
                                             search
                                             multiple
                                             options={renderingDict[item]['options']}
-                                            ref={ref}
+                                            ref={`dropdown${i}`}
                                         />
                                     </li>
                                 )
@@ -208,7 +206,7 @@ class QueryFilter extends React.Component {
                                             clearable
                                             search
                                             options={renderingDict[item]['options']}
-                                            ref={ref}
+                                            ref={`dropdown${i}`}
                                         />
                                     </li>
                                 )

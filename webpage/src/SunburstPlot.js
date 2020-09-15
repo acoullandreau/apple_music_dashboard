@@ -10,12 +10,13 @@ class SunburstPlot extends React.Component {
 	}
 
 	updatePlot(parameters) {
+		var data;
 		if ('data' in parameters) {
 			// check is there is a match to plot
 			var sunburstHasUpdate = parameters.data.rankingDict.genre?Object.keys(parameters.data.rankingDict.genre):false
 			if (sunburstHasUpdate.length > 0) {
 				//we expect this update to concern the data (query)
-				var data = parameters.data.sunburst;
+				data = parameters.data.sunburst;
 				this.setState({ 'data':data });
 			}
 			else {
@@ -23,7 +24,7 @@ class SunburstPlot extends React.Component {
 			}
 		} else {
 			// it is just a new selection of the plot to render
-			var data = this.state.data
+			data = this.state.data
 			this.setState({'data':data, 'type':parameters.payload.type});
 		}
 	}

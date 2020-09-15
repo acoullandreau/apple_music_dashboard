@@ -62,7 +62,7 @@ class IndexedDBConnector {
 
 	createStore(db, storeName) {
 		//create object store
-		var store = db.createObjectStore(storeName, {autoIncrement: true});
+		db.createObjectStore(storeName, {autoIncrement: true});
 
 		// create index
 		//var index = store.createIndex("fileName", "fileName", {unique:true});
@@ -114,7 +114,7 @@ class IndexedDBConnector {
 		this.connection().then(db => {
 			var transaction = db.transaction(this.storeName, "readwrite");
 			var objectStore = transaction.objectStore(this.storeName);
-			var objectStoreRequest = objectStore.clear();
+			objectStore.clear();
 
 		})
 	}

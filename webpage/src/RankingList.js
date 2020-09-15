@@ -1,6 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import plotConfig from './plotConfig.json';
+//import plotConfig from './plotConfig.json';
 import Utils from './Utils.js';
 
 class RankingList extends React.Component {
@@ -11,13 +11,14 @@ class RankingList extends React.Component {
 	}
 
 	updatePlot(parameters) {
+		var data;
 		if ('data' in parameters) {
 			//we expect this update to concern the data (query)
-			var data = parameters.data.rankingDict;
+			data = parameters.data.rankingDict;
 			this.setState({ 'data':data });
 		} else {
 			// it is just a new selection of the plot to render
-			var data = this.state.data
+			data = this.state.data
 			this.setState({'data':data, 'type':parameters.payload.type, 'numItems': parameters.payload.numItems});
 		}
 	}

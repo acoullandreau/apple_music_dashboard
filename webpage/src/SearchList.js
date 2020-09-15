@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Label } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
 
 // IMPORTANT NOTE : SearchResult seems to expect a title key - so make sure to include a title in the objects in the "source"
 
@@ -19,8 +19,6 @@ function reducer(state, action) {
       return { ...state, loading: true, value: action.query };
     case 'FINISH_SEARCH':
       return { ...state, loading: false, results: action.results };
-    // case 'UPDATE_SELECTION':
-    //   return { ...state, value: action.selection };
 
     default:
       throw new Error();
@@ -35,12 +33,11 @@ const resultRenderer = ({ text }) => <p>{text}</p>
 function SearchList(props) {
 
   const source = props.data;
-  const placeholder = 'Search '+ props.type;
   const [state, dispatch] = React.useReducer(reducer, initialState)
   const { loading, results, value } = state
 
   // timeout used for debouncing
-  const timeoutRef = React.useRef()
+  const timeoutRef = React.useRef() // we create a ref for the timeout object
   const handleSearchChange = React.useCallback((e, data) => {
     clearTimeout(timeoutRef.current)
     dispatch({ type: 'START_SEARCH', query: data.value })
@@ -58,11 +55,12 @@ function SearchList(props) {
         results: source.filter((result) => re.test(result.title)),
       })
 
-    }, 300)
+    }, 500)
   }, [])
+
   React.useEffect(() => {
     return () => {
-      clearTimeout(timeoutRef.current)
+      clearTimeout(timeoutRef.current) // we use the ref of the timeout object to clear it
     }
   }, [])
 
@@ -80,7 +78,7 @@ function SearchList(props) {
         resultRenderer={resultRenderer}
         results={results}
         value={value}
-        placeholder={placeholder}
+        placeholder={`Search ${props.type}`}
       />
 
   )

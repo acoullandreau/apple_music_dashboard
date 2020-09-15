@@ -9,7 +9,6 @@ import HeatMapPlot from './HeatMapPlot.js';
 import SunburstPlot from './SunburstPlot.js'; 
 import SunburstPlotFilter from './SunburstPlotFilter.js'; 
 import RankingList from './RankingList.js'; 
-import QueryEngine from './QueryEngine.js'; 
 import QueryFilter from './QueryFilter.js'; 
 
 class App extends React.Component {
@@ -58,6 +57,9 @@ class App extends React.Component {
 						// visualizations matching the query are ready, so we update App state to rerender the component
 						this.onQueryVisualizationReady(event.data['payload']);
 					}
+					break;
+				default:
+					console.log('No matching situation with this value of event.data["type"]');
 					break;
 			}
 		});

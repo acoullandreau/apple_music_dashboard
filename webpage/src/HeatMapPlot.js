@@ -11,12 +11,13 @@ class HeatMapPlot extends React.Component {
 	}
 
 	updatePlot(parameters) {
+		var data;
 		if ('data' in parameters) {
 			// check is there is a match to plot
 			var heatMapHasUpdate = parameters.data.heatMapPlot.heatMapDOW?Object.keys(parameters.data.heatMapPlot.heatMapDOW):false
 			if (heatMapHasUpdate.length > 0) {
 				//we expect this update to concern the data (query)
-				var data = parameters.data.heatMapPlot;
+				data = parameters.data.heatMapPlot;
 				this.setState({ 'data':data });
 			}
 			else {
@@ -24,7 +25,7 @@ class HeatMapPlot extends React.Component {
 			}
 		} else {
 			// it is just a new selection of the plot to render
-			var data = this.state.initialData
+			data = this.state.initialData
 			this.setState({'data':data, 'type':parameters.payload.type});
 		}
 	}
@@ -56,8 +57,7 @@ class HeatMapPlot extends React.Component {
 		var targetData = this.state.data[targetDataName];
 		var xbins = plotConfig.heatMapPlot[targetDataName]['xbins'];
 		var ybins = plotConfig.heatMapPlot[targetDataName]['ybins'];
-		var labels = plotConfig.heatMapPlot[targetDataName]['labels'];
-
+		
 		for (var year in targetData) {
 			var x = targetData[year]['x'];
 			var y = targetData[year]['y'];
@@ -85,7 +85,7 @@ class HeatMapPlot extends React.Component {
 	renderPlot() {
 		var targetDataName = 'heatMap'+this.state.type;
 		var plots = this.getPlotContent(targetDataName);
-		var title = plotConfig.heatMapPlot[targetDataName]['title'];
+		//var title = plotConfig.heatMapPlot[targetDataName]['title'];
 		var xaxis = plotConfig.heatMapPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.heatMapPlot[targetDataName]['yaxis'];
 		// var style = plotConfig.heatMapPlot['heatMap'+targetDataName]['style'];
