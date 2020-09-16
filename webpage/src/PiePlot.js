@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 import plotConfig from './plotConfig.json';
 
@@ -34,5 +35,12 @@ class PiePlot extends React.Component {
 		);
 	}
 }
+
+// props validation
+PiePlot.propTypes = {
+   target: PropTypes.object.isRequired,
+   data: PropTypes.object.isRequired,
+}
+
 
 export default PiePlot;

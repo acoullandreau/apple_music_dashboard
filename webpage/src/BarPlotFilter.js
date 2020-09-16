@@ -1,5 +1,5 @@
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Checkbox, Button } from 'semantic-ui-react';
 
 class BarPlotFilter extends React.Component {
@@ -71,5 +71,11 @@ class BarPlotFilter extends React.Component {
 		)
 	}
 }
+
+// props validation
+BarPlotFilter.propTypes = {
+   onChange:PropTypes.func.isRequired
+}
+
 
 export default BarPlotFilter;

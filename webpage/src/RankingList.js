@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 //import plotConfig from './plotConfig.json';
 import Utils from './Utils.js';
@@ -112,5 +113,12 @@ class RankingList extends React.Component {
 	}
 
 }
+
+// props validation
+RankingList.propTypes = {
+   target: PropTypes.object.isRequired,
+   data: PropTypes.object.isRequired,
+}
+
 
 export default RankingList;

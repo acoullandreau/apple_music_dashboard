@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Dropdown, List } from 'semantic-ui-react';
 import SearchList from './SearchList.js';
 //import Table from './Table.js';
@@ -327,6 +328,15 @@ class QueryFilter extends React.Component {
 
 	}
 }
+
+// props validation
+QueryFilter.propTypes = {
+   target: PropTypes.object.isRequired,
+   data: PropTypes.object.isRequired,
+   onQuery:PropTypes.func.isRequired,
+   onReset:PropTypes.func.isRequired,
+}
+
 
 
 export default QueryFilter;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Search } from 'semantic-ui-react';
 
 // IMPORTANT NOTE : SearchResult seems to expect a title key - so make sure to include a title in the objects in the "source"
@@ -82,6 +83,13 @@ function SearchList(props) {
 			/>
 
 	)
+}
+
+// props validation
+SearchList.propTypes = {
+   type: PropTypes.string,
+   data: PropTypes.array,
+   onSelect:PropTypes.func
 }
 
 

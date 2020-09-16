@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Loader = (props) => {
   return (
@@ -12,5 +13,11 @@ const Loader = (props) => {
 Loader.defaultProps = {
   message:'Processing your files to build visualizations...'
 };
+
+// props validation
+Loader.propTypes = {
+   message: PropTypes.string,
+}
+
 
 export default Loader;

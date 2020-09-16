@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
 class SunburstPlotFilter extends React.Component {
@@ -42,5 +43,11 @@ class SunburstPlotFilter extends React.Component {
 		)
 	}
 }
+
+// props validation
+SunburstPlotFilter.propTypes = {
+   onChange:PropTypes.func.isRequired
+}
+
 
 export default SunburstPlotFilter;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 import plotConfig from './plotConfig.json';
 
@@ -70,5 +71,12 @@ class SunburstPlot extends React.Component {
 
 	}
 }
+
+// props validation
+SunburstPlot.propTypes = {
+   target: PropTypes.object.isRequired,
+   data: PropTypes.object.isRequired,
+}
+
 
 export default SunburstPlot;

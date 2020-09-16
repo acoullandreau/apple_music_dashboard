@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class FileSelector extends React.Component {
 
@@ -110,5 +111,12 @@ class FileSelector extends React.Component {
 		return <div>{this.renderComponent()}</div>;
 	}
 }
+
+// props validation
+FileSelector.propTypes = {
+   onReset: PropTypes.func.isRequired,
+   onFileLoad: PropTypes.func.isRequired,
+}
+
 
 export default FileSelector;
