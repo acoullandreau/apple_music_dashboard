@@ -1,15 +1,17 @@
 import React from 'react';
-import FileSelector from './FileSelector.js';
+import SideNavBar from './SideNavBar.js';
+import Route from './Route.js';
 import Loader from './Loader.js';
 import connectorInstance from './IndexedDBConnector.js';
-import PiePlot from './PiePlot.js'; 
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
+import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
+import QueryFilter from './QueryFilter.js'; 
+import PiePlot from './PiePlot.js'; 
+import RankingList from './RankingList.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
 import SunburstPlotFilter from './SunburstPlotFilter.js'; 
-import RankingList from './RankingList.js'; 
-import QueryFilter from './QueryFilter.js'; 
 
 class App extends React.Component {
 
@@ -278,10 +280,16 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
-				{ this.renderScreen() }
+				<SideNavBar />
+				<Route path="/dist/">
+					<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
+				</Route>
+				<Route path="/dist/graphs">
+					<div>
+						{ this.renderScreen() }
+					</div>
+				</Route>
 			</div>
-
 		)
 	}
 }

@@ -37,18 +37,22 @@ function SearchList(props) {
 	const [state, dispatch] = React.useReducer(reducer, initialState)
 	const { loading, results, value } = state
 
-	// timeout used for debouncing
-	const timeoutRef = React.useRef() // we create a ref for the timeout object
+	const timeoutRef = React.useRef() // we create a ref for the timeout object to be able to use it in useEffect
+	// useCallback is used here due to the intensity of the computation required here, so prevent recomputing it unecessarily at every render
 	const handleSearchChange = React.useCallback((e, data) => {
+		// we add this step to reinitialize the search
 		clearTimeout(timeoutRef.current)
 		dispatch({ type: 'START_SEARCH', query: data.value })
 
+		// timeout used for debouncing
 		timeoutRef.current = setTimeout(() => {
+			// if the value entered at the new rerender is null, we do not compute anything
 			if (data.value.length === 0) {
 				dispatch({ type: 'CLEAN_QUERY', query: props.type })
 				return
 			}
 
+			// otherwise, we look for a match using a regex
 			const re = new RegExp(data.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') // i for case-insensitive search
 
 			dispatch({
@@ -66,22 +70,21 @@ function SearchList(props) {
 	}, [])
 
 	function handleSelect(e, data) {
-			dispatch({ type: 'CLEAN_QUERY' })
-			props.onSelect({'type':props.type, 'data': data.result.text})
+		dispatch({ type: 'CLEAN_QUERY' })
+		props.onSelect({'type':props.type, 'data': data.result.text})
 	}
 
 
 	return (
-			<Search
-				loading={loading}
-				onResultSelect={handleSelect}
-				onSearchChange={handleSearchChange}
-				resultRenderer={resultRenderer}
-				results={results}
-				value={value}
-				placeholder={`Search ${props.type}`}
-			/>
-
+		<Search
+			loading={loading}
+			onResultSelect={handleSelect}
+			onSearchChange={handleSearchChange}
+			resultRenderer={resultRenderer}
+			results={results}
+			value={value}
+			placeholder={`Search ${props.type}`}
+		/>
 	)
 }
 
