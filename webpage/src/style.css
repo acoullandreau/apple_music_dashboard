@@ -1,6 +1,19 @@
+body {
+	background-color: #F7F7ED;
+}
 
 .ui.search>.results {
 	overflow-y: auto;
 	max-height: 250px;
 }
 
+
+.nav-bar {
+	margin-top: 5%;
+	width:100px;
+	float: left;
+}
+
+.content {
+
+}

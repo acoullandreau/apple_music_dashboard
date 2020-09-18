@@ -1,59 +1,70 @@
 import React from 'react';
 //import Link from './Link';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 class SideNavBar extends React.Component {
 
 	state = { activeItem: 'home' };
 
-	handleItemClick = (e, { name }) => {
+	handleItemClick = (e, { name, to }) => {
+		console.log(e)
 		this.setState({ activeItem: name });
+
+		if (e.metaKey || e.ctrlKey) {
+			return;
+		}
+
+		e.preventDefault();
+		window.history.pushState({}, '', to);
+
+		const navEvent = new PopStateEvent('popstate');
+		window.dispatchEvent(navEvent);
 
 	}
 
 	render () {
 		return (
-			<Menu icon vertical>
-				<Menu.Item
-					name='home'
-					active={this.state.activeItem === 'home'}
-					onClick={this.handleItemClick}
-				>
-					<Icon name='home' />
-				</Menu.Item>
-
-				<Menu.Item
-					name='chart bar'
-					active={this.state.activeItem === 'chart bar'}
-					onClick={this.handleItemClick}
-				>
-					<Icon name='chart bar' />
-				</Menu.Item>
-
-				<Menu.Item
-					name='help'
-					active={this.state.activeItem === 'help'}
-					onClick={this.handleItemClick}
-				>
-					<Icon name='help' />
-				</Menu.Item>
-			</Menu>
+			<React.Fragment>
+				<div style={{margin:'10px'}}>
+					<Icon 
+						link
+						to='#'
+						inverted={this.state.activeItem === 'home' ? true : false}
+						bordered
+						circular
+						name='home'
+						size='big' 
+						onClick={this.handleItemClick}
+					/>
+				</div>
+				<div style={{margin:'10px'}} >
+					<Icon 
+						link
+						to="#graphs"
+						inverted={this.state.activeItem === 'chart bar' ? true : false}
+						bordered
+						circular
+						name='chart bar' 
+						size='big'
+						onClick={this.handleItemClick}
+					/>
+				</div>
+				<div style={{margin:'10px'}} >
+					<Icon 
+						link
+						to='#help'
+						inverted={this.state.activeItem === 'help' ? true : false}
+						bordered
+						circular
+						name='help' 
+						size='big'
+						onClick={this.handleItemClick}
+					/>
+				</div>
+			</React.Fragment>
 		);
 
 	}
 }
 
-
-			// <div className="ui secondary pointing menu">
-			// <Link href="/dist/" className="item">
-			// Home
-			// </Link>
-			// <Link href="/dist/graphs" className="item">
-			// Graphs
-			// </Link>
-			// <Link href="/dist/help" className="item">
-			// Help
-			// </Link>
-
-			// </div>
 export default SideNavBar;

@@ -280,15 +280,24 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<SideNavBar />
-				<Route path="/dist/">
-					<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
-				</Route>
-				<Route path="/dist/graphs">
-					<div>
-						{ this.renderScreen() }
-					</div>
-				</Route>
+				<div className='nav-bar'>
+					<SideNavBar />
+				</div>
+				<div className='content'>
+					<Route path="#">
+						<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
+					</Route>
+					<Route path="#graphs">
+						<div>
+							{ this.renderScreen() }
+						</div>
+					</Route>
+					<Route path="#help">
+						<div>
+							Help page
+						</div>
+					</Route>
+				</div>
 			</div>
 		)
 	}
