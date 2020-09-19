@@ -24,7 +24,8 @@ class App extends React.Component {
 			'hasVisuals': false, 
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
-			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] } 
+			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] },
+			'selectedPage':''
 		};
 
 		this.fileSelectorRef = React.createRef();
@@ -178,7 +179,6 @@ class App extends React.Component {
 		}
 	}
 
-
 	renderTimeBarPlot = () => {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
@@ -279,15 +279,18 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className='page'>
 				<div className='nav-bar'>
 					<SideNavBar />
 				</div>
 				<div className='content'>
-					<Route path="#">
-						<div><FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} /></div>
+					<Route path="" >
+						<div className='page-title'>Welcome</div>
+						<div>
+							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
+						</div>
 					</Route>
-					<Route path="#graphs">
+					<Route path="#graphs" >
 						<div>
 							{ this.renderScreen() }
 						</div>

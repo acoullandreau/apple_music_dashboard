@@ -1,13 +1,18 @@
 import React from 'react';
-//import Link from './Link';
+import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
 class SideNavBar extends React.Component {
 
-	state = { activeItem: 'home' };
+	state = { activeItem: '' };
+
+	componentDidMount() {
+		var matchPages = {'':'home', '#graphs':'chart bar', '#help':'help'}
+		var selectedPage = matchPages[window.location.hash];
+		this.setState({ activeItem: selectedPage })
+	}
 
 	handleItemClick = (e, { name, to }) => {
-		console.log(e)
 		this.setState({ activeItem: name });
 
 		if (e.metaKey || e.ctrlKey) {
@@ -66,5 +71,11 @@ class SideNavBar extends React.Component {
 
 	}
 }
+
+// props validation
+SideNavBar.propTypes = {
+   selection: PropTypes.string,
+}
+
 
 export default SideNavBar;
