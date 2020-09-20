@@ -119,6 +119,11 @@ class App extends React.Component {
 
 	onVisualizationsReady = (payload) => {
 		// visualizations can be rendered, so we update our App state to render the new component
+
+		window.history.pushState({}, '', '#graphs');
+		const navEvent = new PopStateEvent('popstate');
+		window.dispatchEvent(navEvent);
+
 		this.setState({
 			'isLoading': false,
 			'hasVisuals': true,
@@ -210,7 +215,7 @@ class App extends React.Component {
 				)
 			}
 		} else {
-			elemToRender = (
+			return (
 				<div>
 					<div>
 						<QueryFilter 
