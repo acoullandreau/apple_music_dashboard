@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="441.698" height="128.027" viewBox="0 0 441.698 128.027">
+  <g id="Groupe_589" data-name="Groupe 589" transform="translate(-749.302 -402)">
+    <path id="Union_8" data-name="Union 8" d="M-398.935,91c-4.39,0-7.318-2.872-7.318-7.187V19.126c0-4.315,2.928-7.187,7.318-7.187h14.623c4.383,0,7.312,2.872,7.312,7.187V83.813c0,4.315-2.929,7.187-7.312,7.187Zm-43.877,0c-4.39,0-7.312-2.872-7.312-7.187V-16.814c0-4.308,2.922-7.187,7.312-7.187h14.623c4.39,0,7.312,2.879,7.312,7.187V83.813c0,4.315-2.922,7.187-7.312,7.187Zm-43.877,0c-4.383,0-7.312-2.872-7.312-7.187V55.066c0-4.315,2.929-7.193,7.312-7.193h14.623c4.39,0,7.318,2.879,7.318,7.193V83.813c0,4.315-2.929,7.187-7.318,7.187Z" transform="translate(1568 426)" fill="#d13434"/>
+    <g id="Groupe_52" data-name="Groupe 52" transform="translate(63 59)">
+      <g id="Ellipse_5" data-name="Ellipse 5" transform="translate(686.302 444.454) rotate(-31)" fill="#d13434" stroke="#d13434" stroke-width="1">
+        <ellipse cx="17" cy="15.5" rx="17" ry="15.5" stroke="none"/>
+        <ellipse cx="17" cy="15.5" rx="16.5" ry="15" fill="none"/>
+      </g>
+      <line id="Ligne_5" data-name="Ligne 5" y2="73" transform="translate(720.5 369.5)" fill="none" stroke="#d13434" stroke-linecap="round" stroke-width="8"/>
+      <line id="Ligne_6" data-name="Ligne 6" y2="73" transform="translate(775.5 354.5)" fill="none" stroke="#d13434" stroke-linecap="round" stroke-width="8"/>
+      <line id="Ligne_7" data-name="Ligne 7" y1="15" x2="55" transform="translate(720.5 360.5)" fill="none" stroke="#d13434" stroke-width="20"/>
+      <g id="Ellipse_6" data-name="Ellipse 6" transform="translate(742.634 425.508) rotate(-40)" fill="#d13434" stroke="#d13434" stroke-width="1">
+        <ellipse cx="16" cy="15" rx="16" ry="15" stroke="none"/>
+        <ellipse cx="16" cy="15" rx="15.5" ry="14.5" fill="none"/>
+      </g>
+    </g>
+    <g id="Groupe_53" data-name="Groupe 53" transform="translate(0 26)">
+      <path id="Icon_Arrow_Drop_Down" data-name="Icon / Arrow Drop Down" d="M111-20,124.5-6.5,138-20Z" transform="translate(952.75 572) rotate(-90)" fill="#d13434" opacity="0.995"/>
+      <path id="Icon_Arrow_Drop_Down-2" data-name="Icon / Arrow Drop Down" d="M111-20,124.5-6.5,138-20Z" transform="translate(979.75 572) rotate(-90)" fill="#d13434" opacity="0.995"/>
+      <path id="Icon_Arrow_Drop_Down-3" data-name="Icon / Arrow Drop Down" d="M111-20,124.5-6.5,138-20Z" transform="translate(1006.75 572) rotate(-90)" fill="#d13434" opacity="0.995"/>
+    </g>
+  </g>
+</svg>

@@ -25,7 +25,7 @@ class App extends React.Component {
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
 			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] },
-			'selectedPage':''
+			'selectedPage':'',
 		};
 
 		this.fileSelectorRef = React.createRef();
@@ -110,10 +110,10 @@ class App extends React.Component {
 		}
 	}
 
-	reloadViz = () => {
-		// display loading screen again while visualizations are recomputed
+	loadViz = () => {
+		// display loading screen again while visualizations are computed
 		this.setState({'isLoading': true, 'hasVisuals': false });
-		// request from loader to recompute the visualizations
+		// request from worker to compute the visualizations
 		this.worker.postMessage({'type':'visualization', 'payload':''});
 	}
 
@@ -198,7 +198,7 @@ class App extends React.Component {
 
 	}
 
-	renderScreen = () => {
+	renderGraphsPage = () => {
 		let elemToRender;
 
 		if ( !this.state.hasVisuals ) {
@@ -212,9 +212,6 @@ class App extends React.Component {
 		} else {
 			elemToRender = (
 				<div>
-					<div>
-						<input type="button" onClick={this.reloadViz} value="Reload the visualizations" />
-					</div>
 					<div>
 						<QueryFilter 
 							data={this.state.plotDetails['filters']} 
@@ -277,7 +274,63 @@ class App extends React.Component {
 
 	}
 
+
+	renderHomePage = () => {
+		return (
+			<React.Fragment>
+				<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Welcome</div>
+				<div className={['paragraph', 'centered-content', 'home-intro'].join(' ')}>
+					<p>
+						This web page was designed to allow you to browse through your Apple Music data, providing various visualizations to help you highlight <b>trends</b>, <b>habits</b>, or any relevant <b>insight</b> on your activity on Apple Music.<br/>
+						Any processing is performed locally, your files and data <b>do not leave your computer</b>! 
+					</p>
+				</div>
+				<div className={['centered-content', 'home-icons'].join(' ')} >
+					<div>
+						<img alt='music to charts' src="./image_library/icon-music-chart.svg" />
+					</div>
+				</div>
+				<div className={['bold', 'subtitle', 'how-to'].join(' ')}>How-to</div>
+				<div className='instructions'>
+					<div className='instruction'>
+						<p className={['bold', 'title', 'instructionOne'].join(' ')}>1.</p>
+						<div className='instruction-block'>
+							<div className={['paragraph', 'instruction-text', 'instructionTwo'].join(' ')}>
+								Request your data to Apple, and make sure that you have the <b>Apple_Media_Services.zip</b> archive ready. 
+							</div>
+						</div>
+					</div>
+					<div className='instruction'>
+						<p className={['bold', 'title', 'instructionOne'].join(' ')}>2.</p>
+						<div className={['instruction-block', 'instructionTwo'].join(' ')}>
+							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
+						</div>
+					</div>
+				</div>
+			</React.Fragment>
+		)
+	}
+					// <div className='instruction'>
+					// 	<p className={['bold', 'title', 'instructionOne'].join(' ')}>3.</p>
+					// 	<div className='instruction-block'>
+					// 		<div className={['paragraph', 'instruction-text', 'instructionTwo'].join(' ')}>
+					// 			Click on the button below to <b>relaunch the treatment</b> of your data
+					// 		</div>
+					// 		<input type="button" onClick={this.loadViz} value={this.state.vizButton} />
+					// 	</div>
+					// </div>
+
 	render() {
+		if ( !this.state.hasVisuals ) {
+			if (this.state.isLoading) {
+				return (
+					<div>
+						<Loader />
+					</div>
+				)
+			}
+		} 
+
 		return (
 			<div className='page'>
 				<div className='nav-bar'>
@@ -285,14 +338,11 @@ class App extends React.Component {
 				</div>
 				<div className='content'>
 					<Route path="" >
-						<div className='page-title'>Welcome</div>
-						<div>
-							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
-						</div>
+						{ this.renderHomePage() }
 					</Route>
 					<Route path="#graphs" >
 						<div>
-							{ this.renderScreen() }
+							{ this.renderGraphsPage() }
 						</div>
 					</Route>
 					<Route path="#help">

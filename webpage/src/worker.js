@@ -88,7 +88,7 @@ var prepareFiles = (archive) => {
 // worker's event listener
 self.addEventListener('message', function(e) {
 	if (!e) return;
-
+	
 	if (e.data['type'] === 'filePreparation') {
 		var archive = e.data['payload'];
 		prepareFiles(archive);

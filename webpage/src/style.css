@@ -5,9 +5,30 @@ body {
 	color:#535353;
 }
 
+p {
+	margin: 0px;
+	line-height: 1.5;
+}
+
 .ui.search>.results {
 	overflow-y: auto;
 	max-height: 250px;
+}
+
+.bold {
+	font-weight: 700;
+}
+
+.title {
+	font-size: 7vh;
+}
+
+.subtitle {
+	font-size: 3vh;
+}
+
+.paragraph {
+	font-size: 2vh;
 }
 
 .page {
@@ -23,15 +44,74 @@ body {
 }
 
 .content {
-	width:90%;
+	width:70%;
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 5%;
 }
 
 .page-title {
-	font-size: 7vh;
-	font-weight: 700;
-	margin: 1%;
+	text-align: center;
+	margin-top: 1%;
+}
+
+.home-intro {
+	margin-top:6%;
+	text-align: center;
+}
+
+.home-icons {
+	max-width: 35%;
 	margin-left: auto;
 	margin-right: auto;
-	max-width: 20%;
+}
+
+.home-icons div {
+	max-width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.home-icons img{
+	margin-top:15%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 12vh;
+}
+
+.how-to {
+	margin-top:7%;
+}
+
+.instructions {
+	width:100%;
+	display:inline-flex;
+	margin-top:5%;
+}
+
+.instruction {
+	display: grid;
+	width:80%;
+	grid-template-columns: 15% 65%;
+	grid-column-gap: 5%;
+}
+
+.instructionOne {
+	grid-column: 1;
+}
+
+.instructionTwo {
+	grid-column: 2;
+}
+
+.instruction-text {
+	margin: 7%;
+	text-align: center;
+	color: #F7F7ED;
+	font-weight: 300;
+}
+
+.instruction-block {
+	background-color: #494949;
+	margin-left:2%;
 }

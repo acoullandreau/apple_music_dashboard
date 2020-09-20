@@ -13,13 +13,14 @@ class SideNavBar extends React.Component {
 	}
 
 	handleItemClick = (e, { name, to }) => {
-		this.setState({ activeItem: name });
-
 		if (e.metaKey || e.ctrlKey) {
+			var target = window.location.href.replace('#', to)
+			window.open(target, "_blank")
 			return;
 		}
 
-		e.preventDefault();
+		this.setState({ activeItem: name });
+		//e.preventDefault();
 		window.history.pushState({}, '', to);
 
 		const navEvent = new PopStateEvent('popstate');

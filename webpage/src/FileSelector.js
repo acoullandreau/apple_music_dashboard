@@ -31,10 +31,10 @@ class FileSelector extends React.Component {
 		this.props.onReset();
 	}
 
-	onFileSelection = (e) => {
+	onFileSelection = (files) => {
 		//check the format of the archive loaded -> zip file containing the structure we want!
 		new Promise((resolve, reject) => {
-			var archive = e.target.files;
+			var archive = files;
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
 				this.props.onFileLoad(archive);
@@ -76,30 +76,26 @@ class FileSelector extends React.Component {
 
 		if ( hasUploadedArchive === true && errorMessage === '') {
 			fileSelector = (
-				<div>
-					<label className="custom-file-upload">
-						<div>You have loaded an archive {this.state.archiveName}</div>
-						<div><input type="button" onClick={this.onReset} value="Load another archive" /></div>
-					</label>
-				</div>
+				<React.Fragment>
+					<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
+					<input type="button" onClick={this.onReset} value="Load another archive" />
+				</React.Fragment>
 			)
 		} else if ( errorMessage !== '') {
 			fileSelector = (
-				<div>
-					<label className="custom-file-upload">
-						<div>The format of the archive you passed is wrong: {errorMessage}</div>
-						<div>Please check the documentation.</div>
-						<div><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
-					</label>
-				</div>
+				<React.Fragment>
+					<div className={['paragraph', 'instruction-text'].join(' ')}>
+						The format of the archive you passed is wrong: {errorMessage} <br/> Please check the documentation.
+					</div>
+					<input type="button" onClick={this.clearStorage} value="Load another archive" />
+				</React.Fragment>
 			)
 		} else {
 			fileSelector = (
-				<div> 
-					<label className="custom-file-upload">
-						<input type="file" onChange={this.onFileSelection}/>
-					</label>
-				</div>
+				<React.Fragment> 
+					<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
+					<input type="file" onChange={e => this.onFileSelection([...e.target.files]) } value=""/>
+				</React.Fragment>
 			)
 		}
 		
@@ -108,7 +104,7 @@ class FileSelector extends React.Component {
 	}
 
 	render() {
-		return <div>{this.renderComponent()}</div>;
+		return <React.Fragment>{this.renderComponent()}</React.Fragment>;
 	}
 }
 
