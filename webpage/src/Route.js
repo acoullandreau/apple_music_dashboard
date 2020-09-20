@@ -15,7 +15,6 @@ const Route = ({ path, children }) => {
     };
   }, []);
 
-  console.log(currentPath)
   return currentPath === path ? children : null;
 };
 

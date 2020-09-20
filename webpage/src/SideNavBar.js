@@ -29,6 +29,33 @@ class SideNavBar extends React.Component {
 	}
 
 	render () {
+
+		let graphsProps;
+		if (this.props.showGraphs) {
+			graphsProps = (
+				<Icon 
+					link
+					to="#graphs"
+					inverted={this.state.activeItem === 'chart bar' ? true : false}
+					bordered
+					circular
+					name='chart bar' 
+					size='big' 
+					onClick={this.handleItemClick}
+				/>
+			)
+		} else {
+			graphsProps = (
+				<Icon 
+					disabled
+					bordered
+					circular
+					name='chart bar' 
+					size='big' 
+				/>
+			)
+		}
+
 		return (
 			<React.Fragment>
 				<div style={{margin:'10px'}}>
@@ -44,16 +71,7 @@ class SideNavBar extends React.Component {
 					/>
 				</div>
 				<div style={{margin:'10px'}} >
-					<Icon 
-						link
-						to="#graphs"
-						inverted={this.state.activeItem === 'chart bar' ? true : false}
-						bordered
-						circular
-						name='chart bar' 
-						size='big'
-						onClick={this.handleItemClick}
-					/>
+					{graphsProps}
 				</div>
 				<div style={{margin:'10px'}} >
 					<Icon 
@@ -76,6 +94,7 @@ class SideNavBar extends React.Component {
 // props validation
 SideNavBar.propTypes = {
    selection: PropTypes.string,
+   showGraphs:PropTypes.bool,
 }
 
 

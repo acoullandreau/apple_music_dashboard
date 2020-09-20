@@ -307,7 +307,7 @@ class App extends React.Component {
 					</div>
 					<div className='instruction'>
 						<p className={['bold', 'title', 'instructionOne'].join(' ')}>2.</p>
-						<div className={['instruction-block', 'instructionTwo'].join(' ')}>
+						<div className='instruction-block'>
 							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
 						</div>
 					</div>
@@ -339,7 +339,7 @@ class App extends React.Component {
 		return (
 			<div className='page'>
 				<div className='nav-bar'>
-					<SideNavBar />
+					<SideNavBar showGraphs={this.state.hasVisuals ? true : false }/>
 				</div>
 				<div className='content'>
 					<Route path="" >

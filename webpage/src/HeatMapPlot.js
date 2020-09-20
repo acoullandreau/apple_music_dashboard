@@ -101,7 +101,8 @@ class HeatMapPlot extends React.Component {
 							title: plot, 
 							autosize:true, 
 							xaxis:xaxis, 
-							yaxis:yaxis
+							yaxis:yaxis,
+							paper_bgcolor: 'rgba(0,0,0,0)'
 						}}
 					/>
 				</div>)

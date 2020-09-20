@@ -63,7 +63,7 @@ class SunburstPlot extends React.Component {
 								insidetextorientation: "radial",
 							},
 						]}
-						layout={{title: title, autosize:true}}
+						layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
 					/>
 				</div>
 			);

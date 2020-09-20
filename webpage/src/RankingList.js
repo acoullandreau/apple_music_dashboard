@@ -96,7 +96,13 @@ class RankingList extends React.Component {
 		var listPlot = (
 			<Plot
 				data={data}
-				layout={{title: '', barmode: 'stack', autosize:true}}
+				layout={{
+					title: '', 
+					barmode: 'stack', 
+					autosize:true, 
+					paper_bgcolor: 'rgba(0,0,0,0)', 
+					plot_bgcolor: 'rgba(0,0,0,0)'
+				}}
 			/>
 		)
 

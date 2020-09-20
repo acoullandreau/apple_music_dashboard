@@ -78,7 +78,7 @@ class FileSelector extends React.Component {
 			fileSelector = (
 				<React.Fragment>
 					<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
-					<input type="button" onClick={this.onReset} value="Load another archive" />
+					<div className="home-button"><input type="button" onClick={this.onReset} value="Load another archive" /></div>
 				</React.Fragment>
 			)
 		} else if ( errorMessage !== '') {
@@ -87,19 +87,19 @@ class FileSelector extends React.Component {
 					<div className={['paragraph', 'instruction-text'].join(' ')}>
 						The format of the archive you passed is wrong: {errorMessage} <br/> Please check the documentation.
 					</div>
-					<input type="button" onClick={this.clearStorage} value="Load another archive" />
+					<div className="home-button"><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
 				</React.Fragment>
 			)
 		} else {
 			fileSelector = (
 				<React.Fragment> 
 					<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
-					<input type="file" onChange={e => this.onFileSelection([...e.target.files]) } value=""/>
+					<div className="home-button"><input type="file" onChange={e => this.onFileSelection([...e.target.files]) } value=""/></div>
 				</React.Fragment>
 			)
 		}
 		
-		return <div>{fileSelector}</div>;
+		return fileSelector;
 
 	}
 
