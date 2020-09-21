@@ -44,20 +44,27 @@ p {
 }
 
 .content {
-	width:70%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 5%;
 }
 
-.page-title {
-	text-align: center;
-	margin-top: 1%;
+.content-home {
+	width:70%;
 }
 
-.home-intro {
-	margin-top:6%;
+.content-graphs {
+	width:85%;
+}
+
+.page-title {
+	margin-top: 1%;
+	margin-bottom: 5%;
 	text-align: center;
+}
+
+.section-margin {
+	margin-top:3%;
 }
 
 .home-icons {
@@ -87,10 +94,6 @@ p {
 
 .home-button input {
 	width:100%;
-}
-
-.how-to {
-	margin-top:7%;
 }
 
 .instructions {
@@ -125,4 +128,12 @@ p {
 	width:100%;
 	background-color: #494949;
 	margin-left:2%;
+}
+
+.tabs {
+	background-color: #F7F7ED;
+}
+
+.tab {
+	background-color: #F7F7ED !important;
 }

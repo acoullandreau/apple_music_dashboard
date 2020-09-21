@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tab } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -215,64 +216,86 @@ class App extends React.Component {
 				)
 			}
 		} else {
-			return (
-				<div>
-					<div>
-						<QueryFilter 
-							data={this.state.plotDetails['filters']} 
-							target={{'type':'sunburst', 'plot':''}} 
-							onQuery={this.onQuerySubmit} 
-							onReset={this.onQueryReset}
-						/>
-					</div>
-					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
-						<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
-					</div>                  
-					<div>
-						<QueryFilter 
-							data={this.state.plotDetails['filters']} 
-							target={{'type':'heatMap'}} 
-							onQuery={this.onQuerySubmit}
-							onReset={this.onQueryReset}
-						/>
-					</div>
-					<div> 
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
-					</div>
-					<div> 
-						<div>
+
+			const panes = [
+				{ 
+					menuItem: 'Listening patterns',
+					render: () => (
+						<Tab.Pane className='tab'>
 							<div>
+								{ this.renderTimeBarPlot() }
+							</div>
+							<div>
+								<QueryFilter 
+									data={this.state.plotDetails['filters']}
+									target={{'type':'sunburst', 'plot':'origin'}} 
+									onQuery={this.onQuerySubmit} 
+									onReset={this.onQueryReset}
+								/>
+								<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
+							</div>
+			  				<div>
 								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
 								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 							</div>
-						</div>
+
+							<div>
+								<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+							</div>
+						</Tab.Pane>
+					)
+				},
+				{
+					menuItem: 'Favourites', 
+					render: () => (
+						<Tab.Pane className='tab'>
+							<div>
+								<QueryFilter 
+									data={this.state.plotDetails['filters']} 
+									target={{'type':'sunburst', 'plot':''}} 
+									onQuery={this.onQuerySubmit} 
+									onReset={this.onQueryReset}
+								/>
+							</div>
+							<div>
+								<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
+								<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+								<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+							</div> 
+						</Tab.Pane> 
+					)
+				},
+				{ 
+					menuItem: 'Calendar view', 
+					render: () => (
+						<Tab.Pane className='tab'>
+				  			<div>
+								<QueryFilter 
+									data={this.state.plotDetails['filters']} 
+									target={{'type':'heatMap'}} 
+									onQuery={this.onQuerySubmit}
+									onReset={this.onQueryReset}
+								/>
+							</div>
+							<div> 
+								<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
+								<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
+							</div>
+						</Tab.Pane> 
+					)
+				},
+			]
+
+
+			elemToRender = (
+				<div className={['content-graphs', 'content'].join(' ')}>
+					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
+					<div className={['paragraph', 'section-margin'].join(' ')}>
+						Data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
-					<div> 
-						<div>
-							{ this.renderTimeBarPlot() }
-						</div>
-					</div>
-					<div>
-						<QueryFilter 
-							data={this.state.plotDetails['filters']}
-							target={{'type':'sunburst', 'plot':'origin'}} 
-							onQuery={this.onQuerySubmit} 
-							onReset={this.onQueryReset}
-						/>
-					</div>
-					<div>
-						<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
-					</div>
-					<div> 
-						<div>
-							<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
-						</div>
-					</div>
+					<Tab className='section-margin' panes={panes} />
 				</div>
-			)
+			);
 
 		} 
 		return elemToRender;
@@ -282,20 +305,20 @@ class App extends React.Component {
 
 	renderHomePage = () => {
 		return (
-			<React.Fragment>
-				<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Welcome</div>
-				<div className={['paragraph', 'centered-content', 'home-intro'].join(' ')}>
+			<div className={['content-home', 'content'].join(' ')}>
+				<div className={['bold', 'title', 'page-title'].join(' ')}>Welcome</div>
+				<div className={['paragraph', 'section-margin'].join(' ')}>
 					<p>
 						This web page was designed to allow you to browse through your Apple Music data, providing various visualizations to help you highlight <b>trends</b>, <b>habits</b>, or any relevant <b>insight</b> on your activity on Apple Music.<br/>
 						Any processing is performed locally, your files and data <b>do not leave your computer</b>! 
 					</p>
 				</div>
-				<div className={['centered-content', 'home-icons'].join(' ')} >
+				<div className={['home-icons'].join(' ')} >
 					<div>
 						<img alt='music to charts' src="./image_library/icon-music-chart.svg" />
 					</div>
 				</div>
-				<div className={['bold', 'subtitle', 'how-to'].join(' ')}>How-to</div>
+				<div className={['bold', 'subtitle', 'section-margin'].join(' ')}>How-to</div>
 				<div className='instructions'>
 					<div className='instruction'>
 						<p className={['bold', 'title', 'instructionOne'].join(' ')}>1.</p>
@@ -312,18 +335,9 @@ class App extends React.Component {
 						</div>
 					</div>
 				</div>
-			</React.Fragment>
+			</div>
 		)
 	}
-					// <div className='instruction'>
-					// 	<p className={['bold', 'title', 'instructionOne'].join(' ')}>3.</p>
-					// 	<div className='instruction-block'>
-					// 		<div className={['paragraph', 'instruction-text', 'instructionTwo'].join(' ')}>
-					// 			Click on the button below to <b>relaunch the treatment</b> of your data
-					// 		</div>
-					// 		<input type="button" onClick={this.loadViz} value={this.state.vizButton} />
-					// 	</div>
-					// </div>
 
 	render() {
 		if ( !this.state.hasVisuals ) {
@@ -341,21 +355,19 @@ class App extends React.Component {
 				<div className='nav-bar'>
 					<SideNavBar showGraphs={this.state.hasVisuals ? true : false }/>
 				</div>
-				<div className='content'>
-					<Route path="" >
-						{ this.renderHomePage() }
-					</Route>
-					<Route path="#graphs" >
-						<div>
-							{ this.renderGraphsPage() }
-						</div>
-					</Route>
-					<Route path="#help">
-						<div>
-							Help page
-						</div>
-					</Route>
-				</div>
+				<Route path="" >
+					{ this.renderHomePage() }
+				</Route>
+				<Route path="#graphs" >
+					<React.Fragment>
+						{ this.renderGraphsPage() }
+					</React.Fragment>
+				</Route>
+				<Route path="#help">
+					<div>
+						Help page
+					</div>
+				</Route>
 			</div>
 		)
 	}
