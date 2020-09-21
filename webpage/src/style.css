@@ -75,6 +75,10 @@ p {
 	margin-top:3%;
 }
 
+.section-title {
+	/*text-align: center;*/
+}
+
 .home-icons {
 	max-width: 35%;
 	margin-left: auto;
@@ -140,26 +144,28 @@ p {
 
 .tab {
 	background-color: #F7F7ED !important;
+	overflow-x: scroll;
 }
 
 .grid-graphs {
 	display: grid;
-	grid-template-columns: 80% 20%;
+	grid-template-columns: 75% 20%;
 	grid-column-gap: 5%;
 }
 
 .grid-graphs-inverted {
 	display: grid;
-	grid-template-columns: 20% 80%;
+	grid-template-columns: 20% 75%;
 	grid-column-gap: 5%;
 }
 
 
 .filter {
-	height:50%;
+	height:80%;
 	margin-top:auto;
 	margin-bottom: auto;
 }
+
 
 
 

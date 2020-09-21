@@ -19,54 +19,73 @@ class BarPlotFilter extends React.Component {
 
 	render() {
 		return (
-			<Form>
+			<Form className='paragraph'>
 				<div>
-					<Button toggle value='count' active={this.state.unit === 'count' ? true : false} onClick={this.handleChange}>Count</Button>
-					<Button toggle value='percent' active={this.state.unit === 'percent' ? true : false} onClick={this.handleChange}>Percentage</Button>
+					<p>Choose unit:</p>
+					<div>
+						<Button
+							toggle 
+							size='tiny'
+							value='count' 
+							active={this.state.unit === 'count' ? true : false} 
+							onClick={this.handleChange}
+						>
+							Count
+						</Button>
+						<Button 
+							toggle
+							size='tiny'
+							value='percent' 
+							active={this.state.unit === 'percent' ? true : false} 
+							onClick={this.handleChange}
+						>
+							Percentage
+						</Button>
+					</div>
 				</div>
-				<Form.Field>
-					Choose time granularity:
-				</Form.Field>
-				<Form.Field>
+				<div style={{marginTop:'10%'}}>
+					<p>Choose time granularity:</p>
+					<Form.Field>
+							<Checkbox
+							radio
+							label='Per month'
+							name='checkboxRadioGroup'
+							value='month'
+							checked={this.state.granularity === 'month'}
+							onChange={this.handleChange}
+						/>
+					</Form.Field>
+					<Form.Field>
 						<Checkbox
-						radio
-						label='Per month'
-						name='checkboxRadioGroup'
-						value='month'
-						checked={this.state.granularity === 'month'}
-						onChange={this.handleChange}
-					/>
-				</Form.Field>
-				<Form.Field>
-					<Checkbox
-						radio
-						label='Per day of the month'
-						name='checkboxRadioGroup'
-						value='dom'
-						checked={this.state.granularity === 'dom'}
-						onChange={this.handleChange}
-					/>
-				</Form.Field>
-				<Form.Field>
-					<Checkbox
-						radio
-						label='Per day of the week'
-						name='checkboxRadioGroup'
-						value='dow'
-						checked={this.state.granularity === 'dow'}
-						onChange={this.handleChange}
-					/>
-				</Form.Field>
-				<Form.Field>
-					<Checkbox
-						radio
-						label='Per hour of the day'
-						name='checkboxRadioGroup'
-						value='hod'
-						checked={this.state.granularity === 'hod'}
-						onChange={this.handleChange}
-					/>
-				</Form.Field>
+							radio
+							label='Per day of the month'
+							name='checkboxRadioGroup'
+							value='dom'
+							checked={this.state.granularity === 'dom'}
+							onChange={this.handleChange}
+						/>
+					</Form.Field>
+					<Form.Field>
+						<Checkbox
+							radio
+							label='Per day of the week'
+							name='checkboxRadioGroup'
+							value='dow'
+							checked={this.state.granularity === 'dow'}
+							onChange={this.handleChange}
+						/>
+					</Form.Field>
+					<Form.Field>
+						<Checkbox
+							radio
+							label='Per hour of the day'
+							name='checkboxRadioGroup'
+							value='hod'
+							checked={this.state.granularity === 'hod'}
+							onChange={this.handleChange}
+						/>
+					</Form.Field>
+				</div>
 			</Form>
 		)
 	}

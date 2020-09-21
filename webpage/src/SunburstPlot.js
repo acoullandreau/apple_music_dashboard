@@ -63,7 +63,7 @@ class SunburstPlot extends React.Component {
 							},
 						]}
 						layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
-						style={{width:'auto', height:'100vh'}}
+						style={{width:'auto', height:'90vh'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>

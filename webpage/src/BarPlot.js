@@ -77,7 +77,7 @@ class BarPlot extends React.Component {
 
 	renderPlot() {
 		var targetDataName = this.getRefTargetData();
-		var title = plotConfig.barPlot[targetDataName]['title'];
+		//var title = plotConfig.barPlot[targetDataName]['title'];
 		var barmode = plotConfig.barPlot[targetDataName]['barmode'];
 		var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];
@@ -87,7 +87,6 @@ class BarPlot extends React.Component {
 			<Plot
 				data={data}
 				layout={{
-					title: title, 
 					barmode: barmode, 
 					autosize:true, 
 					xaxis:xaxis, 
@@ -95,7 +94,7 @@ class BarPlot extends React.Component {
 					paper_bgcolor: 'rgba(0,0,0,0)', 
 					plot_bgcolor: 'rgba(0,0,0,0)'
 				}}
-				style={{width:'100%'}}
+				style={{width:'100%', minHeight:'60vh'}}
 				config = {{responsive: 'true'}}
 			/>
 		)
@@ -107,7 +106,7 @@ class BarPlot extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>{this.renderPlot()}</div>
+				{this.renderPlot()}
 			</div>
 		);
 	}

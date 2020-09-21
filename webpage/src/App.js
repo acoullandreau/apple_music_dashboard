@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from 'semantic-ui-react';
+import { Divider, Tab } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -188,24 +188,59 @@ class App extends React.Component {
 	renderTimeBarPlot = () => {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
-				<div className='grid-graphs'>
+				<React.Fragment>
 					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
 					<div className={['grid-two', 'filter'].join(' ')} >
 						<BarPlotFilter target='month' onChange={this.onSelectPlot} />
 					</div>
-				</div>
+				</React.Fragment>
 			)
 		} else {
 			return (
-				<div className='grid-graphs'>
+				<React.Fragment>
 					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
 					<div className={['grid-two', 'filter'].join(' ')} >
 						<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 					</div>
-				</div>
+				</React.Fragment>
 			)
 		}
 
+	}
+
+	renderGraphTabOne = () => {
+		return (
+			<Tab.Pane className='tab'>
+				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >When do you listen to music?</div>
+				<div className='grid-graphs' >
+					{ this.renderTimeBarPlot() }
+				</div>
+				<Divider section />
+				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >How do you find tracks?</div>
+				<div className='grid-graphs-inverted'>
+					<div className={['grid-one', 'filter'].join(' ')} >
+						<QueryFilter 
+							data={this.state.plotDetails['filters']}
+							target={{'type':'sunburst', 'plot':'origin'}} 
+							onQuery={this.onQuerySubmit} 
+							onReset={this.onQueryReset}
+						/>
+					</div>
+					<SunburstPlot className='grid-two' data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
+				</div>
+				<Divider section />
+				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>
+					<div>
+					<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+					<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
+				</div>
+				<Divider section />
+				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Do you skip tracks a lot?</div>
+				<div>
+					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+				</div>
+			</Tab.Pane>
+		)
 	}
 
 	renderGraphsPage = () => {
@@ -224,30 +259,7 @@ class App extends React.Component {
 			const panes = [
 				{ 
 					menuItem: 'Listening patterns',
-					render: () => (
-						<Tab.Pane className='tab'>
-							{ this.renderTimeBarPlot() }
-							<div className='grid-graphs-inverted'>
-								<div className={['grid-one', 'filter'].join(' ')} >
-									<QueryFilter 
-										data={this.state.plotDetails['filters']}
-										target={{'type':'sunburst', 'plot':'origin'}} 
-										onQuery={this.onQuerySubmit} 
-										onReset={this.onQueryReset}
-									/>
-								</div>
-								<SunburstPlot className='grid-two' data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
-							</div>
-			  				<div>
-								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
-								<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
-							</div>
-
-							<div>
-								<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
-							</div>
-						</Tab.Pane>
-					)
+					render: () => this.renderGraphTabOne()
 				},
 				{
 					menuItem: 'Favourites', 
