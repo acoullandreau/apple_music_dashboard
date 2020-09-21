@@ -15,6 +15,14 @@ p {
 	max-height: 250px;
 }
 
+.ui.button.toggle.active {
+  background: #D13434 !important;
+}
+
+.ui.button.toggle.active:hover {
+  background: #FD3F3F !important;
+}
+
 .bold {
 	font-weight: 700;
 }
@@ -109,11 +117,11 @@ p {
 	grid-column-gap: 5%;
 }
 
-.instructionOne {
+.grid-one {
 	grid-column: 1;
 }
 
-.instructionTwo {
+.grid-two {
 	grid-column: 2;
 }
 
@@ -130,10 +138,28 @@ p {
 	margin-left:2%;
 }
 
-.tabs {
-	background-color: #F7F7ED;
-}
-
 .tab {
 	background-color: #F7F7ED !important;
 }
+
+.grid-graphs {
+	display: grid;
+	grid-template-columns: 80% 20%;
+	grid-column-gap: 5%;
+}
+
+.grid-graphs-inverted {
+	display: grid;
+	grid-template-columns: 20% 80%;
+	grid-column-gap: 5%;
+}
+
+
+.filter {
+	height:50%;
+	margin-top:auto;
+	margin-bottom: auto;
+}
+
+
+

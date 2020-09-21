@@ -16,8 +16,8 @@ class PiePlot extends React.Component {
 
 	render() {
 		var targetConfig = this.getTargetConfig();
-		var style = targetConfig['style'];
 		var title = targetConfig['title'];
+		
 		return (
 			<Plot
 				data={[
@@ -30,7 +30,8 @@ class PiePlot extends React.Component {
 					},
 				]}
 				layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
-				style={style}
+				style={{width:'100%'}}
+				config = {{responsive: 'true'}}
 			/>
 		);
 	}

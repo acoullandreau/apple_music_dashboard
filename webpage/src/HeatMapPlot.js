@@ -89,7 +89,6 @@ class HeatMapPlot extends React.Component {
 		//var title = plotConfig.heatMapPlot[targetDataName]['title'];
 		var xaxis = plotConfig.heatMapPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.heatMapPlot[targetDataName]['yaxis'];
-		// var style = plotConfig.heatMapPlot['heatMap'+targetDataName]['style'];
 		var histPlots = [];
 
 		for (var plot in plots) {
@@ -104,6 +103,8 @@ class HeatMapPlot extends React.Component {
 							yaxis:yaxis,
 							paper_bgcolor: 'rgba(0,0,0,0)'
 						}}
+						style={{width:'100%'}}
+						config = {{responsive: 'true'}}
 					/>
 				</div>)
 			)

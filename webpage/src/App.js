@@ -188,16 +188,20 @@ class App extends React.Component {
 	renderTimeBarPlot = () => {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
-				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
-					<BarPlotFilter target='month' onChange={this.onSelectPlot} />
+				<div className='grid-graphs'>
+					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
+					<div className={['grid-two', 'filter'].join(' ')} >
+						<BarPlotFilter target='month' onChange={this.onSelectPlot} />
+					</div>
 				</div>
 			)
 		} else {
 			return (
-				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
-					<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
+				<div className='grid-graphs'>
+					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
+					<div className={['grid-two', 'filter'].join(' ')} >
+						<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
+					</div>
 				</div>
 			)
 		}
@@ -222,17 +226,17 @@ class App extends React.Component {
 					menuItem: 'Listening patterns',
 					render: () => (
 						<Tab.Pane className='tab'>
-							<div>
-								{ this.renderTimeBarPlot() }
-							</div>
-							<div>
-								<QueryFilter 
-									data={this.state.plotDetails['filters']}
-									target={{'type':'sunburst', 'plot':'origin'}} 
-									onQuery={this.onQuerySubmit} 
-									onReset={this.onQueryReset}
-								/>
-								<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
+							{ this.renderTimeBarPlot() }
+							<div className='grid-graphs-inverted'>
+								<div className={['grid-one', 'filter'].join(' ')} >
+									<QueryFilter 
+										data={this.state.plotDetails['filters']}
+										target={{'type':'sunburst', 'plot':'origin'}} 
+										onQuery={this.onQuerySubmit} 
+										onReset={this.onQueryReset}
+									/>
+								</div>
+								<SunburstPlot className='grid-two' data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
 							</div>
 			  				<div>
 								<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
@@ -291,7 +295,7 @@ class App extends React.Component {
 				<div className={['content-graphs', 'content'].join(' ')}>
 					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
 					<div className={['paragraph', 'section-margin'].join(' ')}>
-						Data source : <b>{localStorage.getItem('archiveName')}</b>
+						Your data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
 					<Tab className='section-margin' panes={panes} />
 				</div>
@@ -321,15 +325,15 @@ class App extends React.Component {
 				<div className={['bold', 'subtitle', 'section-margin'].join(' ')}>How-to</div>
 				<div className='instructions'>
 					<div className='instruction'>
-						<p className={['bold', 'title', 'instructionOne'].join(' ')}>1.</p>
+						<p className={['bold', 'title', 'grid-one'].join(' ')}>1.</p>
 						<div className='instruction-block'>
-							<div className={['paragraph', 'instruction-text', 'instructionTwo'].join(' ')}>
+							<div className={['paragraph', 'instruction-text', 'grid-two'].join(' ')}>
 								Request your data to Apple, and make sure that you have the <b>Apple_Media_Services.zip</b> archive ready. 
 							</div>
 						</div>
 					</div>
 					<div className='instruction'>
-						<p className={['bold', 'title', 'instructionOne'].join(' ')}>2.</p>
+						<p className={['bold', 'title', 'grid-one'].join(' ')}>2.</p>
 						<div className='instruction-block'>
 							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
 						</div>

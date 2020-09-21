@@ -82,7 +82,6 @@ class BarPlot extends React.Component {
 		var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];
 		var data = this.getPlotContent(targetDataName);
-		var style = plotConfig.barPlot[targetDataName]['style'];
 
 		var barPlot = (
 			<Plot
@@ -96,7 +95,8 @@ class BarPlot extends React.Component {
 					paper_bgcolor: 'rgba(0,0,0,0)', 
 					plot_bgcolor: 'rgba(0,0,0,0)'
 				}}
-				style={style}
+				style={{width:'100%'}}
+				config = {{responsive: 'true'}}
 			/>
 		)
 

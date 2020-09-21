@@ -40,7 +40,6 @@ class SunburstPlot extends React.Component {
 		var targetPlot = type+'Sunburst';
 		var title = plotConfig['sunburstPlot'][targetPlot]['title'];
 		var data = this.state.data[type];
-		// var style = plotConfig['sunburstPlot'][targetPlot]['style'];
 
 		if (this.state.renderNone) {
 			return (
@@ -64,6 +63,8 @@ class SunburstPlot extends React.Component {
 							},
 						]}
 						layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
+						style={{width:'auto', height:'100vh'}}
+						config = {{responsive: 'true'}}
 					/>
 				</div>
 			);

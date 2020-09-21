@@ -103,6 +103,8 @@ class RankingList extends React.Component {
 					paper_bgcolor: 'rgba(0,0,0,0)', 
 					plot_bgcolor: 'rgba(0,0,0,0)'
 				}}
+				style={{width:'100%'}}
+				config = {{responsive: 'true'}}
 			/>
 		)
 

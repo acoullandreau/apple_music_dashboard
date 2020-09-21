@@ -74,7 +74,7 @@ class BarPlotFilter extends React.Component {
 
 // props validation
 BarPlotFilter.propTypes = {
-   onChange:PropTypes.func.isRequired
+   onChange:PropTypes.func.isRequired,
 }
 
 
