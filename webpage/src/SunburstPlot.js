@@ -57,15 +57,15 @@ class SunburstPlot extends React.Component {
 								type: "sunburst",
 								branchvalues: "total",
 								insidetextorientation: "radial",
-								marker: {line: {width: 100}},
 							},
 						]}
 						layout={{
 							autosize:true, 
 							paper_bgcolor: 'rgba(0,0,0,0)', 
 							margin: {l: 0, r: 0, b: 0, t: 0}, 
+							marker: {line: {width: 1000}},
 							sunburstcolorway:[
-								"#111111","#EF553B","#00cc96","#ab63fa","#19d3f3", "#e763fa", "#FECB52","#FFA15A","#FF6692","#B6E880"
+								"#003f5c","#2f4b7c","#665191","#a05195", "#d45087", "#f95d6a", "#ff7c43", "#ffa600"
 							]
 						}}
 						style={{width:'auto', height:'90vh'}}
