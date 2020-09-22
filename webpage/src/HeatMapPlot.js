@@ -73,7 +73,8 @@ class HeatMapPlot extends React.Component {
 				xbins:xbins,
 				autobiny: false,
 				ybins:ybins,
-				hovertemplate : this.getHoverTemplate(year)
+				hovertemplate : this.getHoverTemplate(year),
+				colorscale: 'Portland',
 			}
 			traces[year]=trace;
 		}

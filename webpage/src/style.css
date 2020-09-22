@@ -159,13 +159,24 @@ p {
 	grid-column-gap: 5%;
 }
 
-
 .filter {
 	height:80%;
 	margin-top:auto;
 	margin-bottom: auto;
 }
 
+.two-blocks {
+	display: grid;
+	grid-template-columns: 49% 49%;
+	grid-column-gap: 2%;
+}
+
+.two-blocks-asym {
+	display: grid;
+	grid-template-columns: 60% 38%;
+	grid-column-gap: 2%;
+	min-height:110vh;
+}
 
 
 

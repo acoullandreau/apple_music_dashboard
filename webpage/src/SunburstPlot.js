@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
-import plotConfig from './plotConfig.json';
 
 class SunburstPlot extends React.Component {
 
@@ -37,8 +36,6 @@ class SunburstPlot extends React.Component {
 
 	render() {
 		var type = this.state.type;
-		var targetPlot = type+'Sunburst';
-		var title = plotConfig['sunburstPlot'][targetPlot]['title'];
 		var data = this.state.data[type];
 
 		if (this.state.renderNone) {
@@ -60,16 +57,23 @@ class SunburstPlot extends React.Component {
 								type: "sunburst",
 								branchvalues: "total",
 								insidetextorientation: "radial",
+								marker: {line: {width: 100}},
 							},
 						]}
-						layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
+						layout={{
+							autosize:true, 
+							paper_bgcolor: 'rgba(0,0,0,0)', 
+							margin: {l: 0, r: 0, b: 0, t: 0}, 
+							sunburstcolorway:[
+								"#111111","#EF553B","#00cc96","#ab63fa","#19d3f3", "#e763fa", "#FECB52","#FFA15A","#FF6692","#B6E880"
+							]
+						}}
 						style={{width:'auto', height:'90vh'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>
 			);
 		}
-
 	}
 }
 

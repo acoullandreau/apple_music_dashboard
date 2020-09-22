@@ -230,8 +230,8 @@ class App extends React.Component {
 				</div>
 				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>
-					<div>
-					<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+				<div className='two-blocks' >
+					<PiePlot className='grid-one' data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
 					<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 				</div>
 				<Divider section />
@@ -265,19 +265,24 @@ class App extends React.Component {
 					menuItem: 'Favourites', 
 					render: () => (
 						<Tab.Pane className='tab'>
-							<div>
-								<QueryFilter 
-									data={this.state.plotDetails['filters']} 
-									target={{'type':'sunburst', 'plot':''}} 
-									onQuery={this.onQuerySubmit} 
-									onReset={this.onQueryReset}
-								/>
+							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')}>What is your favourite....</div>
+							<div className='two-blocks-asym'>
+								<SunburstPlot className='grid-one' data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
+								<div className='grid-two' >
+									<div>
+										<QueryFilter 
+											data={this.state.plotDetails['filters']} 
+											target={{'type':'sunburst', 'plot':''}} 
+											onQuery={this.onQuerySubmit} 
+											onReset={this.onQueryReset}
+										/>
+									</div>
+									<div>
+										<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+										<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+									</div> 
+								</div>
 							</div>
-							<div>
-								<SunburstPlot data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
-								<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-								<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
-							</div> 
 						</Tab.Pane> 
 					)
 				},
