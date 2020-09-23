@@ -2,14 +2,18 @@
 
 	"piePlot" : {
 		"pieYear" : {
-			"title":"Which was your most active year?"
+			"title":"Which was your most active year?",
+			"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"]
+
 		},
 		"pieDevice" : {
-			"title":"What device did you listen to music on?"
+			"title":"What device did you listen to music on?",
+			"colors":["#003273", "#623280",  "#a12b78",  "#cf3260",  "#e8543d", "#e88300"]
 		}
 
 	},
 	"sunburstPlot" : {
+		"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"],
 		"genreSunburst":{
 			"title":""
 		},
@@ -51,6 +55,7 @@
 		}
 	},
 	"barPlot" : {
+		"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"],
 		"barMonthCount" : {
 			"title":"Distribution of count of tracks listened to month for different years",
 			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],

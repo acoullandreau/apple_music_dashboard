@@ -46,28 +46,34 @@ class BarPlot extends React.Component {
 				x: labels,
 				y: partials,
 				name: 'Partial listening',
-				type: 'bar'
+				type: 'bar',
+				marker: {color: '#214A76'}
 			};
 			traces.push(tracePartials);
 			var traceCompletes = {
 				x: labels,
 				y: completes,
 				name: 'Complete listening',
-				type: 'bar'
+				type: 'bar',
+				marker: {color: '#F1B05D'}
 			};
 			traces.push(traceCompletes);
 
 		} else {
 			labels = this.getLabels(targetDataName);
+			var colors = plotConfig.barPlot["colors"];
+			var k = 0;
 			for (var year in targetData) {
 				var values = Object.values(targetData[year]);
 				var trace = {
 					x: labels,
 					y: values,
 					name: year,
-					type: 'bar'
+					type: 'bar',
+					marker:{color:colors[k]}
 				}
 				traces.push(trace)
+				k++;
 			}
 
 		}
@@ -77,7 +83,6 @@ class BarPlot extends React.Component {
 
 	renderPlot() {
 		var targetDataName = this.getRefTargetData();
-		//var title = plotConfig.barPlot[targetDataName]['title'];
 		var barmode = plotConfig.barPlot[targetDataName]['barmode'];
 		var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];

@@ -17,6 +17,7 @@ class PiePlot extends React.Component {
 	render() {
 		var targetConfig = this.getTargetConfig();
 		var title = targetConfig['title'];
+		var colors = targetConfig['colors']
 
 		return (
 			<Plot
@@ -27,6 +28,8 @@ class PiePlot extends React.Component {
 						type: 'pie',
 						textinfo: "percent",
 						insidetextorientation: "horizontal",
+						marker: {colors: colors},
+						sort:false,
 					},
 				]}
 				layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}

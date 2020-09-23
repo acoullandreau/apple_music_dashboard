@@ -226,7 +226,13 @@ class App extends React.Component {
 							onReset={this.onQueryReset}
 						/>
 					</div>
-					<SunburstPlot className='grid-two' data={this.state.plotDetails['sunburst']} target={{'type':'origin'}} ref={this.sunburstOriginRef}/>
+					<SunburstPlot 
+						className='grid-two' 
+						ranking={this.state.plotDetails['pieYear']} 
+						data={this.state.plotDetails['sunburst']} 
+						target={{'type':'origin'}} 
+						ref={this.sunburstOriginRef}
+					/>
 				</div>
 				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>
@@ -267,7 +273,13 @@ class App extends React.Component {
 						<Tab.Pane className='tab'>
 							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')}>What is your favourite....</div>
 							<div className='two-blocks-asym'>
-								<SunburstPlot className='grid-one' data={this.state.plotDetails['sunburst']} target={{'type':'genre'}} ref={this.sunburstSongRef}/>
+								<SunburstPlot 
+									className='grid-one' 
+									ranking={this.state.plotDetails['pieYear']} 
+									data={this.state.plotDetails['sunburst']} 
+									target={{'type':'genre'}} 
+									ref={this.sunburstSongRef}
+								/>
 								<div className='grid-two' >
 									<div>
 										<QueryFilter 
