@@ -89,6 +89,10 @@ class HeatMapPlot extends React.Component {
 				ybins:ybins,
 				hovertemplate : this.getHoverTemplate(year),
 				colorscale: colors,
+				colorbar:{
+					bordercolor:"#F7F7ED",
+					thickness:"10"
+				},
 				zmin:0,
 				zmax:maxValue
 			}
@@ -121,7 +125,7 @@ class HeatMapPlot extends React.Component {
 							margin:{t:"40"},
 
 						}}
-						style={{width:'75%'}}
+						style={{marginTop:'3%'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>)
@@ -131,7 +135,7 @@ class HeatMapPlot extends React.Component {
 
 
 		return (<div>
-			<ul>
+			<ul style={{paddingInlineStart:"0"}}>
 				{
 					histPlots.map((item, i) => <li key={i} style={{listStyleType:"none"}}>{item}</li>)
 				}

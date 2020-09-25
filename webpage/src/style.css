@@ -23,6 +23,12 @@ p {
   background: #FD3F3F !important;
 }
 
+.ui.menu {
+	background-color: transparent !important;
+	border:none !important;
+	box-shadow: none !important;
+}
+
 .bold {
 	font-weight: 700;
 }
@@ -176,6 +182,4 @@ p {
 	grid-column-gap: 2%;
 	min-height:110vh;
 }
-
-
 

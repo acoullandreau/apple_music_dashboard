@@ -310,17 +310,39 @@ class App extends React.Component {
 					menuItem: 'Calendar view', 
 					render: () => (
 						<Tab.Pane className='tab'>
-				  			<div>
-								<QueryFilter 
-									data={this.state.plotDetails['filters']} 
-									target={{'type':'heatMap'}} 
-									onQuery={this.onQuerySubmit}
-									onReset={this.onQueryReset}
-								/>
-							</div>
-							<div> 
-								<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
-								<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
+							<div className='grid-graphs'>
+								<div className='grid-one'>
+									<Tab 
+										menu={{ pointing: true }}
+										className={['section-margin'].join(' ')}
+										panes={[
+											{
+												menuItem: 'Day of the month',
+												render: () => (
+													<Tab.Pane attached={false}>
+														<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
+													</Tab.Pane>
+												)
+											},
+											{
+												menuItem: 'Day of the week',
+												render: () => (
+													<Tab.Pane attached={false}>
+														<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
+													</Tab.Pane>
+												)
+											}
+										]} 
+									/>
+								</div>
+				  				<div className='grid-two'>
+									<QueryFilter 
+										data={this.state.plotDetails['filters']} 
+										target={{'type':'heatMap'}} 
+										onQuery={this.onQuerySubmit}
+										onReset={this.onQueryReset}
+									/>
+								</div>
 							</div>
 						</Tab.Pane> 
 					)
