@@ -125,14 +125,13 @@ class HeatMapPlot extends React.Component {
 							margin:{t:"40"},
 
 						}}
-						style={{marginTop:'3%'}}
+						style={{marginTop:'3%', minHeight:'60vh'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>)
 			)
 
 		}
-
 
 		return (<div>
 			<ul style={{paddingInlineStart:"0"}}>

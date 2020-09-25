@@ -6,6 +6,7 @@ import Loader from './Loader.js';
 import connectorInstance from './IndexedDBConnector.js';
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
+import CalendarPlotFilter from './CalendarPlotFilter.js';
 import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
 import QueryFilter from './QueryFilter.js'; 
@@ -26,7 +27,7 @@ class App extends React.Component {
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
 			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] },
-			'selectedPage':'',
+			'selectedHeatMap':'DOM',
 		};
 
 		this.fileSelectorRef = React.createRef();
@@ -108,6 +109,8 @@ class App extends React.Component {
 			// we request an update of the sunburst and rankingList components with the new params
 			this.sunburstSongRef.current.updatePlot(parameters);
 			this.rankingRef.current.updatePlot(parameters);
+		} else if (target === 'heatmap') {
+			this.setState({ 'selectedHeatMap': parameters.payload.type }, () => console.log(this.state));
 		}
 	}
 
@@ -144,8 +147,13 @@ class App extends React.Component {
 				this.rankingRef.current.updatePlot(payload);
 			}
 		} else if (targetPlot === 'heatMap') {
-			this.heatMapDOMRef.current.updatePlot(payload);
-			this.heatMapDOWRef.current.updatePlot(payload);
+			// this.heatMapDOMRef.current.updatePlot(payload);
+			// this.heatMapDOWRef.current.updatePlot(payload);
+			if (this.state.selectedHeatMap === 'DOM') {
+				this.heatMapDOMRef.current.updatePlot(payload);
+			} else {
+				this.heatMapDOWRef.current.updatePlot(payload);
+			}
 		}
 	}
 
@@ -180,8 +188,13 @@ class App extends React.Component {
 				this.rankingRef.current.resetPlot();
 			}
 		} else if (targetPlot === 'heatMap') {
-			this.heatMapDOMRef.current.resetPlot();
-			this.heatMapDOWRef.current.resetPlot();
+			// this.heatMapDOMRef.current.resetPlot();
+			// this.heatMapDOWRef.current.resetPlot();
+			if (this.state.selectedHeatMap === 'DOM') {
+				this.heatMapDOMRef.current.resetPlot;
+			} else {
+				this.heatMapDOWRef.current.resetPlot;
+			}
 		}
 	}
 
@@ -202,6 +215,29 @@ class App extends React.Component {
 					<div className={['grid-two', 'filter'].join(' ')} >
 						<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 					</div>
+				</React.Fragment>
+			)
+		}
+
+	}
+
+	renderCalendarView = () => {
+		if (this.state.selectedHeatMap === 'DOM') {
+			return (
+				<React.Fragment>
+					<div >
+						<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+					</div>
+					<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
+				</React.Fragment>
+			)
+		} else {
+			return (
+				<React.Fragment>
+					<div >
+						<CalendarPlotFilter target='DOW' onChange={this.onSelectPlot} />
+					</div>
+					<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
 				</React.Fragment>
 			)
 		}
@@ -312,28 +348,7 @@ class App extends React.Component {
 						<Tab.Pane className='tab'>
 							<div className='grid-graphs'>
 								<div className='grid-one'>
-									<Tab 
-										menu={{ pointing: true }}
-										className={['section-margin'].join(' ')}
-										panes={[
-											{
-												menuItem: 'Day of the month',
-												render: () => (
-													<Tab.Pane attached={false}>
-														<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
-													</Tab.Pane>
-												)
-											},
-											{
-												menuItem: 'Day of the week',
-												render: () => (
-													<Tab.Pane attached={false}>
-														<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
-													</Tab.Pane>
-												)
-											}
-										]} 
-									/>
+									{ this.renderCalendarView() }
 								</div>
 				  				<div className='grid-two'>
 									<QueryFilter 
@@ -364,7 +379,6 @@ class App extends React.Component {
 		return elemToRender;
 
 	}
-
 
 	renderHomePage = () => {
 		return (
@@ -403,6 +417,7 @@ class App extends React.Component {
 	}
 
 	render() {
+		console.log('Rerender')
 		if ( !this.state.hasVisuals ) {
 			if (this.state.isLoading) {
 				return (
