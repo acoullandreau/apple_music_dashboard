@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Tab } from 'semantic-ui-react';
+import { Divider, Grid, Tab } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -235,11 +235,18 @@ class App extends React.Component {
 					/>
 				</div>
 				<Divider section />
-				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>
-				<div className='two-blocks' >
-					<PiePlot className='grid-one' data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
-					<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
-				</div>
+				<Grid columns={2} divided>
+					<Grid.Row>
+						<Grid.Column>
+							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Which was your most active year?</div>
+							<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+						</Grid.Column>
+						<Grid.Column>
+							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >What device did you listen to music on?</div>
+							<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
+						</Grid.Column>
+					</Grid.Row>
+				</Grid>
 				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Do you skip tracks a lot?</div>
 				<div>
@@ -248,6 +255,7 @@ class App extends React.Component {
 			</Tab.Pane>
 		)
 	}
+				/*<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>*/
 
 	renderGraphsPage = () => {
 		let elemToRender;

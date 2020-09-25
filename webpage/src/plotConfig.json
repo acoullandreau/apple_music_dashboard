@@ -3,36 +3,40 @@
 	"piePlot" : {
 		"pieYear" : {
 			"title":"Which was your most active year?",
-			"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"]
-
+			"colors":[
+				"#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191" ,"#146666", "#1D698F", 
+				"#FFB833", "#FF94C1", "#576E96", "#FF919A", "#A1729A", "#FF9F75", "#7A6E91"
+			]
 		},
 		"pieDevice" : {
 			"title":"What device did you listen to music on?",
-			"colors":["#003273", "#623280",  "#a12b78",  "#cf3260",  "#e8543d", "#e88300"]
+			"colors":["#D7586C", "#3A636C", "#EE9B60", "#835636", "#ED979A", "#68B2C5", "#7ED0B3", "#DCD054"]
 		}
 
 	},
 	"sunburstPlot" : {
-		"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"],
-		"genreSunburst":{
-			"title":""
-		},
-		"artistSunburst":{
-			"title":""
-		},
-		"titleSunburst":{
-			"title":""
-		},
-		"originSunburst":{
-			"title":""
-		}
+		"colors":[
+			"#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191" ,"#146666", "#1D698F", 
+			"#FFB833", "#FF94C1", "#576E96", "#FF919A", "#A1729A", "#FF9F75", "#7A6E91"
+		]
 	},
 	"heatMapPlot" : {
+		"colors":[
+			["0.0", "#F7F7ED"],
+			["0.111111111111", "#f8ebe1"],
+			["0.222222222222", "#f7dfdc"],
+			["0.333333333333", "#f6c8c2"],
+			["0.444444444444", "#f3b2a8"],
+			["0.555555555556", "#ef9b90"],
+			["0.666666666667", "#ea8478"],
+			["0.777777777778", "#e36c60"],
+			["0.888888888889", "#da524a"],
+			["1.0", "#d13434"]
+		],
 		"heatMapDOM" : {
 			"title":"Heat map of the play duration in minutes for each day",
-			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			"xaxis":{
-				"tickangle":-45, 
+				"tickangle":-45,
 				"tickmode":"array",
 				"tickvals":[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 				"ticktext": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -43,31 +47,34 @@
 		},
 		"heatMapDOW" : {
 			"title":"Heat map of the play duration in minutes for each day",
-			"labels" : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			"xaxis":{
 				"tickangle":-45,
 				"tickmode":"array",
-				"tickvals":[0, 1, 2, 3, 4, 5, 6],
-				"ticktext":["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]},
+				"tickvals":[1, 2, 3, 4, 5, 6, 0],
+				"ticktext": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+			},
 			"xbins":{ "end": 6.5, "size": 1, "start": -0.5 },
 			"yaxis":{"autorange":"reversed"},
 			"ybins":{ "end": 23.5, "size": 1, "start": -0.5 }
 		}
 	},
 	"barPlot" : {
-		"colors":["#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191"],
+		"colors":[
+			"#003f5c","#ffa600", "#d45087", "#2f4b7c", "#f95d6a", "#a05195", "#ff7c43" ,"#665191" ,"#146666", "#1D698F", 
+			"#FFB833", "#FF94C1", "#576E96", "#FF919A", "#A1729A", "#FF9F75", "#7A6E91"
+		],
 		"barMonthCount" : {
 			"title":"Distribution of count of tracks listened to month for different years",
 			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			"barmode":"group",
-			"xaxis":{"tickangle":-45},
+			"xaxis":{},
 			"yaxis":{"title":"Count of songs listened to"}
 		},
 		"barMonthPercent" : {
 			"title":"Distribution of percentage of tracks listened to month for different years",
 			"labels" : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			"barmode":"group",
-			"xaxis":{"tickangle":-45},
+			"xaxis":{},
 			"yaxis":{"title":"Percentage of songs listened to"}
 		},
 		"barDOMCount" : {
@@ -88,14 +95,20 @@
 			"title":"Distribution of count of tracks listened to per day of the week for different years",
 			"labels":["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			"barmode":"group",
-			"xaxis":{"tickangle":-45},
+			"xaxis":{
+				"categoryorder":"array",
+				"categoryarray":["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+			},
 			"yaxis":{"title":"Count of songs listened to"}
 		},
 		"barDOWPercent" : {
 			"title":"Distribution of percentage of tracks listened to per day of the week for different years",
 			"labels":["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			"barmode":"group",
-			"xaxis":{"tickangle":-45},
+			"xaxis":{
+				"categoryorder":"array",
+				"categoryarray":["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+			},
 			"yaxis":{"title":"Percentage of songs listened to"}
 		},
 		"barHODCount" : {

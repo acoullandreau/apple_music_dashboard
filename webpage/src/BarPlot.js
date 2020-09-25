@@ -10,6 +10,14 @@ class BarPlot extends React.Component {
 		return plotConfig.barPlot[targetDataName]['labels'];
 	}
 
+	getLegend() {
+		if (this.props.target.type !== 'skippedRatio') {
+			return {orientation:"h"};
+		} else {
+			return {};
+		}
+	}
+
 	getRefTargetData() {
 		var type = this.props.target.type;
 		var targetType;
@@ -87,6 +95,7 @@ class BarPlot extends React.Component {
 		var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];
 		var data = this.getPlotContent(targetDataName);
+		var legend = this.getLegend();
 
 		var barPlot = (
 			<Plot
@@ -97,7 +106,9 @@ class BarPlot extends React.Component {
 					xaxis:xaxis, 
 					yaxis:yaxis, 
 					paper_bgcolor: 'rgba(0,0,0,0)', 
-					plot_bgcolor: 'rgba(0,0,0,0)'
+					plot_bgcolor: 'rgba(0,0,0,0)',
+					margin:{t:"40", pad:"10"},
+					legend:legend
 				}}
 				style={{width:'100%', minHeight:'60vh'}}
 				config = {{responsive: 'true'}}

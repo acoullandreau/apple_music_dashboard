@@ -52,12 +52,26 @@ class HeatMapPlot extends React.Component {
 		}
 	}
 
+	getMaxValue(targetData) {
+		var maxValue = 0;
+		for (var year in targetData) {
+			var values = Object.values(targetData[year]['sums']);
+			var yearMax = Math.max(...values)
+			if (yearMax > maxValue) {
+				maxValue = yearMax
+			}
+		}
+		return maxValue;
+	}
+
 
 	getPlotContent(targetDataName) {
 		var traces = {};
 		var targetData = this.state.data[targetDataName];
 		var xbins = plotConfig.heatMapPlot[targetDataName]['xbins'];
 		var ybins = plotConfig.heatMapPlot[targetDataName]['ybins'];
+		var colors = plotConfig.heatMapPlot['colors'];
+		var maxValue = this.getMaxValue(targetData);
 		
 		for (var year in targetData) {
 			var x = targetData[year]['x'];
@@ -74,7 +88,9 @@ class HeatMapPlot extends React.Component {
 				autobiny: false,
 				ybins:ybins,
 				hovertemplate : this.getHoverTemplate(year),
-				colorscale: 'Portland',
+				colorscale: colors,
+				zmin:0,
+				zmax:maxValue
 			}
 			traces[year]=trace;
 		}
@@ -87,7 +103,6 @@ class HeatMapPlot extends React.Component {
 	renderPlot() {
 		var targetDataName = 'heatMap'+this.state.type;
 		var plots = this.getPlotContent(targetDataName);
-		//var title = plotConfig.heatMapPlot[targetDataName]['title'];
 		var xaxis = plotConfig.heatMapPlot[targetDataName]['xaxis'];
 		var yaxis = plotConfig.heatMapPlot[targetDataName]['yaxis'];
 		var histPlots = [];
@@ -102,9 +117,11 @@ class HeatMapPlot extends React.Component {
 							autosize:true, 
 							xaxis:xaxis, 
 							yaxis:yaxis,
-							paper_bgcolor: 'rgba(0,0,0,0)'
+							paper_bgcolor: 'rgba(0,0,0,0)',
+							margin:{t:"40"},
+
 						}}
-						style={{width:'100%'}}
+						style={{width:'75%'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>)

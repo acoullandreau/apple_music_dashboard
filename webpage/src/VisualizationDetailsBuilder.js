@@ -221,25 +221,42 @@ class VisualizationDetailsBuilder {
 
 			if (year in plotParameters === false) {
 				plotParameters[year] = { 
-					'DOM':{'x':[], 'y':[], 'z':[]},
-					'DOW':{'x':[], 'y':[], 'z':[]}
+					'DOM':{'x':[], 'y':[], 'z':[], 'sums':{}},
+					'DOW':{'x':[], 'y':[], 'z':[], 'sums':{}}
 				};
 
 			}
 
 			if (year in plotParameters) {
+				// we add the raw data points
 				plotParameters[year]['DOM']['x'].push(data[row][targetXDOM]);
 				plotParameters[year]['DOW']['x'].push(data[row][targetXDOW]);
 				plotParameters[year]['DOM']['y'].push(data[row][targetYDOM]);
 				plotParameters[year]['DOW']['y'].push(data[row][targetYDOW]);
 				plotParameters[year]['DOM']['z'].push(data[row][targetZ]);
 				plotParameters[year]['DOW']['z'].push(data[row][targetZ]);
+
+				// we compute the z value for each coordinate (used to uniformise the colorscale)
+				var keyDOM = data[row][targetXDOM] + '-' + data[row][targetYDOM];
+				var keyDOW = data[row][targetXDOW] + '-' + data[row][targetYDOW];
+
+				if (keyDOM in plotParameters[year]['DOM']['sums'] === false) {
+					plotParameters[year]['DOM']['sums'][keyDOM] = data[row][targetZ];
+				} 
+				if (keyDOW in plotParameters[year]['DOW']['sums'] === false) {
+					plotParameters[year]['DOW']['sums'][keyDOW] = data[row][targetZ];
+				}
+
+				plotParameters[year]['DOM']['sums'][keyDOM] += data[row][targetZ];
+				plotParameters[year]['DOW']['sums'][keyDOW] += data[row][targetZ];
+
 			}
 
 		}
+
 		plotDetails['heatMapPlot'] = {};
 
-		// we populate plotDetails with the details of each bar plot
+		// we populate plotDetails with the details of each plot
 		this.build2DHistPlotDict(plotParameters, plotDetails);
 	}
 
@@ -248,8 +265,10 @@ class VisualizationDetailsBuilder {
 		plotDetails['heatMapPlot']['heatMapDOM'] = {};
 		plotDetails['heatMapPlot']['heatMapDOW'] = {};
 		for (var year in parametersDict) {
+			// we add the raw data points for the plot
 			plotDetails['heatMapPlot']['heatMapDOM'][year] = parametersDict[year]['DOM'];
 			plotDetails['heatMapPlot']['heatMapDOW'][year] = parametersDict[year]['DOW'];
+
 		}
 
 	}

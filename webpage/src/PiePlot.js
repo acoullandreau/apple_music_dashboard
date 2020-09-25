@@ -16,7 +16,7 @@ class PiePlot extends React.Component {
 
 	render() {
 		var targetConfig = this.getTargetConfig();
-		var title = targetConfig['title'];
+		//var title = targetConfig['title'];
 		var colors = targetConfig['colors']
 
 		return (
@@ -28,17 +28,24 @@ class PiePlot extends React.Component {
 						type: 'pie',
 						textinfo: "percent",
 						insidetextorientation: "horizontal",
-						marker: {colors: colors},
+						marker: {colors: colors, line: {color:"#F7F7ED", width: "2"}},
 						sort:false,
 					},
 				]}
-				layout={{title: title, autosize:true, paper_bgcolor: 'rgba(0,0,0,0)'}}
+				layout={{
+					autosize:true, 
+					paper_bgcolor: 'rgba(0,0,0,0)',
+					margin: {l: 0, r: 0, b: "10", t: "40"},
+					legend:{orientation:"h", xanchor:"center"}
+				}}
+				style={{width:'auto', height:'60vh'}}
 				config = {{responsive: 'true'}}
 			/>
 		);
 	}
 }
 
+					// title: title, 
 // props validation
 PiePlot.propTypes = {
    target: PropTypes.object.isRequired,

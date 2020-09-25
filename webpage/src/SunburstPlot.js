@@ -85,7 +85,7 @@ class SunburstPlot extends React.Component {
 						layout={{
 							autosize:true, 
 							paper_bgcolor: 'rgba(0,0,0,0)', 
-							margin: {l: 0, r: 0, b: "10", t: "10"}, 
+							margin: {l: 0, r: 0, b: "10", t: "40"}, 
 							sunburstcolorway:colors,
 						}}
 						style={{width:'auto', height:'90vh'}}

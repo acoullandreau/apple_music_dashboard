@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
-//import plotConfig from './plotConfig.json';
+import plotConfig from './plotConfig.json';
 import Utils from './Utils.js';
 
 class RankingList extends React.Component {
@@ -33,6 +33,8 @@ class RankingList extends React.Component {
 		var topRanked = this.getTopRank();
 		var targetData = this.getTargetData(topRanked);
 		var traces = [];
+		var colors = plotConfig.barPlot["colors"];
+		var k = 0;
 
 		for (var year in targetData) {
 			var labels = Object.keys(targetData[year]);
@@ -42,9 +44,11 @@ class RankingList extends React.Component {
 				y: labels,
 				name: year,
 				type: 'bar',
-				orientation:'h'
+				orientation:'h',
+				marker:{color:colors[k]}
 			}
 			traces.push(trace)
+			k++;
 		}
 		return traces;
 	}
@@ -85,37 +89,25 @@ class RankingList extends React.Component {
 		return topRanked;
 	}
 
-	renderPlot() {
-		var data = this.getPlotContent();
-		// var title = plotConfig.barPlot[targetDataName]['title'];
-		// var barmode = plotConfig.barPlot[targetDataName]['barmode'];
-		// var xaxis = plotConfig.barPlot[targetDataName]['xaxis'];
-		// var yaxis = plotConfig.barPlot[targetDataName]['yaxis'];
-		// var style = plotConfig.barPlot[targetDataName]['style'];
-
-		var listPlot = (
-			<Plot
-				data={data}
-				layout={{
-					title: '', 
-					barmode: 'stack', 
-					autosize:true, 
-					paper_bgcolor: 'rgba(0,0,0,0)', 
-					plot_bgcolor: 'rgba(0,0,0,0)'
-				}}
-				style={{width:'100%'}}
-				config = {{responsive: 'true'}}
-			/>
-		)
-
-		return listPlot;
-	}
-
-
 	render() {
+		var data = this.getPlotContent();
+
 		return (
 			<div>
-				<div>{this.renderPlot()}</div>
+				<Plot
+					data={data}
+					layout={{
+						title: '', 
+						barmode: 'stack', 
+						autosize:true, 
+						paper_bgcolor: 'rgba(0,0,0,0)', 
+						plot_bgcolor: 'rgba(0,0,0,0)',
+						margin:{l:0, r:0, b:0, t:"40"},
+						legend:{traceorder:"normal", orientation:"h"},
+					}}
+					style={{width:'100%'}}
+					config = {{responsive: 'true'}}
+				/>
 			</div>
 		);
 	}

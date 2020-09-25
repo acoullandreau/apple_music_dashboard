@@ -149,8 +149,7 @@ p {
 
 .grid-graphs {
 	display: grid;
-	grid-template-columns: 75% 20%;
-	grid-column-gap: 5%;
+	grid-template-columns: 85% 15%;
 }
 
 .grid-graphs-inverted {
