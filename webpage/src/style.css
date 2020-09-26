@@ -177,8 +177,8 @@ p {
 
 .two-blocks-asym {
 	display: grid;
-	grid-template-columns: 60% 38%;
-	grid-column-gap: 2%;
+	grid-template-columns: 60% 39%;
+	grid-column-gap: 1%;
 	min-height:110vh;
 }
 

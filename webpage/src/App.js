@@ -26,15 +26,13 @@ class App extends React.Component {
 			'hasVisuals': false, 
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
-			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] },
-			'selectedHeatMap':'DOM',
+			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] }
 		};
 
 		this.fileSelectorRef = React.createRef();
 		this.sunburstSongRef = React.createRef();
 		this.rankingRef = React.createRef();
-		this.heatMapDOMRef = React.createRef();
-		this.heatMapDOWRef = React.createRef();
+		this.heatMapRef = React.createRef();
 		this.sunburstOriginRef = React.createRef();
 	}
 
@@ -97,7 +95,7 @@ class App extends React.Component {
 			'isLoading': false, 
 			'hasVisuals': false, 
 			'plotDetails': {}, 
-			'selectedBarPlot' : {}, 
+			'selectedBarPlot' : {}
 		});
 	} 
 
@@ -110,7 +108,7 @@ class App extends React.Component {
 			this.sunburstSongRef.current.updatePlot(parameters);
 			this.rankingRef.current.updatePlot(parameters);
 		} else if (target === 'heatmap') {
-			this.setState({ 'selectedHeatMap': parameters.payload.type }, () => console.log(this.state));
+			this.heatMapRef.current.updatePlot(parameters);
 		}
 	}
 
@@ -123,7 +121,6 @@ class App extends React.Component {
 
 	onVisualizationsReady = (payload) => {
 		// visualizations can be rendered, so we update our App state to render the new component
-
 		window.history.pushState({}, '', '#graphs');
 		const navEvent = new PopStateEvent('popstate');
 		window.dispatchEvent(navEvent);
@@ -132,7 +129,7 @@ class App extends React.Component {
 			'isLoading': false,
 			'hasVisuals': true,
 			'plotDetails': Object.assign({}, payload.data),
-			'selectedBarPlot' : {}, 
+			'selectedBarPlot' : {}
 		});
 	}
 
@@ -147,13 +144,7 @@ class App extends React.Component {
 				this.rankingRef.current.updatePlot(payload);
 			}
 		} else if (targetPlot === 'heatMap') {
-			// this.heatMapDOMRef.current.updatePlot(payload);
-			// this.heatMapDOWRef.current.updatePlot(payload);
-			if (this.state.selectedHeatMap === 'DOM') {
-				this.heatMapDOMRef.current.updatePlot(payload);
-			} else {
-				this.heatMapDOWRef.current.updatePlot(payload);
-			}
+			this.heatMapRef.current.updatePlot(payload);
 		}
 	}
 
@@ -188,13 +179,7 @@ class App extends React.Component {
 				this.rankingRef.current.resetPlot();
 			}
 		} else if (targetPlot === 'heatMap') {
-			// this.heatMapDOMRef.current.resetPlot();
-			// this.heatMapDOWRef.current.resetPlot();
-			if (this.state.selectedHeatMap === 'DOM') {
-				this.heatMapDOMRef.current.resetPlot;
-			} else {
-				this.heatMapDOWRef.current.resetPlot;
-			}
+			this.heatMapRef.current.resetPlot;
 		}
 	}
 
@@ -221,28 +206,28 @@ class App extends React.Component {
 
 	}
 
-	renderCalendarView = () => {
-		if (this.state.selectedHeatMap === 'DOM') {
-			return (
-				<React.Fragment>
-					<div >
-						<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
-					</div>
-					<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapDOMRef} />
-				</React.Fragment>
-			)
-		} else {
-			return (
-				<React.Fragment>
-					<div >
-						<CalendarPlotFilter target='DOW' onChange={this.onSelectPlot} />
-					</div>
-					<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapDOWRef} />
-				</React.Fragment>
-			)
-		}
+	// renderCalendarView = () => {
+	// 	if (this.state.selectedHeatMap === '') {
+	// 		return (
+	// 			<React.Fragment>
+	// 				<div >
+	// 					<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+	// 				</div>
+	// 				<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
+	// 			</React.Fragment>
+	// 		)
+	// 	} else {
+	// 		return (
+	// 			<React.Fragment>
+	// 				<div >
+	// 					<CalendarPlotFilter target='DOW' onChange={this.onSelectPlot} />
+	// 				</div>
+	// 				<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapRef} />
+	// 			</React.Fragment>
+	// 		)
+	// 	}
 
-	}
+	// }
 
 	renderGraphTabOne = () => {
 		return (
@@ -291,7 +276,6 @@ class App extends React.Component {
 			</Tab.Pane>
 		)
 	}
-				/*<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Most active year and device?</div>*/
 
 	renderGraphsPage = () => {
 		let elemToRender;
@@ -348,7 +332,10 @@ class App extends React.Component {
 						<Tab.Pane className='tab'>
 							<div className='grid-graphs'>
 								<div className='grid-one'>
-									{ this.renderCalendarView() }
+									<div>
+										<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+									</div>
+									<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
 								</div>
 				  				<div className='grid-two'>
 									<QueryFilter 
@@ -417,7 +404,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log('Rerender')
 		if ( !this.state.hasVisuals ) {
 			if (this.state.isLoading) {
 				return (

@@ -102,8 +102,9 @@ class RankingList extends React.Component {
 						autosize:true, 
 						paper_bgcolor: 'rgba(0,0,0,0)', 
 						plot_bgcolor: 'rgba(0,0,0,0)',
-						margin:{l:0, r:0, b:0, t:"40"},
+						margin:{r:0, t:"40"},
 						legend:{traceorder:"normal", orientation:"h"},
+						xaxis: {automargin: true}
 					}}
 					style={{width:'100%'}}
 					config = {{responsive: 'true'}}

@@ -7,9 +7,8 @@ class CalendarPlotFilter extends React.Component {
 	state = { 'target':'DOM' };
 
 	handleChange = (e, selection) => {
-		this.setState({ 'target': selection.value }, () => {
-			this.props.onChange({ 'type': 'heatmap', 'payload': {'type': this.state.target } })
-		});
+		this.setState({ 'target': selection.value });
+		this.props.onChange({ 'type': 'heatmap', 'payload': {'type': selection.value } })
 
 	}
 

@@ -32,6 +32,7 @@ class HeatMapPlot extends React.Component {
 	}
 	
 	resetPlot() {
+		console.log(this.state)
 		var data = this.state.initialData;
 		this.setState({ 'data':data, 'renderNone':false });
 	}
@@ -152,6 +153,7 @@ class HeatMapPlot extends React.Component {
 				</div>
 			);
 		} else {
+			console.log(this.state)
 			return (
 				<div>
 					<div>{this.renderPlot()}</div>
