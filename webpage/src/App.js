@@ -179,7 +179,7 @@ class App extends React.Component {
 				this.rankingRef.current.resetPlot();
 			}
 		} else if (targetPlot === 'heatMap') {
-			this.heatMapRef.current.resetPlot;
+			this.heatMapRef.current.resetPlot();
 		}
 	}
 

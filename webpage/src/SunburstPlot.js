@@ -45,8 +45,7 @@ class SunburstPlot extends React.Component {
 			}
 		} else {
 			// it is just a new selection of the plot to render
-			data = this.state.data
-			this.setState({'data':data, 'type':parameters.payload.type});
+			this.setState({'type':parameters.payload.type});
 		}
 	}
 
