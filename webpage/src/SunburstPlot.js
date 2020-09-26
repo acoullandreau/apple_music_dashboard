@@ -87,7 +87,7 @@ class SunburstPlot extends React.Component {
 							margin: {l: 0, r: 0, b: "10", t: "40"}, 
 							sunburstcolorway:colors,
 						}}
-						style={{width:'auto', height:'90vh'}}
+						style={{width:'auto', minHeight:'75vh'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>

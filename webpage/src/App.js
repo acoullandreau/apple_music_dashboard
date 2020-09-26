@@ -104,6 +104,7 @@ class App extends React.Component {
 		if (target === 'bar') {
 			this.setState({ 'selectedBarPlot': parameters.payload });
 		} else if (target === 'sunburst') {
+			console.log(parameters)
 			// we request an update of the sunburst and rankingList components with the new params
 			this.sunburstSongRef.current.updatePlot(parameters);
 			this.rankingRef.current.updatePlot(parameters);
@@ -206,39 +207,16 @@ class App extends React.Component {
 
 	}
 
-	// renderCalendarView = () => {
-	// 	if (this.state.selectedHeatMap === '') {
-	// 		return (
-	// 			<React.Fragment>
-	// 				<div >
-	// 					<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
-	// 				</div>
-	// 				<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
-	// 			</React.Fragment>
-	// 		)
-	// 	} else {
-	// 		return (
-	// 			<React.Fragment>
-	// 				<div >
-	// 					<CalendarPlotFilter target='DOW' onChange={this.onSelectPlot} />
-	// 				</div>
-	// 				<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOW'}} ref={this.heatMapRef} />
-	// 			</React.Fragment>
-	// 		)
-	// 	}
-
-	// }
-
 	renderGraphTabOne = () => {
 		return (
-			<Tab.Pane className='tab'>
-				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >When do you listen to music?</div>
-				<div className='grid-graphs' >
+			<Tab.Pane className='tab' key='tab1'>
+				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >When do you listen to music?</div>
+				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
 				</div>
 				<Divider section />
-				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >How do you find tracks?</div>
-				<div className='grid-graphs-inverted'>
+				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
+				<div className='grid-patterns-sunburst'>
 					<div className={['grid-one', 'filter'].join(' ')} >
 						<QueryFilter 
 							data={this.state.plotDetails['filters']}
@@ -259,17 +237,17 @@ class App extends React.Component {
 				<Grid columns={2} divided>
 					<Grid.Row>
 						<Grid.Column>
-							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Which was your most active year?</div>
+							<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Which was your most active year?</div>
 							<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
 						</Grid.Column>
 						<Grid.Column>
-							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >What device did you listen to music on?</div>
+							<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >What device did you listen to music on?</div>
 							<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 						</Grid.Column>
 					</Grid.Row>
 				</Grid>
 				<Divider section />
-				<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')} >Do you skip tracks a lot?</div>
+				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Do you skip tracks a lot?</div>
 				<div>
 					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
 				</div>
@@ -293,34 +271,37 @@ class App extends React.Component {
 			const panes = [
 				{ 
 					menuItem: 'Listening patterns',
-					render: () => this.renderGraphTabOne()
+					pane: this.renderGraphTabOne()
 				},
 				{
 					menuItem: 'Favourites', 
-					render: () => (
-						<Tab.Pane className='tab'>
-							<div className={['subtitle', 'bold', 'section-margin', 'section-title'].join(' ')}>What is your favourite....</div>
-							<div className='two-blocks-asym'>
-								<SunburstPlot 
-									className='grid-one' 
-									ranking={this.state.plotDetails['pieYear']} 
-									data={this.state.plotDetails['sunburst']} 
-									target={{'type':'genre'}} 
-									ref={this.sunburstSongRef}
-								/>
+					pane: (
+						<Tab.Pane className='tab' key='tab2'>
+							<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
+							<div className='grid-calendar'>
+								<div className='grid-one' >
+									<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+									<SunburstPlot 
+										className='grid-one' 
+										ranking={this.state.plotDetails['pieYear']} 
+										data={this.state.plotDetails['sunburst']} 
+										target={{'type':'genre'}} 
+										ref={this.sunburstSongRef}
+									/>
+								</div>
 								<div className='grid-two' >
 									<div>
-										<QueryFilter 
-											data={this.state.plotDetails['filters']} 
-											target={{'type':'sunburst', 'plot':''}} 
-											onQuery={this.onQuerySubmit} 
-											onReset={this.onQueryReset}
-										/>
-									</div>
-									<div>
 										<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-										<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
-									</div> 
+										<div style={{marginTop:'10%'}}>
+											<p className='bold'>Explore more filters:</p>
+											<QueryFilter 
+												data={this.state.plotDetails['filters']} 
+												target={{'type':'sunburst', 'plot':''}} 
+												onQuery={this.onQuerySubmit} 
+												onReset={this.onQueryReset}
+											/>
+										</div>
+									</div>
 								</div>
 							</div>
 						</Tab.Pane> 
@@ -328,22 +309,26 @@ class App extends React.Component {
 				},
 				{ 
 					menuItem: 'Calendar view', 
-					render: () => (
-						<Tab.Pane className='tab'>
-							<div className='grid-graphs'>
+					pane: (
+						<Tab.Pane className='tab' key='tab3'>
+							<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
+							<div className='grid-calendar'>
 								<div className='grid-one'>
-									<div>
-										<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
-									</div>
 									<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
 								</div>
 				  				<div className='grid-two'>
-									<QueryFilter 
-										data={this.state.plotDetails['filters']} 
-										target={{'type':'heatMap'}} 
-										onQuery={this.onQuerySubmit}
-										onReset={this.onQueryReset}
-									/>
+									<div>
+										<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+									</div>
+									<div style={{marginTop:'10%'}}>
+										<p className='bold'>Explore more filters:</p>
+										<QueryFilter 
+											data={this.state.plotDetails['filters']} 
+											target={{'type':'heatMap'}} 
+											onQuery={this.onQuerySubmit}
+											onReset={this.onQueryReset}
+										/>
+									</div>
 								</div>
 							</div>
 						</Tab.Pane> 
@@ -358,7 +343,7 @@ class App extends React.Component {
 					<div className={['paragraph', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
-					<Tab className='section-margin' panes={panes} />
+					<Tab className='section-margin' panes={panes} renderActiveOnly={false} />
 				</div>
 			);
 

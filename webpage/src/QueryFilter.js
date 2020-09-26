@@ -183,14 +183,13 @@ class QueryFilter extends React.Component {
 
 		return (
 			<div>
-				<ul style={{display: "inline"}}>
-				  
+				<ul>
 				  	{
 						React.Children.toArray(
 							Object.keys(renderingDict).map((item, i) => {
 								if (renderingDict[item]['multiple']) {
 									return (
-										<li style={{listStyleType:"none"}}>
+										<li>
 											<Dropdown
 												placeholder={renderingDict[item]['placeholder']}
 												name={item}
@@ -206,7 +205,7 @@ class QueryFilter extends React.Component {
 									)
 								} else {
 									return (
-										<li style={{listStyleType:"none"}}>
+										<li>
 											<Dropdown
 												placeholder={renderingDict[item]['placeholder']}
 												name={item}

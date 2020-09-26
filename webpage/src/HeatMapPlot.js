@@ -133,9 +133,9 @@ class HeatMapPlot extends React.Component {
 		}
 
 		return (<div>
-			<ul style={{paddingInlineStart:"0"}}>
+			<ul>
 				{
-					histPlots.map((item, i) => <li key={i} style={{listStyleType:"none"}}>{item}</li>)
+					histPlots.map((item, i) => <li key={i}>{item}</li>)
 				}
 			</ul>
 		  </div>

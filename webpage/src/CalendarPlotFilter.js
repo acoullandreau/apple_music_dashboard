@@ -15,24 +15,25 @@ class CalendarPlotFilter extends React.Component {
 	render() {
 		return (
 			<Form className='paragraph'>
-				<Button
-					toggle 
-					size='tiny'
-					value='DOM' 
-					active={this.state.target === 'DOM' ? true : false} 
-					onClick={this.handleChange}
-				>
-					Day of the month
-				</Button>
-				<Button 
-					toggle
-					size='tiny'
-					value='DOW' 
-					active={this.state.target === 'DOW' ? true : false} 
-					onClick={this.handleChange}
-				>
-					Day of the week
-				</Button>
+				<div>
+					<p className='bold'>Choose target:</p>
+					<Button
+						toggle 
+						value='DOM' 
+						active={this.state.target === 'DOM' ? true : false} 
+						onClick={this.handleChange}
+					>
+						Day of the month
+					</Button>
+					<Button 
+						toggle
+						value='DOW' 
+						active={this.state.target === 'DOW' ? true : false} 
+						onClick={this.handleChange}
+					>
+						Day of the week
+					</Button>
+				</div>
 			</Form>
 		)
 	}

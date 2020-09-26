@@ -21,7 +21,7 @@ class BarPlotFilter extends React.Component {
 		return (
 			<Form className='paragraph'>
 				<div>
-					<p>Choose unit:</p>
+					<p className='bold'>Choose unit:</p>
 					<div>
 						<Button
 							toggle 
@@ -44,7 +44,7 @@ class BarPlotFilter extends React.Component {
 					</div>
 				</div>
 				<div style={{marginTop:'10%'}}>
-					<p>Choose time granularity:</p>
+					<p className='bold'>Choose time granularity:</p>
 					<Form.Field>
 							<Checkbox
 							radio

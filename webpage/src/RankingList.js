@@ -99,15 +99,14 @@ class RankingList extends React.Component {
 					layout={{
 						title: '', 
 						barmode: 'stack', 
-						autosize:true, 
 						paper_bgcolor: 'rgba(0,0,0,0)', 
 						plot_bgcolor: 'rgba(0,0,0,0)',
 						margin:{r:0, t:"40"},
 						legend:{traceorder:"normal", orientation:"h"},
-						xaxis: {automargin: true}
+						yaxis: {categoryorder: "total ascending", automargin: true}
 					}}
-					style={{width:'100%'}}
 					config = {{responsive: 'true'}}
+					style={{width:'100%', minHeight:'65vh'}}
 				/>
 			</div>
 		);

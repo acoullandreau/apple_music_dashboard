@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'semantic-ui-react';
+import { Button, Form } from 'semantic-ui-react';
 
 class SunburstPlotFilter extends React.Component {
 	state = { 'target':'genre', 'numItems':'5' };
@@ -30,16 +30,41 @@ class SunburstPlotFilter extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<Button.Group vertical>
-				  <Button toggle value='genre' active={this.state.target === 'genre' ? true : false} onClick={this.handleChange}>Genre</Button>
-				  <Button toggle value='artist' active={this.state.target === 'artist' ? true : false} onClick={this.handleChange}>Artist</Button>
-				  <Button toggle value='title' active={this.state.target === 'title' ? true : false} onClick={this.handleChange}>Title</Button>
-				</Button.Group>
+			<Form className='paragraph'>
 				<div>
+					<p className='bold'>Choose target:</p>
+					<Button 
+						toggle 
+						value='genre' 
+						active={this.state.target === 'genre' ? true : false} 
+						onClick={this.handleChange}
+					>
+						Genre
+					</Button>
+					<Button 
+						toggle 
+						value='artist' 
+						active={this.state.target === 'artist' ? true : false} 
+						onClick={this.handleChange}
+					>
+						Artist
+					</Button>
+					<Button 
+						toggle 
+						value='title' 
+						active={this.state.target === 'title' ? true : false} 
+						onClick={this.handleChange}
+					>
+						Title
+					</Button>
+				</div>
+				<div style={{marginTop:'10%'}}>
+					<p className='bold'>Number of items ranked:</p>
 					<input type="number" value={this.state.numItems} onChange={this.handleChange} />
 				</div>
-			</div>
+			</Form>
+
+
 		)
 	}
 }
