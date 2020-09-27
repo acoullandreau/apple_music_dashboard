@@ -6,6 +6,15 @@ import plotConfig from './plotConfig.json';
 
 class BarPlot extends React.Component {
 
+	state = {'firstRender':true};
+
+	renderTabSwitch() {
+		//this function is used to force a rerender of the component (to call Plotly.relayout / Plotly.react), so the svg has the right layout
+		if (this.state.firstRender) {
+			this.setState({'firstRender':false});
+		}
+	}
+
 	getLabels(targetDataName) {
 		return plotConfig.barPlot[targetDataName]['labels'];
 	}

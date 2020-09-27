@@ -7,9 +7,15 @@ class SunburstPlot extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false }
+		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false, 'firstRender':true };
 	}
 
+	renderTabSwitch() {
+		//this function is used to force a rerender of the component (to call Plotly.relayout / Plotly.react), so the svg has the right layout
+		if (this.state.firstRender) {
+			this.setState({'firstRender':false});
+		}
+	}
 
 	getColorsArray() {
 		// we may have more colors referenced than of years listed, so we get just a portion of the list of colors
@@ -87,7 +93,7 @@ class SunburstPlot extends React.Component {
 							margin: {l: 0, r: 0, b: "10", t: "40"}, 
 							sunburstcolorway:colors,
 						}}
-						style={{width:'auto', minHeight:'75vh'}}
+						style={{width:'auto', minHeight:'90vh'}}
 						config = {{responsive: 'true'}}
 					/>
 				</div>

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Divider, Grid, Tab } from 'semantic-ui-react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { Divider, Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -34,6 +36,8 @@ class App extends React.Component {
 		this.rankingRef = React.createRef();
 		this.heatMapRef = React.createRef();
 		this.sunburstOriginRef = React.createRef();
+		this.barTimeRef = React.createRef();
+		this.barSkippedRef = React.createRef();
 	}
 
 
@@ -188,7 +192,7 @@ class App extends React.Component {
 		if (Object.keys(this.state.selectedBarPlot).length === 0) {
 			return (
 				<React.Fragment>
-					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} />
+					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} ref={this.barTimeRef} />
 					<div className={['grid-two', 'filter'].join(' ')} >
 						<BarPlotFilter target='month' onChange={this.onSelectPlot} />
 					</div>
@@ -197,7 +201,7 @@ class App extends React.Component {
 		} else {
 			return (
 				<React.Fragment>
-					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} />
+					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} ref={this.barTimeRef} />
 					<div className={['grid-two', 'filter'].join(' ')} >
 						<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 					</div>
@@ -207,9 +211,154 @@ class App extends React.Component {
 
 	}
 
+	// renderGraphTabOne = () => {
+	// 	return (
+	// 		<Tab.Pane className='tab' key='tab1'>
+	// 			<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >When do you listen to music?</div>
+	// 			<div className='grid-patterns-bar' >
+	// 				{ this.renderTimeBarPlot() }
+	// 			</div>
+	// 			<Divider section />
+	// 			<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
+	// 			<div className='grid-patterns-sunburst'>
+	// 				<div className={['grid-one', 'filter'].join(' ')} >
+	// 					<QueryFilter 
+	// 						data={this.state.plotDetails['filters']}
+	// 						target={{'type':'sunburst', 'plot':'origin'}} 
+	// 						onQuery={this.onQuerySubmit} 
+	// 						onReset={this.onQueryReset}
+	// 					/>
+	// 				</div>
+	// 				<SunburstPlot 
+	// 					className='grid-two' 
+	// 					ranking={this.state.plotDetails['pieYear']} 
+	// 					data={this.state.plotDetails['sunburst']} 
+	// 					target={{'type':'origin'}} 
+	// 					ref={this.sunburstOriginRef}
+	// 				/>
+	// 			</div>
+	// 			<Divider section />
+	// 			<Grid columns={2} divided>
+	// 				<Grid.Row>
+	// 					<Grid.Column>
+	// 						<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Which was your most active year?</div>
+	// 						<PiePlot data={this.state.plotDetails['pieYear']} target={{'type':'year'}} />
+	// 					</Grid.Column>
+	// 					<Grid.Column>
+	// 						<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >What device did you listen to music on?</div>
+	// 						<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
+	// 					</Grid.Column>
+	// 				</Grid.Row>
+	// 			</Grid>
+	// 			<Divider section />
+	// 			<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Do you skip tracks a lot?</div>
+	// 			<div>
+	// 				<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+	// 			</div>
+	// 		</Tab.Pane>
+	// 	)
+	// }
+
+	// renderGraphsPage = () => {
+	// 	let elemToRender;
+
+	// 	if ( !this.state.hasVisuals ) {
+	// 		if (this.state.isLoading) {
+	// 			elemToRender = (
+	// 				<div>
+	// 					<Loader />
+	// 				</div>
+	// 			)
+	// 		}
+	// 	} else {
+
+	// 		const panes = [
+	// 			{ 
+	// 				menuItem: 'Listening patterns',
+	// 				pane: this.renderGraphTabOne()
+	// 			},
+	// 			{
+	// 				menuItem: 'Favourites', 
+	// 				pane: (
+	// 					<Tab.Pane className='tab' key='tab2'>
+	// 						<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
+	// 						<div className='grid-calendar'>
+	// 							<div className='grid-one' >
+	// 								<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+	// 								<SunburstPlot 
+	// 									className='grid-one' 
+	// 									ranking={this.state.plotDetails['pieYear']} 
+	// 									data={this.state.plotDetails['sunburst']} 
+	// 									target={{'type':'genre'}} 
+	// 									ref={this.sunburstSongRef}
+	// 								/>
+	// 							</div>
+	// 							<div className='grid-two' >
+	// 								<div>
+	// 									<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+	// 									<div style={{marginTop:'10%'}}>
+	// 										<p className='bold'>Explore more filters:</p>
+	// 										<QueryFilter 
+	// 											data={this.state.plotDetails['filters']} 
+	// 											target={{'type':'sunburst', 'plot':''}} 
+	// 											onQuery={this.onQuerySubmit} 
+	// 											onReset={this.onQueryReset}
+	// 										/>
+	// 									</div>
+	// 								</div>
+	// 							</div>
+	// 						</div>
+	// 					</Tab.Pane> 
+	// 				)
+	// 			},
+	// 			{ 
+	// 				menuItem: 'Calendar view', 
+	// 				pane: (
+	// 					<Tab.Pane className='tab' key='tab3'>
+	// 						<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
+	// 						<div className='grid-calendar'>
+	// 							<div className='grid-one'>
+	// 								<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
+	// 							</div>
+	// 			  				<div className='grid-two'>
+	// 								<div>
+	// 									<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+	// 								</div>
+	// 								<div style={{marginTop:'10%'}}>
+	// 									<p className='bold'>Explore more filters:</p>
+	// 									<QueryFilter 
+	// 										data={this.state.plotDetails['filters']} 
+	// 										target={{'type':'heatMap'}} 
+	// 										onQuery={this.onQuerySubmit}
+	// 										onReset={this.onQueryReset}
+	// 									/>
+	// 								</div>
+	// 							</div>
+	// 						</div>
+	// 					</Tab.Pane> 
+	// 				)
+	// 			},
+	// 		]
+
+
+	// 		elemToRender = (
+	// 			<div className={['content-graphs', 'content'].join(' ')}>
+	// 				<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
+	// 				<div className={['paragraph', 'section-margin'].join(' ')}>
+	// 					Your data source : <b>{localStorage.getItem('archiveName')}</b>
+	// 				</div>
+	// 				<Tab className='section-margin' panes={panes} renderActiveOnly={false} defaultActiveIndex={2} />
+	// 			</div>
+	// 		);
+
+	// 	} 
+	// 	return elemToRender;
+
+	// }
+
 	renderGraphTabOne = () => {
 		return (
-			<Tab.Pane className='tab' key='tab1'>
+			<div className='tab'>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >When do you listen to music?</div>
 				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
@@ -249,9 +398,71 @@ class App extends React.Component {
 				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Do you skip tracks a lot?</div>
 				<div>
-					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} />
+					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} ref={this.barSkippedRef} />
 				</div>
-			</Tab.Pane>
+			</div>
+		)
+	}
+
+
+	renderGraphTabTwo = () => {
+		return (
+			<div className='tab'>
+				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
+				<div className='grid-calendar'>
+					<div className='grid-one' >
+						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+						<SunburstPlot 
+							className='grid-one' 
+							ranking={this.state.plotDetails['pieYear']} 
+							data={this.state.plotDetails['sunburst']} 
+							target={{'type':'genre'}} 
+							ref={this.sunburstSongRef}
+						/>
+					</div>
+					<div className='grid-two' >
+						<div>
+							<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+							<div style={{marginTop:'10%'}}>
+								<p className='bold'>Explore more filters:</p>
+								<QueryFilter 
+									data={this.state.plotDetails['filters']} 
+									target={{'type':'sunburst', 'plot':''}} 
+									onQuery={this.onQuerySubmit} 
+									onReset={this.onQueryReset}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	renderGraphTabThree = () => {
+		return (
+			<div className='tab'>
+				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
+				<div className='grid-calendar'>
+					<div className='grid-one'>
+						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
+					</div>
+					<div className='grid-two'>
+						<div>
+							<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
+						</div>
+						<div style={{marginTop:'10%'}}>
+							<p className='bold'>Explore more filters:</p>
+							<QueryFilter 
+								data={this.state.plotDetails['filters']} 
+								target={{'type':'heatMap'}} 
+								onQuery={this.onQuerySubmit}
+								onReset={this.onQueryReset}
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
 		)
 	}
 
@@ -267,90 +478,54 @@ class App extends React.Component {
 				)
 			}
 		} else {
-
-			const panes = [
-				{ 
-					menuItem: 'Listening patterns',
-					pane: this.renderGraphTabOne()
-				},
-				{
-					menuItem: 'Favourites', 
-					pane: (
-						<Tab.Pane className='tab' key='tab2'>
-							<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
-							<div className='grid-calendar'>
-								<div className='grid-one' >
-									<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
-									<SunburstPlot 
-										className='grid-one' 
-										ranking={this.state.plotDetails['pieYear']} 
-										data={this.state.plotDetails['sunburst']} 
-										target={{'type':'genre'}} 
-										ref={this.sunburstSongRef}
-									/>
-								</div>
-								<div className='grid-two' >
-									<div>
-										<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-										<div style={{marginTop:'10%'}}>
-											<p className='bold'>Explore more filters:</p>
-											<QueryFilter 
-												data={this.state.plotDetails['filters']} 
-												target={{'type':'sunburst', 'plot':''}} 
-												onQuery={this.onQuerySubmit} 
-												onReset={this.onQueryReset}
-											/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Tab.Pane> 
-					)
-				},
-				{ 
-					menuItem: 'Calendar view', 
-					pane: (
-						<Tab.Pane className='tab' key='tab3'>
-							<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
-							<div className='grid-calendar'>
-								<div className='grid-one'>
-									<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
-								</div>
-				  				<div className='grid-two'>
-									<div>
-										<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
-									</div>
-									<div style={{marginTop:'10%'}}>
-										<p className='bold'>Explore more filters:</p>
-										<QueryFilter 
-											data={this.state.plotDetails['filters']} 
-											target={{'type':'heatMap'}} 
-											onQuery={this.onQuerySubmit}
-											onReset={this.onQueryReset}
-										/>
-									</div>
-								</div>
-							</div>
-						</Tab.Pane> 
-					)
-				},
-			]
-
-
 			elemToRender = (
 				<div className={['content-graphs', 'content'].join(' ')}>
 					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
 					<div className={['paragraph', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
-					<Tab className='section-margin' panes={panes} renderActiveOnly={false} />
+						<Tabs defaultIndex={1} forceRenderTabPanel={true} onSelect={this.switchTab} >
+							<TabList>
+								<Tab>Listening patterns</Tab>
+								<Tab>Favourites</Tab>
+								<Tab>Calendar view</Tab>
+							</TabList>
+
+							<TabPanel>
+								{this.renderGraphTabOne()}
+							</TabPanel>
+							<TabPanel>
+								{this.renderGraphTabTwo()}
+							</TabPanel>
+							<TabPanel>
+								{this.renderGraphTabThree()}
+							</TabPanel>
+						</Tabs>
 				</div>
-			);
-
-		} 
+			)
+		}
 		return elemToRender;
-
 	}
+
+	switchTab = (index) => {
+		switch (index) {
+			case 0:
+				this.sunburstOriginRef.current.renderTabSwitch();
+				this.barTimeRef.current.renderTabSwitch();
+				this.barSkippedRef.current.renderTabSwitch();
+				break;
+			case 1:
+				this.rankingRef.current.renderTabSwitch();
+				this.sunburstSongRef.current.renderTabSwitch();
+				break;
+			case 2:
+				this.heatMapRef.current.renderTabSwitch();
+				break;
+			default:
+				break;
+		}
+	}
+
 
 	renderHomePage = () => {
 		return (

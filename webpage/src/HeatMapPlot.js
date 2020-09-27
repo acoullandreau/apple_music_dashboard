@@ -8,7 +8,14 @@ class HeatMapPlot extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false }
+		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type, 'renderNone':false, 'firstRender':true }
+	}
+
+	renderTabSwitch() {
+		//this function is used to force a rerender of the component (to call Plotly.relayout / Plotly.react), so the svg has the right layout
+		if (this.state.firstRender) {
+			this.setState({'firstRender':false});
+		}
 	}
 
 	updatePlot(parameters) {
@@ -112,7 +119,7 @@ class HeatMapPlot extends React.Component {
 
 		for (var plot in plots) {
 			histPlots.push(
-				(<div>
+				(<React.Fragment>
 					<Plot
 						data={[plots[plot]]}
 						layout={{
@@ -124,21 +131,20 @@ class HeatMapPlot extends React.Component {
 							margin:{t:"40"},
 
 						}}
-						style={{marginTop:'3%', minHeight:'60vh'}}
+						style={{width:'100%', marginTop:'3%', minHeight:'60vh'}}
 						config = {{responsive: 'true'}}
 					/>
-				</div>)
+				</React.Fragment>)
 			)
 
 		}
 
-		return (<div>
+		return (
 			<ul>
 				{
 					histPlots.map((item, i) => <li key={i}>{item}</li>)
 				}
 			</ul>
-		  </div>
 		)
 		
 	}
@@ -152,9 +158,9 @@ class HeatMapPlot extends React.Component {
 			);
 		} else {
 			return (
-				<div>
-					<div>{this.renderPlot()}</div>
-				</div>
+				<React.Fragment>
+					{this.renderPlot()}
+				</React.Fragment>
 			);
 		}
 	}

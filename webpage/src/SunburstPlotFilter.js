@@ -35,6 +35,7 @@ class SunburstPlotFilter extends React.Component {
 					<p className='bold'>Choose target:</p>
 					<Button 
 						toggle 
+						size='small'
 						value='genre' 
 						active={this.state.target === 'genre' ? true : false} 
 						onClick={this.handleChange}
@@ -43,6 +44,7 @@ class SunburstPlotFilter extends React.Component {
 					</Button>
 					<Button 
 						toggle 
+						size='small'
 						value='artist' 
 						active={this.state.target === 'artist' ? true : false} 
 						onClick={this.handleChange}
@@ -51,6 +53,7 @@ class SunburstPlotFilter extends React.Component {
 					</Button>
 					<Button 
 						toggle 
+						size='small'
 						value='title' 
 						active={this.state.target === 'title' ? true : false} 
 						onClick={this.handleChange}
@@ -58,7 +61,7 @@ class SunburstPlotFilter extends React.Component {
 						Title
 					</Button>
 				</div>
-				<div style={{marginTop:'10%'}}>
+				<div style={{width:'65%', marginTop:'10%'}}>
 					<p className='bold'>Number of items ranked:</p>
 					<input type="number" value={this.state.numItems} onChange={this.handleChange} />
 				</div>

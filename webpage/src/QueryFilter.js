@@ -294,15 +294,34 @@ class QueryFilter extends React.Component {
 		if (this.state.resetIsDisabled) {
 			return (
 				<div>
-					<Button color='red' onClick={this.onSubmit}>Refresh</Button>
-					<Button color='blue' disabled onClick={this.onReset}>Reset</Button>
+					<Button 
+						disabled 
+						onClick={this.onReset}
+					>
+						Reset
+					</Button>
+					<Button 
+						color='red' 
+						onClick={this.onSubmit}
+					>
+						Refresh
+					</Button>
 				</div>
 			)
 		} else {
 			return(
 				<div>
-					<Button color='red' onClick={this.onSubmit}>Refresh</Button>
-					<Button color='blue' onClick={this.onReset}>Reset</Button>
+				<Button 
+					onClick={this.onReset}
+				>
+					Reset
+				</Button>
+				<Button 
+					color='red' 
+					onClick={this.onSubmit}
+				>
+					Refresh
+				</Button>
 				</div>
 			)
 		}

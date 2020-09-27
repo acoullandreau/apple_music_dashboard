@@ -19,6 +19,7 @@ class CalendarPlotFilter extends React.Component {
 					<p className='bold'>Choose target:</p>
 					<Button
 						toggle 
+						size='small'
 						value='DOM' 
 						active={this.state.target === 'DOM' ? true : false} 
 						onClick={this.handleChange}
@@ -27,6 +28,7 @@ class CalendarPlotFilter extends React.Component {
 					</Button>
 					<Button 
 						toggle
+						size='small'
 						value='DOW' 
 						active={this.state.target === 'DOW' ? true : false} 
 						onClick={this.handleChange}

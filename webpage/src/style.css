@@ -24,11 +24,19 @@ li {
 }
 
 .ui.button.toggle.active {
-  background: #D13434 !important;
+  background: #474847 !important;
 }
 
 .ui.button.toggle.active:hover {
-  background: #FD3F3F !important;
+  background: #1B1C1D !important;
+}
+
+.ui.red.button {
+	background: #D13434 !important;
+}
+
+.ui.red.button:hover {
+	background: #FD3F3F !important;
 }
 
 .ui.menu {
@@ -166,7 +174,7 @@ li {
 .grid-patterns-sunburst {
 	display: grid;
 	grid-template-columns: 20% 75%;
-	grid-column-gap: 5%;
+	grid-column-gap: 2%;
 	margin-top: 2%;
 }
 
@@ -179,8 +187,8 @@ li {
 
 .grid-calendar {
 	display: grid;
-	grid-template-columns: 69% 27%;
-	grid-column-gap: 4%;
+	grid-template-columns: 75% 24%;
+	grid-column-gap: 1%;
 	margin-top: 2%;
 }
 
