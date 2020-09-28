@@ -94,7 +94,16 @@ class SunburstPlot extends React.Component {
 							sunburstcolorway:colors,
 						}}
 						style={{width:'auto', minHeight:'90vh'}}
-						config = {{responsive: 'true'}}
+						config = {{
+							responsive: 'true',
+							toImageButtonOptions: {
+								width:1200,
+								height:800,
+								filename: 'sunburst-'+this.props.target.type,
+							},
+							modeBarButtonsToRemove: ['toggleHover'],
+							displaylogo: false
+						}}
 					/>
 				</div>
 			);

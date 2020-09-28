@@ -39,7 +39,16 @@ class PiePlot extends React.Component {
 					legend:{orientation:"h", xanchor:"center"}
 				}}
 				style={{width:'auto', height:'60vh'}}
-				config = {{responsive: 'true'}}
+				config = {{
+					responsive: 'true',
+					toImageButtonOptions: {
+						width:1200,
+						height:800,
+						filename: 'pie-chart-'+this.props.target.type,
+					},
+					modeBarButtonsToRemove: ['toggleHover'],
+					displaylogo: false
+				}}
 			/>
 		);
 	}

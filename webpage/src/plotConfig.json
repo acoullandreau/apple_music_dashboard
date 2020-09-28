@@ -36,25 +36,47 @@
 		"heatMapDOM" : {
 			"title":"Heat map of the play duration in minutes for each day",
 			"xaxis":{
+				"zeroline":false,
+				"linecolor": "rgba(0,0,0,0.3)",
+    			"linewidth": 0.5,
+				"mirror":true,
 				"tickangle":-45,
 				"tickmode":"array",
 				"tickvals":[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 				"ticktext": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 			},
 			"xbins":{ "end": 11.5, "size": 1, "start": -0.5 },
-			"yaxis":{"autorange":"reversed"},
+			"yaxis":{
+				"title":"Day of the month",
+				"autorange":"reversed",
+				"zeroline":false,
+				"linecolor": "rgba(0,0,0,0.3)",
+    			"linewidth": 0.5,
+				"mirror":true
+			},
 			"ybins":{ "end": 31.5, "size": 1, "start": 0.5 }
 		},
 		"heatMapDOW" : {
 			"title":"Heat map of the play duration in minutes for each day",
 			"xaxis":{
+				"zeroline":false,
+				"linecolor": "rgba(0,0,0,0.3)",
+    			"linewidth": 0.5,
+				"mirror":true,
 				"tickangle":-45,
 				"tickmode":"array",
 				"tickvals":[1, 2, 3, 4, 5, 6, 0],
 				"ticktext": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 			},
 			"xbins":{ "end": 6.5, "size": 1, "start": -0.5 },
-			"yaxis":{"autorange":"reversed"},
+			"yaxis":{
+				"title":"Hour of the day",
+				"autorange":"reversed",
+				"zeroline":false,
+				"linecolor": "rgba(0,0,0,0.3)",
+    			"linewidth": 0.5,
+				"mirror":true
+			},
 			"ybins":{ "end": 23.5, "size": 1, "start": -0.5 }
 		}
 	},

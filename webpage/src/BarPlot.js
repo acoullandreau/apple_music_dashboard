@@ -114,13 +114,32 @@ class BarPlot extends React.Component {
 					autosize:true, 
 					xaxis:xaxis, 
 					yaxis:yaxis, 
-					paper_bgcolor: 'rgba(0,0,0,0)', 
+					paper_bgcolor: 'rgba(0,0,0,0)',
 					plot_bgcolor: 'rgba(0,0,0,0)',
 					margin:{t:"40", pad:"10"},
 					legend:legend
 				}}
 				style={{width:'100%', minHeight:'60vh'}}
-				config = {{responsive: 'true'}}
+				config = {{
+					responsive: 'true',
+					toImageButtonOptions: {
+						width:1200,
+						height:800,
+						filename: 'bar-chart-'+this.props.target.type,
+					},
+					modeBarButtonsToRemove: [
+						'hoverClosestCartesian', 
+						'hoverCompareCartesian', 
+						'zoom2d',
+						'lasso2d', 
+						'zoomIn2d', 
+						'zoomOut2d', 
+						'autoScale2d',
+						'toggleHover',
+						'toggleSpikelines'
+					],
+					displaylogo: false
+				}}
 			/>
 		)
 

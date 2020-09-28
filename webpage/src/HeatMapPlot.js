@@ -100,11 +100,12 @@ class HeatMapPlot extends React.Component {
 					thickness:"10"
 				},
 				zmin:0,
-				zmax:maxValue
+				zmax:maxValue,
+				xgap:1,
+				ygap:1
 			}
 			traces[year]=trace;
 		}
-
 		return traces;
 	}
 
@@ -127,18 +128,36 @@ class HeatMapPlot extends React.Component {
 							autosize:true, 
 							xaxis:xaxis, 
 							yaxis:yaxis,
-							paper_bgcolor: 'rgba(0,0,0,0)',
+							paper_bgcolor: '#F7F7ED',
+							plot_bgcolor: 'rgba(0,0,0,0.1)',
 							margin:{t:"40"},
 
 						}}
-						style={{width:'100%', marginTop:'3%', minHeight:'60vh'}}
-						config = {{responsive: 'true'}}
+						style={{width:'100%', marginTop:'3%', minHeight:'80vh'}}
+						config = {{
+							responsive: 'true',
+							toImageButtonOptions: {
+								filename: 'calendar-view-'+this.state.type,
+								width:1200,
+								height:800,
+							},
+							modeBarButtonsToRemove: [
+								'hoverClosestCartesian', 
+								'hoverCompareCartesian', 
+								'zoom2d', 
+								'zoomIn2d', 
+								'zoomOut2d', 
+								'autoScale2d', 
+								'toggleHover',
+								'toggleSpikelines'
+							],
+							displaylogo: false
+						}}
 					/>
 				</React.Fragment>)
 			)
 
 		}
-
 		return (
 			<ul>
 				{

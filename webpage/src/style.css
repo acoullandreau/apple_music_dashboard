@@ -44,6 +44,26 @@ li {
 	box-shadow: none !important;
 }
 
+.react-tabs__tab-panel {
+	border-bottom: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-left: 1px solid #aaa;
+	padding-right:2%;
+	padding-left:2%;
+}
+
+.react-tabs__tab-list {
+	margin-bottom: 0px !important;
+	font-weight: 700;
+	font-size:2.2vh;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D;
+	color: #F7F7ED;
+	border:3px;
+}
+
 .bold {
 	font-weight: 700;
 }
@@ -84,7 +104,7 @@ li {
 }
 
 .content-graphs {
-	width:85%;
+	width:90%;
 }
 
 .page-title {

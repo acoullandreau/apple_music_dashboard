@@ -112,8 +112,27 @@ class RankingList extends React.Component {
 						legend:{traceorder:"normal", orientation:"h"},
 						yaxis: {categoryorder: "total ascending", automargin: true}
 					}}
-					config = {{responsive: 'true'}}
 					style={{width:'100%', minHeight:'65vh'}}
+					config = {{
+						responsive: 'true',
+						toImageButtonOptions: {
+							width:1200,
+							height:800,
+							filename: 'bar-chart-favourite-'+this.props.target.type,
+						},
+						modeBarButtonsToRemove: [
+							'hoverClosestCartesian', 
+							'hoverCompareCartesian', 
+							'zoom2d',
+							'lasso2d', 
+							'zoomIn2d', 
+							'zoomOut2d', 
+							'autoScale2d',
+							'toggleHover',
+							'toggleSpikelines'
+						],
+						displaylogo: false
+					}}
 				/>
 			</div>
 		);
