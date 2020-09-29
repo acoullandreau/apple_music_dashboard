@@ -44,6 +44,10 @@ class QueryFilter extends React.Component {
 		})
 	}
 
+	onQueryCleared = () => {
+		this.setState({'resetIsDisabled':true });
+	}
+
 	onReset = () => {
 		for (var ref in this.elemRefs) {
 			if (ref.includes('dropdown')) {

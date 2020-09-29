@@ -28,7 +28,7 @@ class App extends React.Component {
 			'hasVisuals': false, 
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
-			'queryFiltersDefault':{ 'artist': [], 'genre': [], 'inlib': "", 'offline': "", 'origin': "", 'rating': "", 'skipped': "", 'title': [], 'year': [] }
+			'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': '', 'year': '' }
 		};
 
 		this.fileSelectorRef = React.createRef();
@@ -38,6 +38,9 @@ class App extends React.Component {
 		this.sunburstOriginRef = React.createRef();
 		this.barTimeRef = React.createRef();
 		this.barSkippedRef = React.createRef();
+		this.querySunburstOriginRef = React.createRef();
+		this.queryFavouritesRef = React.createRef();
+		this.queryHeatMapRef = React.createRef();
 	}
 
 
@@ -108,7 +111,6 @@ class App extends React.Component {
 		if (target === 'bar') {
 			this.setState({ 'selectedBarPlot': parameters.payload });
 		} else if (target === 'sunburst') {
-			console.log(parameters)
 			// we request an update of the sunburst and rankingList components with the new params
 			this.sunburstSongRef.current.updatePlot(parameters);
 			this.rankingRef.current.updatePlot(parameters);
@@ -159,12 +161,15 @@ class App extends React.Component {
 		if (isQuery) {
 			this.worker.postMessage({'type':'query', 'payload':parameters});
 		} else {
-			this.onQueryReset(parameters);
+			this.onQueryReset(parameters.target);
 		}
 	}
 
 	hasQueryFilters = (queryDict) => {
 		for (var key in queryDict) {
+			if (Array.isArray(queryDict[key]) & queryDict[key].length === 0) {
+				queryDict[key] = '';
+			}
 			if (queryDict[key] !== this.state.queryFiltersDefault[key]) {
 				return true;
 			}
@@ -179,12 +184,15 @@ class App extends React.Component {
 			var plotType = plotTarget.plot;
 			if (plotType === 'origin') {
 				this.sunburstOriginRef.current.resetPlot();
+				this.querySunburstOriginRef.current.onQueryCleared();
 			} else {
 				this.sunburstSongRef.current.resetPlot();
 				this.rankingRef.current.resetPlot();
+				this.queryFavouritesRef.current.onQueryCleared();
 			}
 		} else if (targetPlot === 'heatMap') {
 			this.heatMapRef.current.resetPlot();
+			this.queryHeatMapRef.current.onQueryCleared();
 		}
 	}
 
@@ -227,6 +235,7 @@ class App extends React.Component {
 							target={{'type':'sunburst', 'plot':'origin'}} 
 							onQuery={this.onQuerySubmit} 
 							onReset={this.onQueryReset}
+							ref={this.querySunburstOriginRef}
 						/>
 					</div>
 					<SunburstPlot 
@@ -285,6 +294,7 @@ class App extends React.Component {
 									target={{'type':'sunburst', 'plot':''}} 
 									onQuery={this.onQuerySubmit} 
 									onReset={this.onQueryReset}
+									ref={this.queryFavouritesRef}
 								/>
 							</div>
 						</div>
@@ -293,6 +303,7 @@ class App extends React.Component {
 			</div>
 		)
 	}
+
 
 	renderGraphTabThree = () => {
 		return (
@@ -313,6 +324,7 @@ class App extends React.Component {
 								target={{'type':'heatMap'}} 
 								onQuery={this.onQuerySubmit}
 								onReset={this.onQueryReset}
+								ref={this.queryHeatMapRef}
 							/>
 						</div>
 					</div>
@@ -336,10 +348,10 @@ class App extends React.Component {
 			elemToRender = (
 				<div className={['content-graphs', 'content'].join(' ')}>
 					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
-					<div className={['paragraph', 'section-margin'].join(' ')}>
+					<div className={['data-source', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
-					<Tabs className={['tab', 'grid-tabs', 'section-margin'].join(' ')} defaultIndex={1} forceRenderTabPanel={true} onSelect={this.switchTab} >
+					<Tabs className={['grid-tabs'].join(' ')} defaultIndex={1} forceRenderTabPanel={true} onSelect={this.switchTab} >
 						<TabList className={['grid-one'].join(' ')}>
 							<Tab>Listening patterns</Tab>
 							<Tab>Favourites</Tab>

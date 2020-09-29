@@ -63,10 +63,11 @@ class QueryEngine  {
 
 		// we keep only the parameters that actually filter something
 		for (var key in queryDict) {
-			if (queryDict[key] === '') {
+			if (queryDict[key] === '' || queryDict[key].length == 0) {
 				delete queryDict[key];
 			}
 		}
+
 		return this.getFilteredFile(queryDict).then(result => {
 			var playPlotDetails = {};
 			var p;
