@@ -213,7 +213,7 @@ class App extends React.Component {
 
 	renderGraphTabOne = () => {
 		return (
-			<div className='tab'>
+			<div className={['tab', 'grid-two'].join(' ')}>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >When do you listen to music?</div>
 				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
@@ -262,7 +262,7 @@ class App extends React.Component {
 
 	renderGraphTabTwo = () => {
 		return (
-			<div className='tab'>
+			<div className={['tab', 'grid-two'].join(' ')}>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
 				<div className='grid-calendar'>
 					<div className='grid-one' >
@@ -296,7 +296,7 @@ class App extends React.Component {
 
 	renderGraphTabThree = () => {
 		return (
-			<div className='tab'>
+			<div className={['tab', 'grid-two'].join(' ')}>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
 				<div className='grid-calendar'>
 					<div className='grid-one'>
@@ -339,8 +339,8 @@ class App extends React.Component {
 					<div className={['paragraph', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
 					</div>
-					<Tabs className={['tab', 'section-margin'].join(' ')} defaultIndex={1} forceRenderTabPanel={true} onSelect={this.switchTab} >
-						<TabList>
+					<Tabs className={['tab', 'grid-tabs', 'section-margin'].join(' ')} defaultIndex={1} forceRenderTabPanel={true} onSelect={this.switchTab} >
+						<TabList className={['grid-one'].join(' ')}>
 							<Tab>Listening patterns</Tab>
 							<Tab>Favourites</Tab>
 							<Tab>Calendar view</Tab>

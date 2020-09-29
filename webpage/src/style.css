@@ -12,6 +12,8 @@ p {
 
 ul {
 	padding-inline-start:0;
+	margin-block-start: 0;
+    margin-block-end: 0;
 }
 
 li {
@@ -44,7 +46,10 @@ li {
 	box-shadow: none !important;
 }
 
-.react-tabs__tab-panel {
+/*CSS for tabs horizontal*/
+/*In this case, remove all classNames of the tabs elements except 'tab' and 'section-margin' for the Tabs component*/
+
+/*.react-tabs__tab-panel {
 	border-bottom: 1px solid #aaa;
 	border-right: 1px solid #aaa;
 	border-left: 1px solid #aaa;
@@ -58,11 +63,58 @@ li {
 	font-size:2.2vh;
 }
 
+.react-tabs__tab {
+	padding:1%;
+	border:1px solid #C6C6C6;
+	border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D;
+	color: #F7F7ED;
+	border:3px;
+}*/
+
+
+/*CSS for the tabs vertical*/
+
+.react-tabs__tab-panel {
+  	border: 1px solid #aaa;
+  	border-radius: 0 5px 5px 5px;
+	padding-right:2%;
+	padding-left:2%;
+}
+
+.react-tabs__tab {
+	display:block;
+	border:1px solid #C6C6C6;
+	border-radius: 0 5px 5px 0;
+	width:100%;
+	height:23vh;
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	font-weight: 700;
+	font-size:2.2vh;
+	padding: 0px;
+	padding-right:25%;
+	padding-bottom:50%;
+	text-align: right;
+}
+
 .react-tabs__tab--selected {
 	background-color: #1B1C1D;
 	color: #F7F7ED;
 	border:3px;
 }
+
+.grid-tabs {
+	display: grid;
+	grid-template-columns: 3% 97%;
+}
+
+
+
+
 
 .bold {
 	font-weight: 700;
