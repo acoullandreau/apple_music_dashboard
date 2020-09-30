@@ -186,7 +186,7 @@ class QueryFilter extends React.Component {
 		}
 
 		return (
-			<div>
+			<React.Fragment>
 				<ul>
 				  	{
 						React.Children.toArray(
@@ -227,7 +227,7 @@ class QueryFilter extends React.Component {
 						)
 					}
 				</ul>
-			</div>
+			</React.Fragment>
 		)
 
 	}
@@ -248,7 +248,7 @@ class QueryFilter extends React.Component {
 		if (this.state.data[target] !== '') {
 			var itemList = this.state.data[target];
 			return (
-				<div style={{maxWidth:"15%"}}>
+				<React.Fragment>
 					<List>
 						{
 							itemList.map((item, i) => {
@@ -264,7 +264,7 @@ class QueryFilter extends React.Component {
 						}
 
 					</List>
-				</div>
+				</React.Fragment>
 			)
 		}
 	}
@@ -272,32 +272,32 @@ class QueryFilter extends React.Component {
 
 	renderQueryHeatMap() {
 		return (
-			<div>
+			<React.Fragment>
 				{ this.renderDropdown('heatMap') }
-				<div>
+				<React.Fragment>
 					<SearchList type='artist' data={this.fetchOptionsArtist()} onSelect={this.onSearchSelect} />
 					{ this.renderSearchListItems('artist') }
-				</div>
-				<div>
+				</React.Fragment>
+				<React.Fragment>
 					<SearchList type='title' data={this.fetchOptionsTitle()} onSelect={this.onSearchSelect} />
 					{ this.renderSearchListItems('title') }
-				</div>
-			</div>
+				</React.Fragment>
+			</React.Fragment>
 		)
 	}
 
 	renderQuerySunburst() {
 		return (
-			<div>
+			<React.Fragment>
 				{ this.renderDropdown('sunburst') }
-			</div>
+			</React.Fragment>
 		)
 	}
 
 	renderButtons() {
 		if (this.state.resetIsDisabled) {
 			return (
-				<div>
+				<div className='button-margin-top'>
 					<Button 
 						disabled 
 						onClick={this.onReset}
@@ -314,18 +314,18 @@ class QueryFilter extends React.Component {
 			)
 		} else {
 			return(
-				<div>
-				<Button 
-					onClick={this.onReset}
-				>
-					Reset
-				</Button>
-				<Button 
-					color='red' 
-					onClick={this.onSubmit}
-				>
-					Refresh
-				</Button>
+				<div className='button-margin-top'>
+					<Button 
+						onClick={this.onReset}
+					>
+						Reset
+					</Button>
+					<Button 
+						color='red' 
+						onClick={this.onSubmit}
+					>
+						Refresh
+					</Button>
 				</div>
 			)
 		}
@@ -334,17 +334,17 @@ class QueryFilter extends React.Component {
 	render() {
 		if (this.props.target.type === 'heatMap') {
 			return (
-				<div>
+				<React.Fragment>
 					{this.renderQueryHeatMap()}
 					{this.renderButtons()}
-				</div>
+				</React.Fragment>
 			)
 		} else if (this.props.target.type === 'sunburst') {
 			return (
-				<div>
+				<React.Fragment>
 					{this.renderQuerySunburst()}
 					{this.renderButtons()}
-				</div>
+				</React.Fragment>
 			)
 		}
 

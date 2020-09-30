@@ -130,8 +130,7 @@ class HeatMapPlot extends React.Component {
 							yaxis:yaxis,
 							paper_bgcolor: '#F7F7ED',
 							plot_bgcolor: 'rgba(0,0,0,0.1)',
-							margin:{t:"40"},
-
+							margin:{t:"40"}
 						}}
 						style={{width:'100%', marginTop:'3%', minHeight:'80vh'}}
 						config = {{

@@ -201,7 +201,7 @@ class App extends React.Component {
 			return (
 				<React.Fragment>
 					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={{'type':'month', 'unit':'count'}} ref={this.barTimeRef} />
-					<div className={['grid-two', 'filter'].join(' ')} >
+					<div className={['grid-two', 'filter-bar'].join(' ')} >
 						<BarPlotFilter target='month' onChange={this.onSelectPlot} />
 					</div>
 				</React.Fragment>
@@ -210,7 +210,7 @@ class App extends React.Component {
 			return (
 				<React.Fragment>
 					<BarPlot className='grid-one' data={this.state.plotDetails['barPlot']} target={this.state.selectedBarPlot} ref={this.barTimeRef} />
-					<div className={['grid-two', 'filter'].join(' ')} >
+					<div className={['grid-two', 'filter-bar'].join(' ')} >
 						<BarPlotFilter target={this.state.selectedBarPlot} onChange={this.onSelectPlot} />
 					</div>
 				</React.Fragment>
@@ -229,7 +229,7 @@ class App extends React.Component {
 				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
 				<div className='grid-patterns-sunburst'>
-					<div className={['grid-one', 'filter'].join(' ')} >
+					<div className={['grid-one', 'filter-query'].join(' ')} >
 						<QueryFilter 
 							data={this.state.plotDetails['filters']}
 							target={{'type':'sunburst', 'plot':'origin'}} 
@@ -284,19 +284,17 @@ class App extends React.Component {
 							ref={this.sunburstSongRef}
 						/>
 					</div>
-					<div className='grid-two' >
-						<div>
-							<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
-							<div style={{marginTop:'10%'}}>
-								<p className='bold'>Explore more filters:</p>
-								<QueryFilter 
-									data={this.state.plotDetails['filters']} 
-									target={{'type':'sunburst', 'plot':''}} 
-									onQuery={this.onQuerySubmit} 
-									onReset={this.onQueryReset}
-									ref={this.queryFavouritesRef}
-								/>
-							</div>
+					<div className={['grid-two', 'filter-query'].join(' ')} >
+						<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+						<div style={{marginTop:'10%'}}>
+							<p className='bold'>Explore more filters:</p>
+							<QueryFilter 
+								data={this.state.plotDetails['filters']} 
+								target={{'type':'sunburst', 'plot':''}} 
+								onQuery={this.onQuerySubmit} 
+								onReset={this.onQueryReset}
+								ref={this.queryFavouritesRef}
+							/>
 						</div>
 					</div>
 				</div>
@@ -313,7 +311,7 @@ class App extends React.Component {
 					<div className='grid-one'>
 						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
 					</div>
-					<div className='grid-two'>
+					<div className={['grid-two', 'filter-query'].join(' ')} >
 						<div>
 							<CalendarPlotFilter target='DOM' onChange={this.onSelectPlot} />
 						</div>

@@ -30,40 +30,48 @@ class SunburstPlotFilter extends React.Component {
 
 	render() {
 		return (
-			<Form className='paragraph'>
-				<div>
+			<Form className='paragraph' >
+				<React.Fragment>
 					<p className='bold'>Choose target:</p>
-					<Button 
-						toggle 
-						size='small'
-						value='genre' 
-						active={this.state.target === 'genre' ? true : false} 
-						onClick={this.handleChange}
-					>
-						Genre
-					</Button>
-					<Button 
-						toggle 
-						size='small'
-						value='artist' 
-						active={this.state.target === 'artist' ? true : false} 
-						onClick={this.handleChange}
-					>
-						Artist
-					</Button>
-					<Button 
-						toggle 
-						size='small'
-						value='title' 
-						active={this.state.target === 'title' ? true : false} 
-						onClick={this.handleChange}
-					>
-						Title
-					</Button>
-				</div>
-				<div style={{width:'65%', marginTop:'10%'}}>
+					<ul>
+						<li className='button-margin'>
+							<Button 
+								toggle 
+								size='medium'
+								value='genre' 
+								active={this.state.target === 'genre' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Genre
+							</Button>
+						</li>
+						<li className='button-margin'>
+							<Button 
+								toggle 
+								size='medium'
+								value='artist' 
+								active={this.state.target === 'artist' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Artist
+							</Button>
+						</li>
+						<li className='button-margin'>
+							<Button 
+								toggle 
+								size='medium'
+								value='title' 
+								active={this.state.target === 'title' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Title
+							</Button>
+						</li>
+					</ul>
+				</React.Fragment>
+				<div className='button-margin-top'>
 					<p className='bold'>Number of items ranked:</p>
-					<input type="number" value={this.state.numItems} onChange={this.handleChange} />
+					<input style={{backgroundColor:"#f9f9f2"}} type="number" value={this.state.numItems} onChange={this.handleChange} />
 				</div>
 			</Form>
 

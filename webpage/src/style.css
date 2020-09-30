@@ -20,17 +20,26 @@ li {
 	list-style-type: none;
 }
 
+.ui.search .prompt {
+	background-color: #f9f9f2;
+}
+
+.ui.search {
+	font-size:1.8vh;
+	margin-top:2%;
+}
+
 .ui.search>.results {
 	overflow-y: auto;
 	max-height: 250px;
 }
 
 .ui.button.toggle.active {
-  background: #474847 !important;
+	background: #474847 !important;
 }
 
 .ui.button.toggle.active:hover {
-  background: #1B1C1D !important;
+	background: #1B1C1D !important;
 }
 
 .ui.red.button {
@@ -41,81 +50,23 @@ li {
 	background: #FD3F3F !important;
 }
 
+.ui.buttons {
+	margin-top:3%;
+}
+
 .ui.menu {
 	background-color: transparent !important;
 	box-shadow: none !important;
 }
 
-/*CSS for tabs horizontal*/
-/*In this case, remove all classNames of the tabs elements except 'tab' and 'section-margin' for the Tabs component*/
-
-/*.react-tabs__tab-panel {
-	border-bottom: 1px solid #aaa;
-	border-right: 1px solid #aaa;
-	border-left: 1px solid #aaa;
-	padding-right:2%;
-	padding-left:2%;
+.ui.search.dropdown {
+	background-color: #f9f9f2;
+	font-size:1.8vh;
+	margin:1%;
+	width: 70%;
+	margin-right: auto;
+	margin-left: auto;
 }
-
-.react-tabs__tab-list {
-	margin-bottom: 0px !important;
-	font-weight: 700;
-	font-size:2.2vh;
-}
-
-.react-tabs__tab {
-	padding:1%;
-	border:1px solid #C6C6C6;
-	border-radius: 5px 5px 0 0;
-}
-
-.react-tabs__tab--selected {
-	background-color: #1B1C1D;
-	color: #F7F7ED;
-	border:3px;
-}*/
-
-
-/*CSS for the tabs vertical*/
-
-.react-tabs__tab-panel {
-  	border: 1px solid #C6C6C6;
-  	border-radius: 0 5px 5px 5px;
-	padding-right:2%;
-	padding-left:2%;
-}
-
-.react-tabs__tab {
-	display:block;
-	border:1px solid #C6C6C6;
-	border-radius: 0 5px 5px 0;
-	width:100%;
-	height:23vh;
-	writing-mode: vertical-rl;
-	transform: rotate(180deg);
-	font-weight: 700;
-	font-size:2.2vh;
-	padding: 0px;
-	padding-right:25%;
-	padding-bottom:50%;
-	text-align: right;
-}
-
-.react-tabs__tab--selected {
-	background-color: #1B1C1D;
-	color: #F7F7ED;
-	border:3px;
-}
-
-.grid-tabs {
-	display: grid;
-	grid-template-columns: 3% 97%;
-	margin-top:2%;
-}
-
-
-
-
 
 .bold {
 	font-weight: 700;
@@ -168,6 +119,14 @@ li {
 
 .section-margin {
 	margin-top:3%;
+}
+
+.button-margin-top {
+	margin-top:10%;
+}
+
+.button-margin {
+	margin:3%;
 }
 
 .home-icons {
@@ -233,11 +192,6 @@ li {
 	margin-left:2%;
 }
 
-.tab {
-	background-color: #F7F7ED !important;
-	overflow-x: auto;
-}
-
 .grid-patterns-bar {
 	display: grid;
 	grid-template-columns: 85% 15%;
@@ -260,18 +214,101 @@ li {
 
 .grid-calendar {
 	display: grid;
-	grid-template-columns: 75% 24%;
-	grid-column-gap: 1%;
+	grid-template-columns: 79% 19%;
+	grid-column-gap: 2%;
 	margin-top: 2%;
 }
 
-.filter {
+.filter-bar {
 	height:80%;
 	margin-top:auto;
 	margin-bottom: auto;
+}
+
+.filter-query {
+	margin-top:10%;
+	width:85%;
+	margin-left: auto;
 }
 
 .data-source {
 	font-size: 1.5vh;
 	text-align: right;
 }
+
+
+/*CSS for the tabs vertical*/
+
+.react-tabs__tab-panel {
+  	border: 1px solid #C6C6C6;
+  	border-radius: 0 5px 5px 5px;
+	padding-right:2%;
+	padding-left:2%;
+	background-color: #F7F7ED !important;
+	overflow-x: auto;
+}
+
+.react-tabs__tab {
+	display:block;
+	border:1px solid #C6C6C6;
+	border-radius: 0 5px 5px 0;
+	width:100%;
+	height:23vh;
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	font-weight: 700;
+	font-size:2.2vh;
+	padding: 0px;
+	padding-right:25%;
+	padding-bottom:50%;
+	text-align: right;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D;
+	color: #F7F7ED;
+	border:3px;
+}
+
+.grid-tabs {
+	display: grid;
+	grid-template-columns: 3% 97%;
+	margin-top:2%;
+}
+
+/*CSS for tabs horizontal*/
+/*In this case, remove all classNames of the tabs elements except 'tab' and 'section-margin' for the Tabs component*/
+
+/*.react-tabs__tab-panel {
+	border-bottom: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-left: 1px solid #aaa;
+	padding-right:2%;
+	padding-left:2%;
+}
+
+.react-tabs__tab-list {
+	margin-bottom: 0px !important;
+	font-weight: 700;
+	font-size:2.2vh;
+}
+
+.react-tabs__tab {
+	padding:1%;
+	border:1px solid #C6C6C6;
+	border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D;
+	color: #F7F7ED;
+	border:3px;
+}*/
+
+
+
+
+
+
+
+

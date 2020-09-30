@@ -15,27 +15,33 @@ class CalendarPlotFilter extends React.Component {
 	render() {
 		return (
 			<Form className='paragraph'>
-				<div>
+				<React.Fragment>
 					<p className='bold'>Choose target:</p>
-					<Button
-						toggle 
-						size='small'
-						value='DOM' 
-						active={this.state.target === 'DOM' ? true : false} 
-						onClick={this.handleChange}
-					>
-						Day of the month
-					</Button>
-					<Button 
-						toggle
-						size='small'
-						value='DOW' 
-						active={this.state.target === 'DOW' ? true : false} 
-						onClick={this.handleChange}
-					>
-						Day of the week
-					</Button>
-				</div>
+					<ul>
+						<li className='button-margin'>
+							<Button
+								toggle 
+								size='medium'
+								value='DOM' 
+								active={this.state.target === 'DOM' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Day of the month
+							</Button>
+						</li>
+						<li className='button-margin'>
+							<Button 
+								toggle
+								size='medium'
+								value='DOW' 
+								active={this.state.target === 'DOW' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Day of the week
+							</Button>
+						</li>
+					</ul>
+				</React.Fragment>
 			</Form>
 		)
 	}
