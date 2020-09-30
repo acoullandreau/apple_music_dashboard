@@ -300,6 +300,7 @@ class QueryFilter extends React.Component {
 				<div className='button-margin-top'>
 					<Button 
 						disabled 
+						color='blue' 
 						onClick={this.onReset}
 					>
 						Reset
@@ -316,6 +317,7 @@ class QueryFilter extends React.Component {
 			return(
 				<div className='button-margin-top'>
 					<Button 
+						color='blue' 
 						onClick={this.onReset}
 					>
 						Reset

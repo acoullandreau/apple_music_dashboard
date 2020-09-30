@@ -20,30 +20,36 @@ class BarPlotFilter extends React.Component {
 	render() {
 		return (
 			<Form className='paragraph'>
-				<div>
+				<React.Fragment>
 					<p className='bold'>Choose unit:</p>
-					<div>
-						<Button
-							toggle 
-							size='small'
-							value='count' 
-							active={this.state.unit === 'count' ? true : false} 
-							onClick={this.handleChange}
-						>
-							Count
-						</Button>
-						<Button 
-							toggle
-							size='small'
-							value='percent' 
-							active={this.state.unit === 'percent' ? true : false} 
-							onClick={this.handleChange}
-						>
-							Percentage
-						</Button>
-					</div>
-				</div>
-				<div style={{marginTop:'10%'}}>
+					<ul>
+						<li className='button-margin'>
+							<Button
+								className='button-margin'
+								toggle 
+								size='small'
+								value='count' 
+								active={this.state.unit === 'count' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Count
+							</Button>
+						</li>
+						<li className='button-margin'>
+							<Button 
+								className='button-margin'
+								toggle
+								size='small'
+								value='percent' 
+								active={this.state.unit === 'percent' ? true : false} 
+								onClick={this.handleChange}
+							>
+								Percentage
+							</Button>
+						</li>
+					</ul>
+				</React.Fragment>
+				<div className='button-margin-top'>
 					<p className='bold'>Choose time granularity:</p>
 					<Form.Field>
 							<Checkbox

@@ -117,7 +117,8 @@ class BarPlot extends React.Component {
 					paper_bgcolor: 'rgba(0,0,0,0)',
 					plot_bgcolor: 'rgba(0,0,0,0)',
 					margin:{t:"40", pad:"10"},
-					legend:legend
+					legend:legend,
+					font:{size:'11'}
 				}}
 				style={{width:'100%', minHeight:'60vh'}}
 				config = {{

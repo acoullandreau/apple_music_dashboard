@@ -36,7 +36,8 @@ class PiePlot extends React.Component {
 					autosize:true, 
 					paper_bgcolor: 'rgba(0,0,0,0)',
 					margin: {l: 0, r: 0, b: "10", t: "40"},
-					legend:{orientation:"h", xanchor:"center"}
+					legend:{orientation:"h", xanchor:"center"},
+					font:{size:'11'}
 				}}
 				style={{width:'auto', height:'60vh'}}
 				config = {{

@@ -110,7 +110,8 @@ class RankingList extends React.Component {
 						plot_bgcolor: 'rgba(0,0,0,0)',
 						margin:{r:0, t:"40"},
 						legend:{traceorder:"normal", orientation:"h"},
-						yaxis: {categoryorder: "total ascending", automargin: true}
+						yaxis: {categoryorder: "total ascending", automargin: true},
+						font:{size:'11'}
 					}}
 					style={{width:'100%', minHeight:'65vh'}}
 					config = {{

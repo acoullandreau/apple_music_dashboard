@@ -221,7 +221,7 @@ class App extends React.Component {
 
 	renderGraphTabOne = () => {
 		return (
-			<div className={['tab', 'grid-two'].join(' ')}>
+			<div className='grid-two'>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >When do you listen to music?</div>
 				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
@@ -230,6 +230,7 @@ class App extends React.Component {
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
 				<div className='grid-patterns-sunburst'>
 					<div className={['grid-one', 'filter-query'].join(' ')} >
+						<p className='bold'>Explore filters:</p>
 						<QueryFilter 
 							data={this.state.plotDetails['filters']}
 							target={{'type':'sunburst', 'plot':'origin'}} 
@@ -247,7 +248,7 @@ class App extends React.Component {
 					/>
 				</div>
 				<Divider section />
-				<Grid style={{width:'94%'}} columns={2} divided>
+				<Grid columns={2} divided>
 					<Grid.Row>
 						<Grid.Column>
 							<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Which was your most active year?</div>
@@ -271,7 +272,7 @@ class App extends React.Component {
 
 	renderGraphTabTwo = () => {
 		return (
-			<div className={['tab', 'grid-two'].join(' ')}>
+			<div className='grid-two'>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
 				<div className='grid-calendar'>
 					<div className='grid-one' >
@@ -305,7 +306,7 @@ class App extends React.Component {
 
 	renderGraphTabThree = () => {
 		return (
-			<div className={['tab', 'grid-two'].join(' ')}>
+			<div className='grid-two'>
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
 				<div className='grid-calendar'>
 					<div className='grid-one'>

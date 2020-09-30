@@ -3,6 +3,9 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
 	color:#535353;
+	min-height:700px;
+	min-width:1245px;
+	overflow:scroll;
 }
 
 p {
@@ -18,6 +21,18 @@ ul {
 
 li {
 	list-style-type: none;
+}
+
+.textpoint text{
+  font-size: 2px !important;
+}
+
+.ui.form {
+	font-size:1.8vh;
+}
+
+.ui.form>p {
+	margin:0;
 }
 
 .ui.search .prompt {
@@ -36,22 +51,36 @@ li {
 
 .ui.button.toggle.active {
 	background: #474847 !important;
+	font-size:1.8vh;
+	/*min-width: 50%*/
 }
 
 .ui.button.toggle.active:hover {
 	background: #1B1C1D !important;
+	font-size:1.8vh;
 }
 
 .ui.red.button {
 	background: #D13434 !important;
+	font-size:1.8vh;
+	min-width: 45%;
 }
 
 .ui.red.button:hover {
 	background: #FD3F3F !important;
+	font-size:1.8vh;
+	min-width: 45%;
 }
 
-.ui.buttons {
-	margin-top:3%;
+.ui.blue.button {
+	background: #CACBCD !important;
+	font-size:1.8vh;
+	min-width: 45%;
+}
+
+.ui.button {
+	font-size:1.8vh;
+	min-width: 50%;
 }
 
 .ui.menu {
@@ -66,6 +95,10 @@ li {
 	width: 70%;
 	margin-right: auto;
 	margin-left: auto;
+}
+
+.ui.checkbox {
+	font-size:1.8vh;
 }
 
 .bold {
@@ -223,12 +256,14 @@ li {
 	height:80%;
 	margin-top:auto;
 	margin-bottom: auto;
+	font-size:1.8vh;
 }
 
 .filter-query {
 	margin-top:10%;
 	width:85%;
 	margin-left: auto;
+	font-size:1.8vh;
 }
 
 .data-source {
@@ -240,6 +275,7 @@ li {
 /*CSS for the tabs vertical*/
 
 .react-tabs__tab-panel {
+	height:auto;
   	border: 1px solid #C6C6C6;
   	border-radius: 0 5px 5px 5px;
 	padding-right:2%;
