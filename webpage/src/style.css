@@ -134,14 +134,11 @@ li {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 5%;
+	width:90%;
 }
 
 .content-home {
 	width:70%;
-}
-
-.content-graphs {
-	width:90%;
 }
 
 .page-title {
@@ -212,6 +209,26 @@ li {
 	grid-column: 2;
 }
 
+.row-one {
+	grid-row: 1;
+}
+
+.row-three-span {
+	grid-row-start: 3 span 2;
+}
+
+.row-three {
+	grid-row: 3;
+}
+
+.row-four {
+	grid-row: 4;
+}
+
+.row-five {
+	grid-row: 5;
+}
+
 .instruction-text {
 	margin: 7%;
 	text-align: center;
@@ -252,6 +269,17 @@ li {
 	margin-top: 2%;
 }
 
+.grid-help {
+	display: grid;
+	grid-template-columns: 49% 49%;
+	grid-template-rows: repeat(4, auto);
+	grid-row-gap: 4%;
+	grid-column-gap: 2%;
+	margin-top: 2%;
+	/*height:100%;*/
+}
+
+
 .filter-bar {
 	height:80%;
 	margin-top:auto;
@@ -269,6 +297,32 @@ li {
 .data-source {
 	font-size: 1.5vh;
 	text-align: right;
+}
+
+.form-block {
+	width:95%;
+	display:flex;
+	margin:2%;
+}
+
+.form-title {
+	float: left;
+	width:18%;
+}
+
+.form-field {
+	width:80%;
+}
+
+.message-field {
+	min-height: 60px;
+	overflow-y: scroll;
+}
+
+.form-button {
+	float:right;
+	min-width:20% !important;
+	margin-right: 5% !important;
 }
 
 

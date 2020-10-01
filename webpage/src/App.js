@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Button, Divider, Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -345,7 +345,7 @@ class App extends React.Component {
 			}
 		} else {
 			elemToRender = (
-				<div className={['content-graphs', 'content'].join(' ')}>
+				<div className='content'>
 					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
 					<div className={['data-source', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
@@ -429,6 +429,55 @@ class App extends React.Component {
 		)
 	}
 
+	renderHelpPage = () => {
+		return (
+			<div className={['content', 'paragraph'].join(' ')}>
+				<div className={['bold', 'title', 'page-title'].join(' ')}>Need help?</div>
+				<div className='grid-help'>
+					<div className={['grid-one', 'row-one'].join(' ')}>
+						<h3>How can you request your data?</h3>
+						<p>Log in with your Apple ID from the Apple’s Data and Privacy page and follow the steps to get a copy of your data (you want Apple Media services information).</p>
+					</div>
+					<div className={['grid-one', 'row-two'].join(' ')}>
+						<h3>How to upload your data?</h3>
+						<p>You upload the archive Apple provides you, and we take care of the rest! Please pay attention to upload the archive we ask for! <br/>These files will never leave your computer (if you want, disconnect your Wi-Fi connection upon loading the page, everything will still work the same ;)).  Once you selected the archive to use for the analysis, be patient! It can take up to a few minutes to process it all. </p>
+					</div>
+					<div className={['grid-one', 'row-three'].join(' ')}>
+						<h3>Can I add new data points to an existing analysis?</h3>
+						<p>Unfortunately, no. It is designed to run on the whole data files, and cannot be edited. But you can always run it again when you have more data points!</p>
+					</div>
+					<div className={['grid-one', 'row-four'].join(' ')}>
+						<h3>Why this dashboard interface?</h3>
+						<p>I discovered the fascinated world of data analysis not so long ago, and decided to apply what I learned on something meaningful. I am not a professional developper or data analyst, and did this as a side-project to practice. If you would like to suggest improvements, please share them from the contact form!</p>
+					</div>
+					<div className={['grid-two', 'row-one'].join(' ')}>
+						<h3>How is your data processed?</h3>
+						<p>A sequence of scripts is ran on your data to extract relevant information, and plot graphs you can interact with. The source code and exploratory work I did before this page on my own data is visible <a href='https://github.com/acoullandreau/apple_dashboard'>here.</a></p>
+					</div>
+					<div className={['grid-two', 'row-two'].join(' ')}>
+						<h3>Is the analysis saved?</h3>
+						<p>Well, kinda…. All the processed data points are saved in your browser. But if you clear your cache, all is cleared. <br/> You can always launch it again, save the page on your computer, or save the graphs as images :) </p>
+					</div>
+					<div className={['grid-two', 'row-three'].join(' ')}>
+						<h3>You have more questions? Get in touch!</h3>
+						<p>Feel free to write to me using the form below, providing your email address so that I can answer you!</p>
+					</div>
+					<div className={['grid-two', 'row-four'].join(' ')}>
+						<div className='form-block'>
+							<p className={['form-title', 'bold'].join(' ')}>Email</p>
+							<input type="email" className='form-field' name="email"/>
+						</div>
+						<div className='form-block'>
+							<p className={['form-title', 'bold'].join(' ')}>Message</p>
+							<textarea className={['form-field', 'message-field'].join(' ')} name="message"></textarea>
+						</div>
+						<Button color='red' className='form-button'> Send message</Button>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
 	render() {
 		if ( !this.state.hasVisuals ) {
 			if (this.state.isLoading) {
@@ -454,9 +503,9 @@ class App extends React.Component {
 					</React.Fragment>
 				</Route>
 				<Route path="#help">
-					<div>
-						Help page
-					</div>
+					<React.Fragment>
+						{ this.renderHelpPage() }
+					</React.Fragment>
 				</Route>
 			</div>
 		)
