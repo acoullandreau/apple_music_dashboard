@@ -35,6 +35,15 @@ li {
 	margin:0;
 }
 
+.ui.form input {
+	padding:1% !important;
+}	
+
+.ui.form textarea {
+	min-height:3vh !important;
+	max-height:10vh !important;
+}	
+
 .ui.search .prompt {
 	background-color: #f9f9f2;
 }
@@ -306,17 +315,12 @@ li {
 }
 
 .form-title {
-	float: left;
-	width:18%;
-}
-
-.form-field {
-	width:80%;
+	width:13%;
 }
 
 .message-field {
-	min-height: 60px;
-	overflow-y: scroll;
+	min-height: 2vh;
+	overflow-y: auto;
 }
 
 .form-button {

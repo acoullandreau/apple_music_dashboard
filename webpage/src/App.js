@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Button, Divider, Grid } from 'semantic-ui-react';
+import { Divider, Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import Loader from './Loader.js';
@@ -9,6 +9,7 @@ import connectorInstance from './IndexedDBConnector.js';
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
 import CalendarPlotFilter from './CalendarPlotFilter.js';
+import ContactForm from './ContactForm.js'
 import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
 import QueryFilter from './QueryFilter.js'; 
@@ -462,17 +463,7 @@ class App extends React.Component {
 						<h3>You have more questions? Get in touch!</h3>
 						<p>Feel free to write to me using the form below, providing your email address so that I can answer you!</p>
 					</div>
-					<div className={['grid-two', 'row-four'].join(' ')}>
-						<div className='form-block'>
-							<p className={['form-title', 'bold'].join(' ')}>Email</p>
-							<input type="email" className='form-field' name="email"/>
-						</div>
-						<div className='form-block'>
-							<p className={['form-title', 'bold'].join(' ')}>Message</p>
-							<textarea className={['form-field', 'message-field'].join(' ')} name="message"></textarea>
-						</div>
-						<Button color='red' className='form-button'> Send message</Button>
-					</div>
+					<ContactForm />
 				</div>
 			</div>
 		)
