@@ -4,7 +4,7 @@ import { Icon } from 'semantic-ui-react';
 
 class SideNavBar extends React.Component {
 
-	state = { activeItem: '' };
+	state = { activeItem: 'chart bar' };
 
 	componentDidMount() {
 		var matchPages = {'':'home', '#graphs':'chart bar', '#help':'help'}
@@ -29,7 +29,6 @@ class SideNavBar extends React.Component {
 	}
 
 	render () {
-
 		let graphsProps;
 		if (this.props.showGraphs) {
 			graphsProps = (

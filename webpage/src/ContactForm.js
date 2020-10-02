@@ -26,12 +26,34 @@ class ContactForm extends React.Component {
 			if (emailValid) {
 				// send the email
 				console.log('Ready to send email');
+				// if message ok, display thank you for your messages
+				// else display Oops something went wrong, please try again 
+
 			} else {
-				this.props.displayOverlay({'display':true, 'hash':'#help', 'type':'email', 'title':'Invalid email address', 'message':'Please enter a valid email address so I can answer you!'})
-				//overlay provide a valid email address
+				this.props.displayOverlay({
+					'display':true, 
+					'hash':'#help', 
+					'type':'email', 
+					'title':'Invalid email address', 
+					'message':'Please enter a valid email address so I can answer you!'
+				})
 			}
-		} else {
-			//overlay provide a valid email address and a message
+		} else if (this.state.email !== '') {
+			this.props.displayOverlay({
+				'display':true, 
+				'hash':'#help', 
+				'type':'email', 
+				'title':'Invalid email address', 
+				'message':'Please enter a valid email address so I can answer you!'
+			})
+		} else if (this.state.message !== '') {
+			this.props.displayOverlay({
+				'display':true, 
+				'hash':'#help', 
+				'type':'message', 
+				'title':'Empty message', 
+				'message':'Please ensure that you enter your question, request or comment in the message field!'
+			})
 		}
 
 	}

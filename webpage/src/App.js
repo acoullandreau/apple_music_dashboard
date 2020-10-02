@@ -142,7 +142,7 @@ class App extends React.Component {
 			'overlay':{'display':false, 'type':'', 'title':'', 'message':''},
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}
-		});
+		}, () => {console.log(this.state)});
 	}
 
 	onQueryVisualizationReady = (payload) => {
@@ -258,6 +258,7 @@ class App extends React.Component {
 						ranking={this.state.plotDetails['pieYear']} 
 						data={this.state.plotDetails['sunburst']} 
 						target={{'type':'origin'}} 
+						onError={this.displayOverlay}
 						ref={this.sunburstOriginRef}
 					/>
 				</div>
@@ -296,6 +297,7 @@ class App extends React.Component {
 							ranking={this.state.plotDetails['pieYear']} 
 							data={this.state.plotDetails['sunburst']} 
 							target={{'type':'genre'}} 
+							onError={this.displayOverlay}
 							ref={this.sunburstSongRef}
 						/>
 					</div>
@@ -324,7 +326,12 @@ class App extends React.Component {
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>Focus on your daily listening time</div>
 				<div className='grid-calendar'>
 					<div className='grid-one'>
-						<HeatMapPlot data={this.state.plotDetails['heatMapPlot']} target={{'type':'DOM'}} ref={this.heatMapRef} />
+						<HeatMapPlot 
+							data={this.state.plotDetails['heatMapPlot']} 
+							target={{'type':'DOM'}} 
+							onError={this.displayOverlay}
+							ref={this.heatMapRef} 
+						/>
 					</div>
 					<div className={['grid-two', 'filter-query'].join(' ')} >
 						<div>
@@ -506,7 +513,6 @@ class App extends React.Component {
 				)
 			}
 		}
-
 
 		return (
 			<div className='page'>

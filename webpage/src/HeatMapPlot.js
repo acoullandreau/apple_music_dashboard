@@ -30,6 +30,13 @@ class HeatMapPlot extends React.Component {
 			}
 			else {
 				this.setState({ 'renderNone':true });
+				this.props.onError({
+					'display':true, 
+					'hash':'#graphs', 
+					'type':'graph', 
+					'title':'No matching result', 
+					'message':'There is no match to the filters you selected. Please try another query!'
+				})
 			}
 		} else {
 			// it is just a new selection of the plot to render
@@ -169,27 +176,20 @@ class HeatMapPlot extends React.Component {
 	}
 
 	render() {
-		if (this.state.renderNone) {
-			return (
-				<div>
-					<p>There is no match to the filters you selected. Please try another query!</p>
-				</div>
-			);
-		} else {
-			return (
-				<React.Fragment>
-					{this.renderPlot()}
-				</React.Fragment>
-			);
-		}
+		return (
+			<React.Fragment>
+				{this.renderPlot()}
+			</React.Fragment>
+		);
 	}
 
 }
 
 // props validation
 HeatMapPlot.propTypes = {
-   target: PropTypes.object.isRequired,
-   data: PropTypes.object.isRequired,
+	onError:PropTypes.func.isRequired,
+	target: PropTypes.object.isRequired,
+	data: PropTypes.object.isRequired,
 }
 
 

@@ -48,6 +48,13 @@ class SunburstPlot extends React.Component {
 			}
 			else {
 				this.setState({ 'renderNone':true });
+				this.props.onError({
+					'display':true, 
+					'hash':'#graphs', 
+					'type':'graph', 
+					'title':'No matching result', 
+					'message':'There is no match to the filters you selected. Please try another query!'
+				})
 			}
 		} else {
 			// it is just a new selection of the plot to render
@@ -65,57 +72,50 @@ class SunburstPlot extends React.Component {
 		var data = this.state.data[type];
 		var colors = this.getColorsArray();
 
-		if (this.state.renderNone) {
-			return (
-				<div>
-					<p>There is no match to the filters you selected. Please try another query!</p>
-				</div>
-			);
-		} else {
-			return (
-				<div>
-					<Plot
-						data={[
-							{
-								values: data['values'],
-								labels: data['labels'],
-								ids:data['ids'],
-								parents:data['parents'],
-								type: "sunburst",
-								branchvalues: "total",
-								insidetextorientation: "radial",
-								marker: {line: {color:"#F7F7ED", width: "2"}},
-							},
-						]}
-						layout={{
-							autosize:true, 
-							paper_bgcolor: 'rgba(0,0,0,0)', 
-							margin: {l: 0, r: 0, b: "10", t: "40"}, 
-							sunburstcolorway:colors,
-						}}
-						style={{width:'100%', minHeight:'90vh'}}
-						config = {{
-							responsive: 'true',
-							toImageButtonOptions: {
-								width:1200,
-								height:800,
-								filename: 'sunburst-'+this.props.target.type,
-							},
-							modeBarButtonsToRemove: ['toggleHover'],
-							displaylogo: false
-						}}
-					/>
-				</div>
-			);
-		}
+		return (
+			<div>
+				<Plot
+					data={[
+						{
+							values: data['values'],
+							labels: data['labels'],
+							ids:data['ids'],
+							parents:data['parents'],
+							type: "sunburst",
+							branchvalues: "total",
+							insidetextorientation: "radial",
+							marker: {line: {color:"#F7F7ED", width: "2"}},
+						},
+					]}
+					layout={{
+						autosize:true, 
+						paper_bgcolor: 'rgba(0,0,0,0)', 
+						margin: {l: 0, r: 0, b: "10", t: "40"}, 
+						sunburstcolorway:colors,
+					}}
+					style={{width:'100%', minHeight:'90vh'}}
+					config = {{
+						responsive: 'true',
+						toImageButtonOptions: {
+							width:1200,
+							height:800,
+							filename: 'sunburst-'+this.props.target.type,
+						},
+						modeBarButtonsToRemove: ['toggleHover'],
+						displaylogo: false
+					}}
+				/>
+			</div>
+		);
 	}
 }
 
 // props validation
 SunburstPlot.propTypes = {
-   target: PropTypes.object.isRequired,
-   data: PropTypes.object.isRequired,
-   ranking:PropTypes.object.isRequired
+	onError: PropTypes.func.isRequired,
+	target: PropTypes.object.isRequired,
+	data: PropTypes.object.isRequired,
+	ranking:PropTypes.object.isRequired
 }
 
 
