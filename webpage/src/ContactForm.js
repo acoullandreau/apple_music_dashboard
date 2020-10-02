@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form } from 'semantic-ui-react';
 
 class ContactForm extends React.Component {
@@ -14,13 +15,25 @@ class ContactForm extends React.Component {
 		});
 	}
 
+	checkEmailValidity = () => {
+		var email_regex = /\S+@\S+\.\S+/;
+		return email_regex.test(this.state.email);
+	}
+
 	sendContactMessage = () => {
-		// check that neither email nor message is empty
-		// check integrity of email address
+		if (this.state.email !== '' & this.state.message !== '') {
+			var emailValid = this.checkEmailValidity();
+			if (emailValid) {
+				// send the email
+				console.log('Ready to send email');
+			} else {
+				this.props.displayOverlay({'display':true, 'hash':'#help', 'type':'email', 'title':'Invalid email address', 'message':'Please enter a valid email address so I can answer you!'})
+				//overlay provide a valid email address
+			}
+		} else {
+			//overlay provide a valid email address and a message
+		}
 
-
-
-		// this.props.onSubmit(this.state)
 	}
 
 	render() {
@@ -45,6 +58,10 @@ class ContactForm extends React.Component {
 			</Form>
 		) 
 	}
+}
+
+ContactForm.propTypes = {
+   displayOverlay:PropTypes.func.isRequired
 }
 
 export default ContactForm;

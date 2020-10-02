@@ -4,7 +4,6 @@ import 'react-tabs/style/react-tabs.css';
 import { Divider, Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
-import Loader from './Loader.js';
 import connectorInstance from './IndexedDBConnector.js';
 import BarPlot from './BarPlot.js'; 
 import BarPlotFilter from './BarPlotFilter.js'; 
@@ -12,8 +11,9 @@ import CalendarPlotFilter from './CalendarPlotFilter.js';
 import ContactForm from './ContactForm.js'
 import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
-import QueryFilter from './QueryFilter.js'; 
+import Overlay from './Overlay.js';
 import PiePlot from './PiePlot.js'; 
+import QueryFilter from './QueryFilter.js'; 
 import RankingList from './RankingList.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
 import SunburstPlotFilter from './SunburstPlotFilter.js'; 
@@ -27,6 +27,7 @@ class App extends React.Component {
 			'archive':'',
 			'isLoading': false, 
 			'hasVisuals': false, 
+			'overlay':{'display':false, 'type':'', 'title':'', 'message':''},
 			'plotDetails': {}, 
 			'selectedBarPlot' : {},  
 			'queryFiltersDefault':{ 'artist': '', 'genre': '', 'inlib': "", 'offline': "", 'origin': '', 'rating': "", 'skipped': "", 'title': '', 'year': '' }
@@ -42,6 +43,7 @@ class App extends React.Component {
 		this.querySunburstOriginRef = React.createRef();
 		this.queryFavouritesRef = React.createRef();
 		this.queryHeatMapRef = React.createRef();
+		this.overlayRef = React.createRef();
 	}
 
 
@@ -102,6 +104,7 @@ class App extends React.Component {
 			'archive':'',
 			'isLoading': false, 
 			'hasVisuals': false, 
+			'overlay':{'display':false, 'type':'', 'title':'', 'message':''},
 			'plotDetails': {}, 
 			'selectedBarPlot' : {}
 		});
@@ -136,6 +139,7 @@ class App extends React.Component {
 		this.setState({
 			'isLoading': false,
 			'hasVisuals': true,
+			'overlay':{'display':false, 'type':'', 'title':'', 'message':''},
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}
 		});
@@ -195,6 +199,15 @@ class App extends React.Component {
 			this.heatMapRef.current.resetPlot();
 			this.queryHeatMapRef.current.onQueryCleared();
 		}
+	}
+
+	displayOverlay = (parameters) => {
+		var overlay = {...this.state.overlay};
+		overlay['display'] = parameters.display;
+		overlay['type'] = parameters.type;
+		overlay['title'] = parameters.title;
+		overlay['message'] = parameters.message;
+		this.setState({ overlay });
 	}
 
 	renderTimeBarPlot = () => {
@@ -339,8 +352,8 @@ class App extends React.Component {
 		if ( !this.state.hasVisuals ) {
 			if (this.state.isLoading) {
 				elemToRender = (
-					<div>
-						<Loader />
+					<div style={{display:'block'}}>
+						<Overlay onClose={this.displayOverlay} params={{'type':'loader'}} ref={this.overlayRef}/>
 					</div>
 				)
 			}
@@ -463,25 +476,41 @@ class App extends React.Component {
 						<h3>You have more questions? Get in touch!</h3>
 						<p>Feel free to write to me using the form below, providing your email address so that I can answer you!</p>
 					</div>
-					<ContactForm />
+					<ContactForm displayOverlay={this.displayOverlay} />
 				</div>
 			</div>
 		)
 	}
 
 	render() {
-		if ( !this.state.hasVisuals ) {
-			if (this.state.isLoading) {
-				return (
-					<div>
-						<Loader />
+		let overlay;
+
+		if ( !this.state.hasVisuals & this.state.isLoading) {
+			overlay = (
+				<div style={{display:'block'}}>
+					<Overlay onClose={this.displayOverlay} params={{'type':'loader'}} ref={this.overlayRef}/>
+				</div>
+			)
+		} else {
+			if (this.state.overlay.display) {
+				overlay = (
+					<div style={{display:'block'}}>
+						<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
+					</div>
+				)
+			} else {
+				overlay = (
+					<div style={{display:'none'}}>
+						<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
 					</div>
 				)
 			}
-		} 
+		}
+
 
 		return (
 			<div className='page'>
+				{ overlay }
 				<div className='nav-bar'>
 					<SideNavBar showGraphs={this.state.hasVisuals ? true : false }/>
 				</div>

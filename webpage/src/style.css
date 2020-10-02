@@ -1,3 +1,5 @@
+/*Generic styling*/
+
 body {
 	background-color: #F7F7ED;
 	font-family: 'Roboto', sans-serif;
@@ -23,9 +25,62 @@ li {
 	list-style-type: none;
 }
 
-.textpoint text{
-  font-size: 2px !important;
+.bold {
+	font-weight: 700;
 }
+
+.title {
+	font-size: 7vh;
+}
+
+.subtitle {
+	font-size: 3vh;
+}
+
+.paragraph {
+	font-size: 2vh;
+}
+
+.section-margin {
+	margin-top:3%;
+}
+
+.button-margin-top {
+	margin-top:10%;
+}
+
+.button-margin {
+	margin:3%;
+}
+
+.grid-one {
+	grid-column: 1;
+}
+
+.grid-two {
+	grid-column: 2;
+}
+
+.row-one {
+	grid-row: 1;
+}
+
+.row-three-span {
+	grid-row-start: 3 span 2;
+}
+
+.row-three {
+	grid-row: 3;
+}
+
+.row-four {
+	grid-row: 4;
+}
+
+
+
+
+/*Style replacing default layout for semantic ui*/
 
 .ui.form {
 	font-size:1.8vh;
@@ -110,40 +165,32 @@ li {
 	font-size:1.8vh;
 }
 
-.bold {
-	font-weight: 700;
-}
 
-.title {
-	font-size: 7vh;
-}
-
-.subtitle {
-	font-size: 3vh;
-}
-
-.paragraph {
-	font-size: 2vh;
-}
+/*Generic layout for the page*/
 
 .page {
-	display:inline-flex;
 	width:100%;
 	height:100%;
+	display: grid;
+	grid-template-columns: 5% 95%;
 	margin-bottom: 3%;
 }
 
 .nav-bar {
+	grid-column: 1;
 	width:5%;
 	min-width:100px;
-	margin-top: 5%;
+	margin-top: 100%;
 }
 
 .content {
+	position:relative;
+	grid-column: 2;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 5%;
 	width:90%;
+	z-index:1;
 }
 
 .content-home {
@@ -156,17 +203,8 @@ li {
 	text-align: center;
 }
 
-.section-margin {
-	margin-top:3%;
-}
 
-.button-margin-top {
-	margin-top:10%;
-}
-
-.button-margin {
-	margin:3%;
-}
+/*CSS for the home page*/
 
 .home-icons {
 	max-width: 35%;
@@ -210,34 +248,6 @@ li {
 	grid-column-gap: 5%;
 }
 
-.grid-one {
-	grid-column: 1;
-}
-
-.grid-two {
-	grid-column: 2;
-}
-
-.row-one {
-	grid-row: 1;
-}
-
-.row-three-span {
-	grid-row-start: 3 span 2;
-}
-
-.row-three {
-	grid-row: 3;
-}
-
-.row-four {
-	grid-row: 4;
-}
-
-.row-five {
-	grid-row: 5;
-}
-
 .instruction-text {
 	margin: 7%;
 	text-align: center;
@@ -250,6 +260,11 @@ li {
 	background-color: #494949;
 	margin-left:2%;
 }
+
+
+
+
+/*CSS for the graphs page*/
 
 .grid-patterns-bar {
 	display: grid;
@@ -285,9 +300,7 @@ li {
 	grid-row-gap: 4%;
 	grid-column-gap: 2%;
 	margin-top: 2%;
-	/*height:100%;*/
 }
-
 
 .filter-bar {
 	height:80%;
@@ -307,6 +320,11 @@ li {
 	font-size: 1.5vh;
 	text-align: right;
 }
+
+
+
+
+/*CSS for the contact form*/
 
 .form-block {
 	width:95%;
@@ -328,6 +346,49 @@ li {
 	min-width:20% !important;
 	margin-right: 5% !important;
 }
+
+
+
+/*CSS for the overlay*/
+
+/*.overlay {
+	display: block;
+	position: fixed;
+	height:100%;
+	width: 100%;
+}*/
+
+.Blur {
+	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
+	position: fixed;
+	height:100%;
+	width: 100%;
+	z-index: 80;
+}
+
+.OverlayWindow {
+	border-radius: 15px;
+	background-color:#F7F7ED;
+	position: absolute;
+	width: auto;
+	height: auto;
+	min-width: 30vh;
+	max-width: 50vh;
+	margin-right: auto;
+	margin-left: 30%;
+	margin-top: 15%;
+	padding: 1%;
+	z-index: 90;
+	filter: drop-shadow(0px 0px 25px rgba(0, 0, 0, 0.24));
+}
+
+.Close {
+	position: relative;
+	z-index: 100;
+	float: right;
+}
+
 
 
 /*CSS for the tabs vertical*/
