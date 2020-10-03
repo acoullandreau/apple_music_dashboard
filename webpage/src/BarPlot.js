@@ -150,9 +150,9 @@ class BarPlot extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<React.Fragment>
 				{this.renderPlot()}
-			</div>
+			</React.Fragment>
 		);
 	}
 }

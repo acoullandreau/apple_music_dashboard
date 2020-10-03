@@ -1,7 +1,8 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Divider, Grid } from 'semantic-ui-react';
+// import { Divider, Grid } from 'semantic-ui-react';
+// import { Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import connectorInstance from './IndexedDBConnector.js';
@@ -12,7 +13,7 @@ import ContactForm from './ContactForm.js'
 import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
 import Overlay from './Overlay.js';
-import PiePlot from './PiePlot.js'; 
+// import PiePlot from './PiePlot.js'; 
 import QueryFilter from './QueryFilter.js'; 
 import RankingList from './RankingList.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
@@ -48,13 +49,18 @@ class App extends React.Component {
 
 
 	componentDidMount = () => {
+		// to instantiate the app properly, check whether we have previous visualizations to load
 		connectorInstance.checkIfVizAvailable().then(result => {
 			if (result) {
 				this.setState({'isLoading': false, 'hasVisuals': true, 'plotDetails': result });
 			}
 		})
-		this.worker = new Worker('./worker.js', { type: 'module' });
 
+		// event listener for scrolling
+		window.addEventListener('scroll', this.scrollAnimation);
+
+		// worker related event listeners
+		this.worker = new Worker('./worker.js', { type: 'module' });
 		this.worker.addEventListener('message', event => {
 			switch (event.data['type']) {
 				case 'archiveValidated':
@@ -90,6 +96,18 @@ class App extends React.Component {
 			}
 		});
 
+	}
+
+	scrollAnimation = (e) => {
+		var windowHeight = e.srcElement.scrollingElement.clientHeight;
+		var contentHeight = e.srcElement.scrollingElement.scrollHeight
+		var scrollHeight = e.srcElement.scrollingElement.scrollTop
+
+		if (scrollHeight + windowHeight  >= contentHeight - windowHeight/2) {
+			document.getElementById("scoll-down-img").style.display="none";
+		} else {
+			document.getElementById("scoll-down-img").style.display="block";
+		}
 	}
 
 	onFileLoad = (archive) => {
@@ -241,7 +259,7 @@ class App extends React.Component {
 				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
 				</div>
-				<Divider section />
+				{/*<Divider section />*/}
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
 				<div className='grid-patterns-sunburst'>
 					<div className={['grid-one', 'filter-query'].join(' ')} >
@@ -263,8 +281,8 @@ class App extends React.Component {
 						ref={this.sunburstOriginRef}
 					/>
 				</div>
-				<Divider section />
-				<Grid columns={2} divided>
+				{/*<Divider section />*/}
+{/*				<Grid columns={2} divided>
 					<Grid.Row>
 						<Grid.Column>
 							<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Which was your most active year?</div>
@@ -275,8 +293,8 @@ class App extends React.Component {
 							<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 						</Grid.Column>
 					</Grid.Row>
-				</Grid>
-				<Divider section />
+				</Grid>*/}
+				{/*<Divider section />*/}
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Do you skip tracks a lot?</div>
 				<div>
 					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} ref={this.barSkippedRef} />
@@ -532,6 +550,7 @@ class App extends React.Component {
 				<Route path="#graphs" >
 					<React.Fragment>
 						{ this.renderGraphsPage() }
+						<div id="scoll-down-img"><img src="./image_library/icon_scroll_down.svg" /></div>
 					</React.Fragment>
 				</Route>
 				<Route path="#help">

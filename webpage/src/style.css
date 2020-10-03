@@ -381,6 +381,25 @@ li {
 }
 
 
+/*CSS for the bouncing arrow*/
+
+@keyframes bounce { 
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-30px); }
+}
+
+#scoll-down-img {
+	position:sticky;
+	left:45%;
+	bottom: 2%;
+	z-index: 10;
+	/*width: 100%;*/
+	animation: bounce 0.8s;
+	animation-direction: alternate;
+	animation-iteration-count: infinite;
+}
+
+
 
 /*CSS for the tabs vertical*/
 

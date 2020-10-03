@@ -36,7 +36,6 @@ class SideNavBar extends React.Component {
 	}
 
 	render () {
-		console.log(this.state)
 		let graphsProps;
 		if (this.props.showGraphs) {
 			graphsProps = (
