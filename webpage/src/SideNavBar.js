@@ -4,13 +4,21 @@ import { Icon } from 'semantic-ui-react';
 
 class SideNavBar extends React.Component {
 
-	state = { activeItem: '' };
+	state = { activeItem: '',  'matchPages':{'':'home', '#graphs':'chart bar', '#help':'help'} };
 
 	componentDidMount() {
-		var matchPages = {'':'home', '#graphs':'chart bar', '#help':'help'}
-		var selectedPage = matchPages[window.location.hash];
-		this.setState({ activeItem: selectedPage })
+		this.onLocationChange();
 	}
+
+	componentDidUpdate() {
+		window.addEventListener('popstate', this.onLocationChange);
+	}
+
+	onLocationChange = () => {
+		var selectedPage = this.state.matchPages[window.location.hash];
+		this.setState({ activeItem: selectedPage });
+    };
+
 
 	handleItemClick = (e, { name, to }) => {
 		if (e.metaKey || e.ctrlKey) {
@@ -28,6 +36,7 @@ class SideNavBar extends React.Component {
 	}
 
 	render () {
+		console.log(this.state)
 		let graphsProps;
 		if (this.props.showGraphs) {
 			graphsProps = (
