@@ -26,17 +26,13 @@ class Overlay extends React.Component {
 				<div>
 					<div className="Blur" onClick={() => this.closeModal()}></div>
 					<div className='OverlayWindow'>
-						<div>
-							<div className={['bold', 'subtitle'].join(' ')}>{this.props.params.title}</div>
-							<div >{this.props.params.message}</div>
-							<Button onClick={() => this.closeModal()}>Close</Button>
-						</div>
+						<div className={['bold', 'subtitle', 'section-margin'].join(' ')}>{this.props.params.title}</div>
+						<div className={['paragraph', 'overlay-text'].join(' ')}>{this.props.params.message}</div>
+						<Button color='red' className='form-button' onClick={() => this.closeModal()}>Close</Button>
 					</div>
 				</div>
 			) 
 		}
-						// <div><a href={this.props.params.hash} className="Close" onClick={() => this.closeModal()}>x</a></div>
-
 
 	}
 }

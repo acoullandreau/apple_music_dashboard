@@ -351,13 +351,6 @@ li {
 
 /*CSS for the overlay*/
 
-/*.overlay {
-	display: block;
-	position: fixed;
-	height:100%;
-	width: 100%;
-}*/
-
 .Blur {
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
@@ -371,24 +364,22 @@ li {
 	border-radius: 15px;
 	background-color:#F7F7ED;
 	position: absolute;
-	width: auto;
-	height: auto;
-	min-width: 30vh;
-	max-width: 50vh;
-	margin-right: auto;
-	margin-left: 30%;
+	width: 20%;
+	min-height: 10vh;
+	min-width: 50vh;
+	max-width: 65vh;
+	margin-left: 38%;
 	margin-top: 15%;
 	padding: 1%;
 	z-index: 90;
 	filter: drop-shadow(0px 0px 25px rgba(0, 0, 0, 0.24));
 }
 
-/*.Close {
-	position: relative;
-	z-index: 100;
-	float: right;
+.overlay-text{
+	margin-bottom: 7%;
+	margin-top: 8%;
 }
-*/
+
 
 
 /*CSS for the tabs vertical*/

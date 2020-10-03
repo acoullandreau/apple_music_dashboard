@@ -42,8 +42,17 @@ class FileSelector extends React.Component {
 			} else {
 				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
 				this.setState({'errorMessage': errorMessage });
+				this.props.onError({
+					'display':true, 
+					'hash':'#', 
+					'type':'file', 
+					'title':'Wrong file format', 
+					'message':'You should provide a single file, archive with a .zip extension.'
+				})
 				reject();
 			}
+		}).catch(() => {
+			console.log('File selection - wrong input file format (expected .zip archive)');
 		});
 	}
 
@@ -85,7 +94,7 @@ class FileSelector extends React.Component {
 			fileSelector = (
 				<React.Fragment>
 					<div className={['paragraph', 'instruction-text'].join(' ')}>
-						The format of the archive you passed is wrong: {errorMessage} <br/> Please check the documentation.
+						The format of the archive you passed is wrong: {errorMessage}
 					</div>
 					<div className="home-button"><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
 				</React.Fragment>
@@ -110,8 +119,9 @@ class FileSelector extends React.Component {
 
 // props validation
 FileSelector.propTypes = {
-   onReset: PropTypes.func.isRequired,
-   onFileLoad: PropTypes.func.isRequired,
+	onError:PropTypes.func.isRequired,
+	onReset: PropTypes.func.isRequired,
+	onFileLoad: PropTypes.func.isRequired,
 }
 
 

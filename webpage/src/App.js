@@ -64,7 +64,8 @@ class App extends React.Component {
 					break;
 				case 'archiveRejected':
 					// there was a problem with the archive, we ask fileSelector to process the error to rerender the component
-					this.fileSelectorRef.current.setState({'errorMessage': event.data['payload'] })
+					this.fileSelectorRef.current.setState({'errorMessage': event.data['payload'] });
+					this.setState({'overlay':{'display':true, 'type':'file', 'title':'Wrong file format', 'message':event.data['payload']}})
 					break;
 				case 'filesParsed':
 					// files are processed, we can clear the archive from localStorage, other files are stored in indexedDB by the worker
@@ -142,7 +143,7 @@ class App extends React.Component {
 			'overlay':{'display':false, 'type':'', 'title':'', 'message':''},
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}
-		}, () => {console.log(this.state)});
+		});
 	}
 
 	onQueryVisualizationReady = (payload) => {
@@ -447,7 +448,7 @@ class App extends React.Component {
 					<div className='instruction'>
 						<p className={['bold', 'title', 'grid-one'].join(' ')}>2.</p>
 						<div className='instruction-block'>
-							<FileSelector onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
+							<FileSelector onError={this.displayOverlay} onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
 						</div>
 					</div>
 				</div>
