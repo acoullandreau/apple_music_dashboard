@@ -26,7 +26,6 @@ class Overlay extends React.Component {
 				<div>
 					<div className="Blur" onClick={() => this.closeModal()}></div>
 					<div className='OverlayWindow'>
-						<div><a href={this.props.params.hash} className="Close" onClick={() => this.closeModal()}>x</a></div>
 						<div>
 							<div className={['bold', 'subtitle'].join(' ')}>{this.props.params.title}</div>
 							<div >{this.props.params.message}</div>
@@ -36,6 +35,7 @@ class Overlay extends React.Component {
 				</div>
 			) 
 		}
+						// <div><a href={this.props.params.hash} className="Close" onClick={() => this.closeModal()}>x</a></div>
 
 
 	}

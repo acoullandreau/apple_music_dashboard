@@ -8,7 +8,14 @@ class RankingList extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { 'initialData': this.props.data, 'data':this.props.data, 'type':this.props.target.type,  'numItems':this.props.target.numItems, 'firstRender':true };
+		this.state = { 
+			'initialData': this.props.data, 
+			'data':this.props.data, 
+			'type':this.props.target.type,  
+			'numItems':this.props.target.numItems, 
+			'renderNone':false,
+			'firstRender':true 
+		};
 	}
 
 	renderTabSwitch() {
@@ -22,8 +29,22 @@ class RankingList extends React.Component {
 		var data;
 		if ('data' in parameters) {
 			//we expect this update to concern the data (query)
-			data = parameters.data.rankingDict;
-			this.setState({ 'data':data });
+			// check is there is a match to plot
+			var rankingHasUpdate = parameters.data.rankingDict.genre?Object.keys(parameters.data.rankingDict.genre):false
+			if (rankingHasUpdate.length > 0) {
+				//we expect this update to concern the data (query)
+				data = parameters.data.rankingDict;
+				this.setState({ 'data':data });
+			} else {
+				this.setState({ 'renderNone':true });
+				this.props.onError({
+					'display':true, 
+					'hash':'#graphs', 
+					'type':'graph', 
+					'title':'No matching result', 
+					'message':'There is no match to the filters you selected. Please try another query!'
+				})
+			}
 		} else {
 			// it is just a new selection of the plot to render
 			data = this.state.data
@@ -33,7 +54,7 @@ class RankingList extends React.Component {
 
 	resetPlot() {
 		var data = this.state.initialData;
-		this.setState({ data });
+		this.setState({ 'data':data, 'renderNone':false });
 	}
 
 	getPlotContent() {
@@ -143,8 +164,9 @@ class RankingList extends React.Component {
 
 // props validation
 RankingList.propTypes = {
-   target: PropTypes.object.isRequired,
-   data: PropTypes.object.isRequired,
+	onError: PropTypes.func.isRequired,
+	target: PropTypes.object.isRequired,
+	data: PropTypes.object.isRequired,
 }
 
 

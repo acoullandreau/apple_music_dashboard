@@ -4,7 +4,7 @@ import { Icon } from 'semantic-ui-react';
 
 class SideNavBar extends React.Component {
 
-	state = { activeItem: 'chart bar' };
+	state = { activeItem: '' };
 
 	componentDidMount() {
 		var matchPages = {'':'home', '#graphs':'chart bar', '#help':'help'}
@@ -20,7 +20,6 @@ class SideNavBar extends React.Component {
 		}
 
 		this.setState({ activeItem: name });
-		//e.preventDefault();
 		window.history.pushState({}, '', to);
 
 		const navEvent = new PopStateEvent('popstate');

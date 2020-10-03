@@ -291,7 +291,12 @@ class App extends React.Component {
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')}>What is your favourite....</div>
 				<div className='grid-calendar'>
 					<div className='grid-one' >
-						<RankingList data={this.state.plotDetails['rankingDict']} target={{'type':'genre', 'numItems':5}} ref={this.rankingRef} />
+						<RankingList 
+							data={this.state.plotDetails['rankingDict']} 
+							target={{'type':'genre', 'numItems':5}} 
+							onError={this.displayOverlay}
+							ref={this.rankingRef} 
+						/>
 						<SunburstPlot 
 							className='grid-one' 
 							ranking={this.state.plotDetails['pieYear']} 
