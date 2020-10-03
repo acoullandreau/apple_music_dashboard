@@ -24,10 +24,51 @@ class ContactForm extends React.Component {
 		if (this.state.email !== '' & this.state.message !== '') {
 			var emailValid = this.checkEmailValidity();
 			if (emailValid) {
-				// send the email
-				console.log('Ready to send email');
-				// if message ok, display thank you for your messages
-				// else display Oops something went wrong, please try again 
+
+				var target_url = 'mail/mail.php';
+				var form_content = {
+					'email':this.state.email,
+					'message':this.state.message
+				}
+
+				var formData = new FormData();
+				for(var elem in form_content) {
+					formData.append(elem, form_content[elem]);
+				}
+
+				var post_request = new Request(target_url, {
+					method: 'POST',
+					body: formData,
+				});
+
+				//post form content
+				fetch(post_request).then(response => {
+					console.log(response)
+					this.props.displayOverlay({
+						'display':true, 
+						'hash':'#help', 
+						'type':'contact success', 
+						'title':'Thank you !', 
+						'message':'Your message has been successfully sent.'
+					})
+				}).catch(function(e) {
+					console.warn('Something went wrong.', e);
+					this.props.displayOverlay({
+						'display':true, 
+						'hash':'#help', 
+						'type':'contact fail', 
+						'title':'Oops !', 
+						'message':'Your message could not be sent. Please try again!'
+					})
+				})
+
+				this.props.displayOverlay({
+					'display':true, 
+					'hash':'#help', 
+					'type':'contact pending', 
+					'title':'Sending !', 
+					'message':'Your message is being sent.'
+				})
 
 			} else {
 				this.props.displayOverlay({

@@ -52,7 +52,7 @@ class FileSelector extends React.Component {
 				reject();
 			}
 		}).catch(() => {
-			console.log('File selection - wrong input file format (expected .zip archive)');
+			console.warn('File selection - wrong input file format (expected .zip archive)');
 		});
 	}
 

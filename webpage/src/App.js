@@ -85,7 +85,7 @@ class App extends React.Component {
 					}
 					break;
 				default:
-					console.log('No matching situation with this value of event.data["type"]');
+					console.warn('No matching situation with this value of event.data["type"]');
 					break;
 			}
 		});
