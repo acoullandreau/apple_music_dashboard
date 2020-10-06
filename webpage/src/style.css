@@ -300,6 +300,7 @@ li {
 	grid-row-gap: 4%;
 	grid-column-gap: 2%;
 	margin-top: 2%;
+	margin-bottom: 5%;
 }
 
 .filter-bar {

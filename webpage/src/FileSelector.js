@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 class FileSelector extends React.Component {
 
 	constructor(props){
-		super(props)
+		super(props);
+		this.fileInput = React.createRef();
 		this.state = { 
 			'hasUploadedArchive': String(localStorage.getItem('hasUploadedArchive')) === "true",
 			'archive': localStorage.getItem('archive'),
 			'archiveName': localStorage.getItem('archiveName'),
-			'errorMessage':''
+			'errorMessage':'',
+			'showFilePicker': !(String(localStorage.getItem('hasUploadedArchive')) === "true")
 		};
 
 		// preserve the initial state in a new object
@@ -17,13 +19,30 @@ class FileSelector extends React.Component {
 			'hasUploadedArchive': false,
 			'archive': null,
 			'archiveName': null,
-			'errorMessage':''
+			'errorMessage':'',
+			'showFilePicker':true
 		};
 	}
 
 	clearStorage = () => {
 		localStorage.clear();
 		this.setState(Object.assign({}, this.initialState));
+	}
+
+	onFocus = () => {
+		// this function is used to handle the case of the user opening the file input and clicking cancel (no file selection) 
+		// we add a timetout because the focus event is fired before the change event - 
+		//and we want to execute the function AFTER the change event had a chance to be fired too
+		// check https://stackoverflow.com/questions/34855400/cancel-event-on-input-type-file for more info about the order the events are triggered
+		setTimeout(() => {
+			this.setState({'showFilePicker':false});
+		}, 100)
+	}
+
+	onChange = () => {
+		var files = this.fileInput.current.files;
+		this.onReset();
+		this.onFileSelection(files);
 	}
 
 	onReset = () => {
@@ -60,8 +79,8 @@ class FileSelector extends React.Component {
 		if (typeof(archive) !== "undefined") {
 			localStorage.setItem('hasUploadedArchive', true);
 			localStorage.setItem('archive', JSON.stringify(archive));
-			localStorage.setItem('archiveName', archive[0].name);
-			this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive[0].name });
+			localStorage.setItem('archiveName', archive.name);
+			this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive.name });
 		}
 
 	}
@@ -77,19 +96,28 @@ class FileSelector extends React.Component {
 		return true;
 	}
 
-
 	renderComponent() {
 		const hasUploadedArchive = this.state.hasUploadedArchive;
 		const errorMessage = this.state.errorMessage;
+		const showFilePicker = this.state.showFilePicker;
 		let fileSelector;
 
 		if ( hasUploadedArchive === true && errorMessage === '') {
-			fileSelector = (
-				<React.Fragment>
-					<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
-					<div className="home-button"><input type="button" onClick={this.onReset} value="Load another archive" /></div>
-				</React.Fragment>
-			)
+			if (showFilePicker) {
+				fileSelector = (
+					<React.Fragment> 
+						<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
+						<div className="home-button"><input type="file" onFocus={this.onFocus} onChange={this.onChange} ref={this.fileInput} value=""/></div>
+					</React.Fragment>
+				)
+			} else {
+				fileSelector = (
+					<React.Fragment>
+						<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
+						<div className="home-button"><input type="button" onClick={() => this.setState({'showFilePicker':true})} value="Load another archive" /></div>
+					</React.Fragment>
+				)
+			}
 		} else if ( errorMessage !== '') {
 			fileSelector = (
 				<React.Fragment>
@@ -99,14 +127,7 @@ class FileSelector extends React.Component {
 					<div className="home-button"><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
 				</React.Fragment>
 			)
-		} else {
-			fileSelector = (
-				<React.Fragment> 
-					<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
-					<div className="home-button"><input type="file" onChange={e => this.onFileSelection([...e.target.files]) } value=""/></div>
-				</React.Fragment>
-			)
-		}
+		} 
 		
 		return fileSelector;
 

@@ -99,20 +99,22 @@ class App extends React.Component {
 	}
 
 	scrollAnimation = (e) => {
-		var windowHeight = e.srcElement.scrollingElement.clientHeight;
-		var contentHeight = e.srcElement.scrollingElement.scrollHeight
-		var scrollHeight = e.srcElement.scrollingElement.scrollTop
+		if (e.target['URL'].includes('#graphs')) {
+			var windowHeight = e.srcElement.scrollingElement.clientHeight;
+			var contentHeight = e.srcElement.scrollingElement.scrollHeight
+			var scrollHeight = e.srcElement.scrollingElement.scrollTop
 
-		if (scrollHeight + windowHeight  >= contentHeight - windowHeight/2) {
-			document.getElementById("scoll-down-img").style.display="none";
-		} else {
-			document.getElementById("scoll-down-img").style.display="block";
+			if (scrollHeight + windowHeight  >= contentHeight - windowHeight/2) {
+				document.getElementById("scoll-down-img").style.display="none";
+			} else {
+				document.getElementById("scoll-down-img").style.display="block";
+			}
 		}
 	}
 
 	onFileLoad = (archive) => {
 		// we ask the worker to prepare the files
-		this.setState({'archive':archive}, () => {
+		this.setState({'archive':archive[0]}, () => {
 			this.worker.postMessage({'type':'filePreparation', 'payload':archive});
 		})
 	}

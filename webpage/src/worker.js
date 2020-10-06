@@ -17,7 +17,6 @@ var filesInArchive = {
 }
 
 var validateArchiveContent = (input) => {
-
 	// we load the zip archive, and validate that it contains the files we expect
 	var archive = input[0];
 	var archiveContentPromise = 
