@@ -18,9 +18,8 @@ var filesInArchive = {
 
 var validateArchiveContent = (input) => {
 	// we load the zip archive, and validate that it contains the files we expect
-	var archive = input[0];
 	var archiveContentPromise = 
-		jsZip.loadAsync(archive).then(zip => {
+		jsZip.loadAsync(input).then(zip => {
 			var filesToParse = {}
 			//validate that we have the five files we want using the file names
 			for (var key in filesInArchive) {

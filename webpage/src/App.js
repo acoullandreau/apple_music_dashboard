@@ -25,6 +25,7 @@ class App extends React.Component {
 		super(props);
 
 		this.state = { 
+			'pageLoading':true,
 			'archive':'',
 			'isLoading': false, 
 			'hasVisuals': false, 
@@ -49,6 +50,11 @@ class App extends React.Component {
 
 
 	componentDidMount = () => {
+		// remove the loader once app is ready
+		this.setState({ 'pageLoading': false }, () => {
+			document.getElementById("loading-page").style.display = "none";
+		});
+
 		// to instantiate the app properly, check whether we have previous visualizations to load
 		connectorInstance.checkIfVizAvailable().then(result => {
 			if (result) {
@@ -105,9 +111,9 @@ class App extends React.Component {
 			var scrollHeight = e.srcElement.scrollingElement.scrollTop
 
 			if (scrollHeight + windowHeight  >= contentHeight - windowHeight/2) {
-				document.getElementById("scoll-down-img").style.display="none";
+				document.getElementById("scroll-down").style.display="none";
 			} else {
-				document.getElementById("scoll-down-img").style.display="block";
+				document.getElementById("scroll-down").style.display="block";
 			}
 		}
 	}
@@ -115,7 +121,7 @@ class App extends React.Component {
 	onFileLoad = (archive) => {
 		// we ask the worker to prepare the files
 		this.setState({'archive':archive[0]}, () => {
-			this.worker.postMessage({'type':'filePreparation', 'payload':archive});
+			this.worker.postMessage({'type':'filePreparation', 'payload':this.state.archive});
 		})
 	}
 
@@ -414,6 +420,7 @@ class App extends React.Component {
 							{this.renderGraphTabThree()}
 						</TabPanel>
 					</Tabs>
+					<div id="scroll-down"><img className="scroll-down-img" src="./image_library/icon_scroll_down.svg" /></div>
 				</div>
 			)
 		}
@@ -516,52 +523,60 @@ class App extends React.Component {
 	}
 
 	render() {
-		let overlay;
 
-		if ( !this.state.hasVisuals & this.state.isLoading) {
-			overlay = (
-				<div style={{display:'block'}}>
-					<Overlay onClose={this.displayOverlay} params={{'type':'loader'}} ref={this.overlayRef}/>
-				</div>
-			)
+		let pageLoading = this.state.pageLoading;
+
+		if (pageLoading) { 
+			return null;
 		} else {
-			if (this.state.overlay.display) {
+			let overlay;
+
+			if ( !this.state.hasVisuals & this.state.isLoading) {
 				overlay = (
 					<div style={{display:'block'}}>
-						<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
+						<Overlay onClose={this.displayOverlay} params={{'type':'loader'}} ref={this.overlayRef}/>
 					</div>
 				)
 			} else {
-				overlay = (
-					<div style={{display:'none'}}>
-						<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
-					</div>
-				)
+				if (this.state.overlay.display) {
+					overlay = (
+						<div style={{display:'block'}}>
+							<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
+						</div>
+					)
+				} else {
+					overlay = (
+						<div style={{display:'none'}}>
+							<Overlay onClose={this.displayOverlay} params={this.state.overlay} ref={this.overlayRef}/>
+						</div>
+					)
+				}
 			}
+
+			return (
+				<div className='page'>
+					{ overlay }
+					<div className='nav-bar'>
+						<SideNavBar showGraphs={this.state.hasVisuals ? true : false }/>
+					</div>
+					<Route path="" >
+						{ this.renderHomePage() }
+					</Route>
+					<Route path="#graphs" >
+						<React.Fragment>
+							{ this.renderGraphsPage() }
+						</React.Fragment>
+					</Route>
+					<Route path="#help">
+						<React.Fragment>
+							{ this.renderHelpPage() }
+						</React.Fragment>
+					</Route>
+				</div>
+			)
 		}
 
-		return (
-			<div className='page'>
-				{ overlay }
-				<div className='nav-bar'>
-					<SideNavBar showGraphs={this.state.hasVisuals ? true : false }/>
-				</div>
-				<Route path="" >
-					{ this.renderHomePage() }
-				</Route>
-				<Route path="#graphs" >
-					<React.Fragment>
-						{ this.renderGraphsPage() }
-						<div id="scoll-down-img"><img src="./image_library/icon_scroll_down.svg" /></div>
-					</React.Fragment>
-				</Route>
-				<Route path="#help">
-					<React.Fragment>
-						{ this.renderHelpPage() }
-					</React.Fragment>
-				</Route>
-			</div>
-		)
+
 	}
 }
 

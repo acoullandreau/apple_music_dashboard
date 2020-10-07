@@ -41,7 +41,9 @@ class FileSelector extends React.Component {
 
 	onChange = () => {
 		var files = this.fileInput.current.files;
-		this.onReset();
+		if (this.state.hasUploadedArchive) {
+			this.onReset();
+		}
 		this.onFileSelection(files);
 	}
 
@@ -107,7 +109,7 @@ class FileSelector extends React.Component {
 				fileSelector = (
 					<React.Fragment> 
 						<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
-						<div className="home-button"><input type="file" onFocus={this.onFocus} onChange={this.onChange} ref={this.fileInput} value=""/></div>
+						<div className="home-button"><input type="file" accept=".zip" onFocus={this.onFocus} onChange={this.onChange} ref={this.fileInput} value=""/></div>
 					</React.Fragment>
 				)
 			} else {
@@ -127,7 +129,14 @@ class FileSelector extends React.Component {
 					<div className="home-button"><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
 				</React.Fragment>
 			)
-		} 
+		} else if (showFilePicker) {
+			fileSelector = (
+				<React.Fragment> 
+					<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
+					<div className="home-button"><input type="file" accept=".zip" onChange={this.onChange} ref={this.fileInput} value=""/></div>
+				</React.Fragment>
+			)
+		}
 		
 		return fileSelector;
 

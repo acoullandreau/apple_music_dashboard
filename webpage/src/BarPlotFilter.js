@@ -27,7 +27,6 @@ class BarPlotFilter extends React.Component {
 							<Button
 								className='button-margin'
 								toggle 
-								size='small'
 								value='count' 
 								active={this.state.unit === 'count' ? true : false} 
 								onClick={this.handleChange}
@@ -39,7 +38,6 @@ class BarPlotFilter extends React.Component {
 							<Button 
 								className='button-margin'
 								toggle
-								size='small'
 								value='percent' 
 								active={this.state.unit === 'percent' ? true : false} 
 								onClick={this.handleChange}
