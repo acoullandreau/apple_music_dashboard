@@ -5,7 +5,17 @@
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-16x16.png",
+      "sizes": "16x16",
       "type": "image/x-icon"
     },
     {
@@ -23,10 +33,9 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#00000000",
+  "theme_color": "#D13434",
   "background_color": "#F7F7ED"
 }
