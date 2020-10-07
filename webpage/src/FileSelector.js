@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'semantic-ui-react';
 
 class FileSelector extends React.Component {
 
@@ -27,16 +28,6 @@ class FileSelector extends React.Component {
 	clearStorage = () => {
 		localStorage.clear();
 		this.setState(Object.assign({}, this.initialState));
-	}
-
-	onFocus = () => {
-		// this function is used to handle the case of the user opening the file input and clicking cancel (no file selection) 
-		// we add a timetout because the focus event is fired before the change event - 
-		//and we want to execute the function AFTER the change event had a chance to be fired too
-		// check https://stackoverflow.com/questions/34855400/cancel-event-on-input-type-file for more info about the order the events are triggered
-		setTimeout(() => {
-			this.setState({'showFilePicker':false});
-		}, 100)
 	}
 
 	onChange = () => {
@@ -104,22 +95,21 @@ class FileSelector extends React.Component {
 		const showFilePicker = this.state.showFilePicker;
 		let fileSelector;
 
-		if ( hasUploadedArchive === true && errorMessage === '') {
-			if (showFilePicker) {
-				fileSelector = (
-					<React.Fragment> 
-						<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
-						<div className="home-button"><input type="file" accept=".zip" onFocus={this.onFocus} onChange={this.onChange} ref={this.fileInput} value=""/></div>
-					</React.Fragment>
-				)
-			} else {
-				fileSelector = (
-					<React.Fragment>
-						<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
-						<div className="home-button"><input type="button" onClick={() => this.setState({'showFilePicker':true})} value="Load another archive" /></div>
-					</React.Fragment>
-				)
-			}
+		if ( hasUploadedArchive && errorMessage === '') {
+			fileSelector = (
+				<React.Fragment>
+					<div className={['paragraph', 'instruction-text'].join(' ')}>You have loaded an archive {this.state.archiveName}</div>
+					<div className="home-button">
+						<Button 
+							color="red" 
+							onClick={() => this.fileInput.current.click()}
+						>
+							Load other data
+						</Button>
+						<input id="file-input" type="file" onChange={this.onChange} ref={this.fileInput} />
+					</div>
+				</React.Fragment>
+			)
 		} else if ( errorMessage !== '') {
 			fileSelector = (
 				<React.Fragment>
@@ -129,11 +119,19 @@ class FileSelector extends React.Component {
 					<div className="home-button"><input type="button" onClick={this.clearStorage} value="Load another archive" /></div>
 				</React.Fragment>
 			)
-		} else if (showFilePicker) {
+		} else if (!hasUploadedArchive && showFilePicker) {
 			fileSelector = (
 				<React.Fragment> 
 					<div className={['paragraph', 'instruction-text'].join(' ')}>Choose a file to upload</div>
-					<div className="home-button"><input type="file" accept=".zip" onChange={this.onChange} ref={this.fileInput} value=""/></div>
+					<div className="home-button">
+						<Button 
+							color="red" 
+							onClick={() => this.fileInput.current.click()}
+						>
+							Load your data
+						</Button>
+						<input id="file-input" type="file" onChange={this.onChange} ref={this.fileInput} />
+					</div>
 				</React.Fragment>
 			)
 		}

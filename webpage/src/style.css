@@ -155,7 +155,6 @@ li {
 .ui.button.toggle.active {
 	background: #474847 !important;
 	font-size:1.8vh;
-	/*min-width: 50%*/
 }
 
 .ui.button.toggle.active:hover {
@@ -265,13 +264,13 @@ li {
 }
 
 .home-button {
-	width:60%;
+	width:50%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.home-button input {
-	width:100%;
+#file-input {
+	display: none;
 }
 
 .instructions {
@@ -298,6 +297,8 @@ li {
 	width:100%;
 	background-color: #494949;
 	margin-left:2%;
+	padding-bottom: 8%;
+	padding-top: 3%;
 }
 
 
