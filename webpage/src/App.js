@@ -1,8 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-// import { Divider, Grid } from 'semantic-ui-react';
-// import { Grid } from 'semantic-ui-react';
+import { Divider, Grid } from 'semantic-ui-react';
 import SideNavBar from './SideNavBar.js';
 import Route from './Route.js';
 import connectorInstance from './IndexedDBConnector.js';
@@ -13,7 +12,7 @@ import ContactForm from './ContactForm.js'
 import FileSelector from './FileSelector.js';
 import HeatMapPlot from './HeatMapPlot.js'; 
 import Overlay from './Overlay.js';
-// import PiePlot from './PiePlot.js'; 
+import PiePlot from './PiePlot.js'; 
 import QueryFilter from './QueryFilter.js'; 
 import RankingList from './RankingList.js'; 
 import SunburstPlot from './SunburstPlot.js'; 
@@ -267,7 +266,7 @@ class App extends React.Component {
 				<div className='grid-patterns-bar' >
 					{ this.renderTimeBarPlot() }
 				</div>
-				{/*<Divider section />*/}
+				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >How do you find tracks?</div>
 				<div className='grid-patterns-sunburst'>
 					<div className={['grid-one', 'filter-query'].join(' ')} >
@@ -289,8 +288,8 @@ class App extends React.Component {
 						ref={this.sunburstOriginRef}
 					/>
 				</div>
-				{/*<Divider section />*/}
-{/*				<Grid columns={2} divided>
+				<Divider section />
+				<Grid columns={2} divided>
 					<Grid.Row>
 						<Grid.Column>
 							<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Which was your most active year?</div>
@@ -301,8 +300,8 @@ class App extends React.Component {
 							<PiePlot data={this.state.plotDetails['pieDevice']} target={{'type':'device'}} />
 						</Grid.Column>
 					</Grid.Row>
-				</Grid>*/}
-				{/*<Divider section />*/}
+				</Grid>
+				<Divider section />
 				<div className={['subtitle', 'bold', 'section-margin'].join(' ')} >Do you skip tracks a lot?</div>
 				<div>
 					<BarPlot data={this.state.plotDetails['barPlot']} target={{'type':'skippedRatio', 'unit':'percent'}} ref={this.barSkippedRef} />
@@ -428,8 +427,12 @@ class App extends React.Component {
 	}
 
 	switchTab = (index) => {
+		// this function simply calls a rerender of each component upon tab switch, due to the fact that all tabs are
+		// rendered when the page is loaded, with the style not yet available - changing the state of the component just forces the rerender 
 		switch (index) {
 			case 0:
+				// this setState is done to have the semantic UI Grid component rerendered (used for the pie charts)
+				this.setState({'forceRender':true});
 				this.sunburstOriginRef.current.renderTabSwitch();
 				this.barTimeRef.current.renderTabSwitch();
 				this.barSkippedRef.current.renderTabSwitch();
