@@ -14,7 +14,7 @@ It occured to me, after a few hours wrangling, cleaning, looking from different 
 This repository and the code 
 ----------------------------
 
-This repository contains the source code of the webpage that is available at [www.acoullandreau.com/dashboard](www.acoullandreau.com/dashboard).
+This repository contains the source code of the webpage that is available [here](https://www.acoullandreau.com/dashboard).
 
 To build this website, I relied on a few major blocks:
 - React to start with! Not using create-react-app, but webpack with Babel to have a finer control on what was going on..
