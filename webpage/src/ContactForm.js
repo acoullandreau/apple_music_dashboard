@@ -22,7 +22,7 @@ class ContactForm extends React.Component {
 
 
 	sendContactMessage = () => {
-		var target_url = 'mail/mail.php';
+		var target_url = '../mail/mail.php';
 		var form_content = {
 			'email':this.state.email,
 			'message':this.state.message
@@ -40,8 +40,8 @@ class ContactForm extends React.Component {
 
 		// problem with the context, this undefined !
 		
-		fetch(post_request).then(function(response) {
-			console.log(response)
+		fetch(post_request).then(() => {
+			console.log(form_content)
 			this.props.displayOverlay({
 				'display':true, 
 				'hash':'#help', 
@@ -49,7 +49,7 @@ class ContactForm extends React.Component {
 				'title':'Thank you !', 
 				'message':'Your message has been successfully sent.'
 			})
-		}).catch(function (err) {
+		}).catch( err => {
 			console.warn('Something went wrong.', err);
 			this.props.displayOverlay({
 				'display':true, 

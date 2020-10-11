@@ -38,6 +38,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "style-loader": "^1.2.1",
     "webpack-cli": "^3.3.12",
+    "webpack-merge": "^5.2.0",
     "worker-plugin": "^5.0.0"
   }
 }

@@ -2,12 +2,14 @@ const WorkerPlugin = require('worker-plugin');
 const path = require('path');
 
 module.exports = {
-	entry: './src/index.js',
+	entry: {
+		app: './src/index.js'
+	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'index.js',
 		publicPath: '',
-		library: 'apple-music-dashboard'
+		library: 'appleMusicDashboard'
 	},
 	module: {
 		rules: [
@@ -29,10 +31,7 @@ module.exports = {
 		{
 	        test: /\.js$/,
 	        exclude: /node_modules/,
-	        loader: 'eslint-loader',
-	        options: {
-	          // eslint options (if necessary)
-	        },
+	        loader: 'eslint-loader'
 	    }
 		]
 	},

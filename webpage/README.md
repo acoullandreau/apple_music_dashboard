@@ -1,6 +1,6 @@
 # Apple Music Dashboard
 
-Please visit [www.acoullandreau.com/dashboard](www.acoullandreau.com/dashboard) !
+Please visit [this page](https://www.acoullandreau.com/dashboard) to see the final result!
 
 
 Context of this project
