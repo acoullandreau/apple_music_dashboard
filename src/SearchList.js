@@ -61,7 +61,7 @@ function SearchList(props) {
 			})
 
 		}, 500)
-	}, [])
+	}, [source, props.type])
 
 	React.useEffect(() => {
 		return () => {

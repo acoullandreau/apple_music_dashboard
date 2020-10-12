@@ -1,4 +1,5 @@
 const WorkerPlugin = require('worker-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -36,6 +37,11 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new CopyPlugin({
+			patterns: [
+			{ from: 'public', to: 'public' }
+			]
+		}),
 		new WorkerPlugin()
 	],
 	resolve: {

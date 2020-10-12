@@ -38,7 +38,7 @@ class IndexedDBConnector {
 					resolve(this.db);
 				}
 
-				request.onerror = function() {
+				request.onerror = function(event) {
 					alert('error opening database ' + event.target.errorCode);
 					reject(event.target.errorCode)
 				}

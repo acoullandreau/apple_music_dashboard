@@ -419,7 +419,7 @@ class App extends React.Component {
 							{this.renderGraphTabThree()}
 						</TabPanel>
 					</Tabs>
-					<div id="scroll-down"><img className="scroll-down-img" src="./image_library/icon_scroll_down.svg" /></div>
+					<div id="scroll-down"><img className="scroll-down-img" src="./image_library/icon_scroll_down.svg" alt="Scroll Icon"/></div>
 				</div>
 			)
 		}
