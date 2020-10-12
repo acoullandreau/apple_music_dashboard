@@ -1,0 +1,525 @@
+/*Generic styling*/
+
+body {
+	background-color: #F7F7ED;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	color:#535353;
+	min-height:700px;
+	min-width:1245px;
+	overflow:scroll;
+}
+
+p {
+	margin: 0px;
+	line-height: 1.5;
+}
+
+ul {
+	padding-inline-start:0;
+	margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+li {
+	list-style-type: none;
+}
+
+.bold {
+	font-weight: 700;
+}
+
+.title {
+	font-size: 7vh;
+}
+
+.subtitle {
+	font-size: 3vh;
+}
+
+.paragraph {
+	font-size: 2vh;
+}
+
+.section-margin {
+	margin-top:3%;
+}
+
+.button-margin-top {
+	margin-top:10%;
+}
+
+.button-margin {
+	margin:3%;
+}
+
+.grid-one {
+	grid-column: 1;
+}
+
+.grid-two {
+	grid-column: 2;
+}
+
+.row-one {
+	grid-row: 1;
+}
+
+.row-three-span {
+	grid-row-start: 3 span 2;
+}
+
+.row-three {
+	grid-row: 3;
+}
+
+.row-four {
+	grid-row: 4;
+}
+
+
+
+/*Loading the website*/
+
+#loading-page {
+	position: absolute;
+	top: 25%;
+	left: 25%;
+}
+
+@keyframes blink {
+    0% {
+      opacity: .2;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      opacity: .2;
+    }
+}
+
+.Loading span {
+    animation-name: blink;
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+	/*This makes sure that the starting style (opacity: .2) of the animation is applied before the animation starts.*/
+    animation-fill-mode: both;
+}
+
+.Loading span:nth-child(2) {
+	/*Starts the animation of the second dot with a delay of .2s*/
+    animation-delay: .2s;
+}
+
+.Loading span:nth-child(3) {
+	/*Starts the animation of the third dot with a delay of .4s*/
+    animation-delay: .4s;
+}
+
+
+
+/*Style replacing default layout for semantic ui*/
+
+.ui.form {
+	font-size:1.8vh;
+}
+
+.ui.form>p {
+	margin:0;
+}
+
+.ui.form input {
+	padding:1% !important;
+}	
+
+.ui.form textarea {
+	min-height:3vh !important;
+	max-height:10vh !important;
+}	
+
+.ui.search .prompt {
+	background-color: #f9f9f2;
+}
+
+.ui.search {
+	font-size:1.8vh;
+	margin-top:2%;
+}
+
+.ui.search>.results {
+	overflow-y: auto;
+	max-height: 250px;
+}
+
+.ui.button.toggle.active {
+	background: #474847 !important;
+	font-size:1.8vh;
+}
+
+.ui.button.toggle.active:hover {
+	background: #1B1C1D !important;
+	font-size:1.8vh;
+}
+
+.ui.red.button {
+	background: #D13434 !important;
+	font-size:1.8vh;
+	min-width: 45%;
+}
+
+.ui.red.button:hover {
+	background: #FD3F3F !important;
+	font-size:1.8vh;
+	min-width: 45%;
+}
+
+.ui.blue.button {
+	background: #CACBCD !important;
+	font-size:1.8vh;
+	min-width: 45%;
+}
+
+.ui.button {
+	font-size:1.8vh;
+	min-width: 50%;
+}
+
+.ui.menu {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+.ui.search.dropdown {
+	background-color: #f9f9f2;
+	font-size:1.8vh;
+	margin:1%;
+	width: 70%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.ui.checkbox {
+	font-size:1.8vh;
+}
+
+
+/*Generic layout for the page*/
+
+.page {
+	width:100%;
+	display: grid; 
+	grid-template-columns: 5% 95%;
+	margin-bottom: 3%;
+}
+
+.nav-bar {
+	grid-column: 1;
+	width:5%;
+	min-width:100px;
+	margin-top: 100%;
+}
+
+.content {
+	position:relative;
+	grid-column: 2;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5%;
+	width:90%;
+	z-index:1;
+}
+
+.content-home {
+	width:70%;
+}
+
+.page-title {
+	margin-top: 2vh;
+	margin-bottom: 10vh;
+	text-align: center;
+}
+
+
+/*CSS for the home page*/
+
+.home-icons {
+	max-width: 35%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.home-icons div {
+	max-width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.home-icons img{
+	margin-top:15%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 12vh;
+}
+
+.home-button {
+	width:50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#file-input {
+	display: none;
+}
+
+.instructions {
+	width:80%;
+	display:inline-flex;
+	margin-top:5%;
+}
+
+.instruction {
+	display: grid;
+	width:80%;
+	grid-template-columns: 15% 65%;
+	grid-column-gap: 5%;
+}
+
+.instruction-text {
+	margin: 7%;
+	text-align: center;
+	color: #F7F7ED;
+	font-weight: 300;
+}
+
+.instruction-block {
+	width:100%;
+	background-color: #494949;
+	margin-left:2%;
+	padding-bottom: 8%;
+	padding-top: 3%;
+}
+
+
+
+
+/*CSS for the graphs page*/
+
+.grid-patterns-bar {
+	display: grid;
+	grid-template-columns: 85% 15%;
+	margin-top: 2%;
+}
+
+.grid-patterns-sunburst {
+	display: grid;
+	grid-template-columns: 20% 75%;
+	grid-column-gap: 2%;
+	margin-top: 2%;
+}
+
+.grid-patterns-pie {
+	display: grid;
+	grid-template-columns: 49% 49%;
+	grid-column-gap: 2%;
+	margin-top: 2%;
+}
+
+.grid-calendar {
+	display: grid;
+	grid-template-columns: 79% 19%;
+	grid-column-gap: 2%;
+	margin-top: 2%;
+}
+
+.grid-help {
+	display: grid;
+	grid-template-columns: 49% 49%;
+	grid-template-rows: repeat(4, auto);
+	grid-row-gap: 4%;
+	grid-column-gap: 2%;
+	margin-top: 2%;
+	margin-bottom: 5%;
+}
+
+.filter-bar {
+	height:80%;
+	margin-top:auto;
+	margin-bottom: auto;
+	font-size:1.8vh;
+}
+
+.filter-query {
+	margin-top:10%;
+	width:85%;
+	margin-left: auto;
+	font-size:1.8vh;
+}
+
+.data-source {
+	font-size: 1.5vh;
+	text-align: right;
+}
+
+
+
+
+/*CSS for the contact form*/
+
+.form-block {
+	width:95%;
+	display:flex;
+	margin:2%;
+}
+
+.form-title {
+	width:13%;
+}
+
+.message-field {
+	min-height: 2vh;
+	overflow-y: auto;
+}
+
+.form-button {
+	float:right;
+	min-width:20% !important;
+	margin-right: 5% !important;
+}
+
+
+
+/*CSS for the overlay*/
+
+.Blur {
+	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
+	position: fixed;
+	height:100%;
+	width: 100%;
+	z-index: 80;
+}
+
+.OverlayWindow {
+	border-radius: 15px;
+	background-color:#F7F7ED;
+	position: absolute;
+	width: 20%;
+	min-height: 10vh;
+	min-width: 50vh;
+	max-width: 65vh;
+	margin-left: 38%;
+	margin-top: 15%;
+	padding: 1%;
+	z-index: 90;
+	filter: drop-shadow(0px 0px 25px rgba(0, 0, 0, 0.24));
+}
+
+.overlay-text{
+	margin-bottom: 7%;
+	margin-top: 8%;
+}
+
+
+/*CSS for the bouncing arrow*/
+
+@keyframes bounce { 
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-30px); }
+}
+
+#scroll-down {
+	position:sticky;
+	bottom: 2%;
+	z-index: 10;
+	width: 100%;
+}
+
+.scroll-down-img {
+	position:sticky;
+	left:45%;
+	z-index: 10;
+	animation: bounce 0.8s;
+	animation-direction: alternate;
+	animation-iteration-count: infinite;
+}
+
+
+
+
+/*CSS for the tabs vertical*/
+
+.react-tabs__tab-panel {
+	height:auto;
+  	border: 1px solid #C6C6C6;
+  	border-radius: 0 5px 5px 5px;
+	padding-right:2%;
+	padding-left:2%;
+	background-color: #F7F7ED !important;
+	overflow-x: visible;
+}
+
+.react-tabs__tab {
+	display:block;
+	border:1px solid #C6C6C6 !important;
+	border-radius: 0 5px 5px 0 !important;
+	width:100%;
+	height:23vh;
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	font-weight: 700;
+	font-size:2.2vh;
+	padding: 0px;
+	padding-right:25%;
+	padding-bottom:50%;
+	text-align: right;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D !important;
+	color: #F7F7ED !important;
+	border:3px !important;
+}
+
+.grid-tabs {
+	display: grid;
+	grid-template-columns: 3% 97%;
+	margin-top:2%;
+}
+
+/*CSS for tabs horizontal*/
+/*In this case, remove all classNames of the tabs elements except 'tab' and 'section-margin' for the Tabs component*/
+
+/*.react-tabs__tab-panel {
+	border-bottom: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	border-left: 1px solid #aaa;
+	padding-right:2%;
+	padding-left:2%;
+}
+
+.react-tabs__tab-list {
+	margin-bottom: 0px !important;
+	font-weight: 700;
+	font-size:2.2vh;
+}
+
+.react-tabs__tab {
+	padding:1%;
+	border:1px solid #C6C6C6;
+	border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab--selected {
+	background-color: #1B1C1D;
+	color: #F7F7ED;
+	border:3px;
+}*/
+
+
+
+
+
+
+
+
