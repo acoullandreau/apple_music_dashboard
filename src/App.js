@@ -471,7 +471,8 @@ class App extends React.Component {
 						<p className={['bold', 'title', 'grid-one'].join(' ')}>1.</p>
 						<div className='instruction-block'>
 							<div className={['paragraph', 'instruction-text', 'grid-two'].join(' ')}>
-								Request your data to Apple, and make sure that you have the <b>Apple_Media_Services.zip</b> archive ready. 
+								Request your data to Apple, and make sure that you have the <b>Apple_Media_Services.zip</b> archive ready. <br/>
+								Check the <a href='#help'>help page</a> for more details.
 							</div>
 						</div>
 					</div>
@@ -493,7 +494,7 @@ class App extends React.Component {
 				<div className='grid-help'>
 					<div className={['grid-one', 'row-one'].join(' ')}>
 						<h3>How can you request your data?</h3>
-						<p>Log in with your Apple ID from the Apple’s Data and Privacy page and follow the steps to get a copy of your data (you want Apple Media services information).</p>
+						<p>Log in with your Apple ID from the <a href='https://privacy.apple.com/account'>Apple’s Data and Privacy</a> page and follow the steps to get a copy of your data (you want Apple Media services information).</p>
 					</div>
 					<div className={['grid-one', 'row-two'].join(' ')}>
 						<h3>How to upload your data?</h3>
