@@ -472,7 +472,7 @@ class App extends React.Component {
 						<div className='instruction-block'>
 							<div className={['paragraph', 'instruction-text', 'grid-two'].join(' ')}>
 								Request your data to Apple, and make sure that you have the <b>Apple_Media_Services.zip</b> archive ready. <br/>
-								Check the <a href='#help'>help page</a> for more details.
+								Check the <a href='#help'>help page</a> for more details, or <a href="https://medium.com/@mozart38/apple-music-dashboard-an-introduction-4a99295217f9">this article</a> for an overview.
 							</div>
 						</div>
 					</div>
@@ -514,7 +514,7 @@ class App extends React.Component {
 					</div>
 					<div className={['grid-two', 'row-two'].join(' ')}>
 						<h3>Is the analysis saved?</h3>
-						<p>Well, kinda…. All the processed data points are saved in your browser. But if you clear your cache, all is cleared. <br/> You can always launch it again, save the page on your computer, or save the graphs as images :) </p>
+						<p>Absolutely not, the data never leaves your computer! All the processing is performed locally, upon loading the archive provided by Apple. <br/> You can always launch it again, save the page on your computer, or save the graphs as images :) </p>
 					</div>
 					<div className={['grid-two', 'row-three'].join(' ')}>
 						<h3>You have more questions? Get in touch!</h3>
