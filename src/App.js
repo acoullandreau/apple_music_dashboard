@@ -126,7 +126,7 @@ class App extends React.Component {
 	onDemoLaunch = () => {
 		console.log('Demo launched')
 		this.onReset();
-		fetch('../public/Demo.zip').then(archive => {
+		fetch('public/Demo.zip').then(archive => {
 			archive.blob().then( content => {
 				this.onFileLoad(content);
 			})
