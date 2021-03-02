@@ -82,6 +82,13 @@ a {
 	grid-row: 4;
 }
 
+#demo-button {
+	background-color: #00000000;
+	color:#D13434;
+	border: solid 1px #4748471A;
+	border-radius: 8%;
+	cursor: pointer;
+}
 
 
 /*Loading the website*/

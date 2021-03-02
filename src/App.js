@@ -493,8 +493,8 @@ class App extends React.Component {
 					</div>
 				</div>
 				<div className={['paragraph', 'section-margin'].join(' ')}>
-					<p>Don&apos;t have data but still want to take a look at what this tool can do? Check out this demo!</p>
-					<button onClick={this.onDemoLaunch}>Demo</button>
+					<p>Don&apos;t have data but still want to take a look at what this tool can do? Check out this <button id="demo-button" onClick={this.onDemoLaunch}>demo</button> !</p>
+					
 				</div>
 			</div>
 		)
