@@ -49,7 +49,7 @@ class FileSelector extends React.Component {
 			var archive = files;
 			var isInputValid = this.validateInputFormat(archive);
 			if (isInputValid) {
-				this.props.onFileLoad(archive);
+				this.props.onFileLoad(archive[0]);
 				resolve();
 			} else {
 				var errorMessage = 'You should provide a single file, archive with a .zip extension.'
@@ -72,13 +72,17 @@ class FileSelector extends React.Component {
 		if (typeof(archive) !== "undefined") {
 			localStorage.setItem('hasUploadedArchive', true);
 			localStorage.setItem('archive', JSON.stringify(archive));
-			localStorage.setItem('archiveName', archive.name);
+			localStorage.setItem('archiveName', archive.name || 'Demo data');
 			this.setState({'archive': archive,'hasUploadedArchive': true, 'archiveName': archive.name });
 		}
 
 	}
 
 	validateInputFormat = (input) => {
+		if (input.length !== 1) {
+			return false;
+		}
+
 		// as we limit the input by not having the 'multiple' keyword, we are sure the user passes a single file
 		var archive = input[0];
 
