@@ -100,7 +100,6 @@ class App extends React.Component {
 					break;
 			}
 		});
-
 	}
 
 	scrollAnimation = (e) => {
@@ -119,8 +118,18 @@ class App extends React.Component {
 
 	onFileLoad = (archive) => {
 		// we ask the worker to prepare the files
-		this.setState({'archive':archive[0]}, () => {
+		this.setState({'archive':archive}, () => {
 			this.worker.postMessage({'type':'filePreparation', 'payload':this.state.archive});
+		})
+	}
+
+	onDemoLaunch = () => {
+		console.log('Demo launched')
+		this.onReset();
+		fetch('../public/Demo.zip').then(archive => {
+			archive.blob().then( content => {
+				this.onFileLoad(content);
+			})
 		})
 	}
 
@@ -453,7 +462,7 @@ class App extends React.Component {
 	renderHomePage = () => {
 		return (
 			<div className={['content-home', 'content'].join(' ')}>
-				<div className={['bold', 'title', 'page-title'].join(' ')}>Welcome</div>
+				<div className={['bold', 'title', 'page-title'].join(' ')}>Apple Music Dashboard</div>
 				<div className={['paragraph', 'section-margin'].join(' ')}>
 					<p>
 						This web page was designed to allow you to browse through your Apple Music data, providing various visualizations to help you highlight <b>trends</b>, <b>habits</b>, or any relevant <b>insight</b> on your activity on Apple Music.<br/>
@@ -482,6 +491,10 @@ class App extends React.Component {
 							<FileSelector onError={this.displayOverlay} onFileLoad={this.onFileLoad} onReset={this.onReset} ref={this.fileSelectorRef} />
 						</div>
 					</div>
+				</div>
+				<div className={['paragraph', 'section-margin'].join(' ')}>
+					<p>Don&apos;t have data but still want to take a look at what this tool can do? Check out this demo!</p>
+					<button onClick={this.onDemoLaunch}>Demo</button>
 				</div>
 			</div>
 		)
