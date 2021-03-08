@@ -178,6 +178,16 @@ class App extends React.Component {
 			'plotDetails': Object.assign({}, payload.data),
 			'selectedBarPlot' : {}
 		});
+
+		// to download a json of the visualization df
+		// connectorInstance.readObjectFromDB('playActivityFile').then(result => {
+		// 	const a = document.createElement("a");
+		// 	const file = new Blob([JSON.stringify(result)], { type: "text/plain" });
+		// 	a.href = URL.createObjectURL(file);
+		// 	a.download = "data.json";
+		// 	a.click();
+
+		// })
 	}
 
 	onQueryVisualizationReady = (payload) => {
