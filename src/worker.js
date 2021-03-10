@@ -37,6 +37,7 @@ var validateArchiveContent = (input) => {
 
 var prepareFiles = (archive) => {
 	// validate the archive
+	console.log('Validating the archive...')
 	validateArchiveContent(archive).then(result => {
 		if (Object.keys(result).length === Object.keys(filesInArchive).length) {
 			// the archive's format is correct, we return the files promise
@@ -50,10 +51,12 @@ var prepareFiles = (archive) => {
 	})
 	.then(result => {
 		// extract files
+		console.log('Extracting the files from the archive...')
 		return FileParser.getFilesToParse(result);
 	})
 	.then(result => {
 		// parse files 
+		console.log('Parsing the files...')
 		return FileParser.parseFiles(result);
 	})
 	.then(result => {
@@ -63,6 +66,7 @@ var prepareFiles = (archive) => {
 		postMessage({'type':'filesParsed', 'payload':''});
 
 		// process them
+		console.log('Processing the content of the files...')
 		return FileProcessor.processFiles(result);
 	})
 	.then(result => {
@@ -70,9 +74,11 @@ var prepareFiles = (archive) => {
 		var matchIndexInstanceDict = VisualizationFileBuilder.buildIndexTrackDict(result['trackInstanceDict']);
 		var playActivityFilePromise = connectorInstance.readObjectFromDB('playActivityFile');
 		playActivityFilePromise.then(result => {
+			console.log('Building visualizations...')
 			var visualizationFile = VisualizationFileBuilder.buildVisualizationFile(matchIndexInstanceDict, result);
 			connectorInstance.addObjectToDB(visualizationFile, 'visualizationFile');
 			postMessage({'type':'visualizationFileReady', 'payload':''});
+			console.log('Dashboard ready!')
 		})
 	})
 	.catch(error => {
