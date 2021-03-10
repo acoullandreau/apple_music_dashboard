@@ -281,6 +281,9 @@ class FileParser {
 
 		// Get rows above 99th percentile of play duration
 		// this.getPercentileOutliers(playDurations, 0.99, rowsToDelete); 
+		
+		// Get rows which pay duration is more than 1h30
+		this.getDurationOutliers(playDurations, 90, rowsToDelete); 
 
 		// remove all the rows we do not want to keep for further analysis
 		for (var i in rowsToDelete) {
@@ -359,9 +362,6 @@ class FileParser {
 				row['Play HOD'] = datetimeObject['hod'];
 			}
 
-			if (datetimeString.includes('2020-01')) {
-				console.log(datetimeString, row['Play Year'], row['Play Month'], row['Play DOM'])
-			}
 		} else {
 			rowsToDelete.push(rowIndex);
 			return 'incomplete';
@@ -439,6 +439,19 @@ class FileParser {
 		}
 
 	} 
+ 
+	static getDurationOutliers(playDurationsDict, maxDuration, rowsToDelete) {
+		
+		for (var rowIndex in Object.keys(playDurationsDict)) {
+			if (playDurationsDict[rowIndex] > maxDuration) {
+				rowsToDelete.push(rowIndex);
+			}
+		}
+
+	} 
+
+
+
 
 }
 
