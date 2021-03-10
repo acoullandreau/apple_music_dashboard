@@ -235,7 +235,6 @@ class FileParser {
 				var datetimeString = entry['Transaction Date'];
 				var datetimeObject = this.parseDateTime(datetimeString);
 				if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
-
 					delete libraryActivityFile[row]
 					rowsDeleted.push(entry);
 					break;
@@ -281,7 +280,7 @@ class FileParser {
 		}
 
 		// Get rows above 99th percentile of play duration
-		this.getPercentileOutliers(playDurations, 0.99, rowsToDelete); 
+		// this.getPercentileOutliers(playDurations, 0.99, rowsToDelete); 
 
 		// remove all the rows we do not want to keep for further analysis
 		for (var i in rowsToDelete) {
@@ -296,7 +295,12 @@ class FileParser {
 		var dateInMs = Date.parse(datetimeString);
 		var dateInLocalTimeInMs;
 		if (utcOffset) {
-			var utcOffsetInMs = parseInt(utcOffset) * 1000;
+			var utcOffsetInMs;
+			if (utcOffset/3600 < 12) {
+				utcOffsetInMs = parseInt(utcOffset) * 1000;
+			} else {
+				utcOffsetInMs = parseInt(utcOffset);
+			}
 			dateInLocalTimeInMs = dateInMs + utcOffsetInMs;
 		} else {
 			dateInLocalTimeInMs = dateInMs;
@@ -341,7 +345,10 @@ class FileParser {
 			var utcOffset = row['UTC Offset In Seconds'];
 			var datetimeObject = this.parseDateTime(datetimeString, utcOffset);
 
-			if (datetimeObject['year'] < 2015 && datetimeObject['month'] < 6) {
+			if (datetimeObject['year'] < 2015) {
+				rowsToDelete.push(rowIndex);
+				return 'incomplete';
+			} else if (datetimeObject['year'] === 2015 && datetimeObject['month'] < 6) {
 				rowsToDelete.push(rowIndex);
 				return 'incomplete';
 			} else {
@@ -350,6 +357,10 @@ class FileParser {
 				row['Play DOM'] = datetimeObject['dom'];
 				row['Play DOW'] = datetimeObject['dow'];
 				row['Play HOD'] = datetimeObject['hod'];
+			}
+
+			if (datetimeString.includes('2020-01')) {
+				console.log(datetimeString, row['Play Year'], row['Play Month'], row['Play DOM'])
 			}
 		} else {
 			rowsToDelete.push(rowIndex);
@@ -399,6 +410,7 @@ class FileParser {
 	static computePlayDuration(row, rowIndex, playDurations) {
 		var startTime = new Date(row['Event Start Timestamp']);
 		var endTime = new Date(row['Event End Timestamp']);
+
 		if (row['Played completely'] === false && row['Play Duration Milliseconds']>0) {
 			row['Play duration in minutes'] = row['Play Duration Milliseconds']/60000;
 		} else if (startTime.getUTCDate() === endTime.getUTCDate()) {
