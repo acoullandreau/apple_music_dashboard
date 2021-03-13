@@ -471,7 +471,7 @@ class App extends React.Component {
 
 	renderHomePage = () => {
 		return (
-			<div className={['content-home', 'content'].join(' ')}>
+			<div className={['content-home', 'page-content'].join(' ')}>
 				<div className={['bold', 'title', 'page-title'].join(' ')}>Apple Music Dashboard</div>
 				<div className={['paragraph', 'section-margin'].join(' ')}>
 					<p>
@@ -512,7 +512,7 @@ class App extends React.Component {
 
 	renderHelpPage = () => {
 		return (
-			<div className={['content', 'paragraph'].join(' ')}>
+			<div className={['page-content', 'paragraph'].join(' ')}>
 				<div className={['bold', 'title', 'page-title'].join(' ')}>Need help?</div>
 				<div className='grid-help'>
 					<div className={['grid-one', 'row-one'].join(' ')}>
