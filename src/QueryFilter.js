@@ -249,7 +249,7 @@ class QueryFilter extends React.Component {
 			var itemList = this.state.data[target];
 			return (
 				<React.Fragment>
-					<List>
+					<List divided verticalAlign='middle'>
 						{
 							itemList.map((item, i) => {
 								return(
@@ -268,7 +268,6 @@ class QueryFilter extends React.Component {
 			)
 		}
 	}
-
 
 	renderQueryHeatMap() {
 		return (

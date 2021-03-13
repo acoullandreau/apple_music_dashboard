@@ -416,7 +416,7 @@ class App extends React.Component {
 			}
 		} else {
 			elemToRender = (
-				<div className='content'>
+				<div className='page-content'>
 					<div className={['bold', 'title', 'centered-content', 'page-title'].join(' ')}>Visualizations</div>
 					<div className={['data-source', 'section-margin'].join(' ')}>
 						Your data source : <b>{localStorage.getItem('archiveName')}</b>
