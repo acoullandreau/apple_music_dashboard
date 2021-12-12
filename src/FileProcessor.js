@@ -133,15 +133,15 @@ class FileProcessor {
 				trackInstance.updateTrackFromLibrary(index, row);
 
 				// we add the track's genre to the list of genres
-			if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
-				processOutput['genresList'].push(row['Genre']);
-			}
+				if (typeof(row['Genre']) !== 'undefined' && !processOutput['genresList'].includes(row['Genre'])) {
+					processOutput['genresList'].push(row['Genre']);
+				}
 
-				// we add a reference of the track instance to the trackInstanceDict with this combination of title/artist
-			processOutput['trackInstanceDict'][titleArtist]=trackInstance;
+					// we add a reference of the track instance to the trackInstanceDict with this combination of title/artist
+				processOutput['trackInstanceDict'][titleArtist]=trackInstance;
 
-			// we add a reference to this title in the list of titles for this artist
-			//processOutput['artistTracksTitles'][artist].append(title);
+				// we add a reference to this title in the list of titles for this artist
+				//processOutput['artistTracksTitles'][artist].append(title);
 			}
 
 		} else {

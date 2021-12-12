@@ -205,6 +205,7 @@ class VisualizationDetailsBuilder {
 			genre = genres.trim();
 			Utils.populateCountDict(genre, parametersDict);
 		}
+
 	}
 
 	static build2DHistPlot(data, plotDetails) {

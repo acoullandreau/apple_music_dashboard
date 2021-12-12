@@ -170,7 +170,7 @@ class FileParser {
 			papaConfig['transformHeader'] = (header) => {
 				if (header === 'Artist Name') {
 					return 'Artist';
-				} else if (header === 'Content Name') {
+				} else if (header === 'Content Name' || header === 'Song Name') {
 					return 'Title';
 				} 
 				return header;

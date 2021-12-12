@@ -550,7 +550,6 @@ class App extends React.Component {
 	}
 
 	render() {
-
 		let pageLoading = this.state.pageLoading;
 
 		if (pageLoading) { 
