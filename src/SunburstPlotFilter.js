@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Form } from 'semantic-ui-react';
 
 class SunburstPlotFilter extends React.Component {
-	state = { 'target':'genre', 'numItems':'5' };
+	state = { 'target':'title', 'numItems':'5' };
 
 	handleChange = (e, selection) => {
 		var payload = { 'type' : this.state.target, 'numItems': this.state.numItems};
@@ -38,11 +38,11 @@ class SunburstPlotFilter extends React.Component {
 							<Button 
 								toggle 
 								size='medium'
-								value='genre' 
-								active={this.state.target === 'genre' ? true : false} 
+								value='title' 
+								active={this.state.target === 'title' ? true : false} 
 								onClick={this.handleChange}
 							>
-								Genre
+								Title
 							</Button>
 						</li>
 						<li className='button-margin'>
@@ -60,11 +60,11 @@ class SunburstPlotFilter extends React.Component {
 							<Button 
 								toggle 
 								size='medium'
-								value='title' 
-								active={this.state.target === 'title' ? true : false} 
+								value='genre' 
+								active={this.state.target === 'genre' ? true : false} 
 								onClick={this.handleChange}
 							>
-								Title
+								Genre
 							</Button>
 						</li>
 					</ul>

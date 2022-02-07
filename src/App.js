@@ -338,7 +338,7 @@ class App extends React.Component {
 					<div className='grid-one' >
 						<RankingList 
 							data={this.state.plotDetails['rankingDict']} 
-							target={{'type':'genre', 'numItems':5}} 
+							target={{'type':'title', 'numItems':5}} 
 							onError={this.displayOverlay}
 							ref={this.rankingRef} 
 						/>
@@ -346,13 +346,13 @@ class App extends React.Component {
 							className='grid-one' 
 							ranking={this.state.plotDetails['pieYear']} 
 							data={this.state.plotDetails['sunburst']} 
-							target={{'type':'genre'}} 
+							target={{'type':'title'}} 
 							onError={this.displayOverlay}
 							ref={this.sunburstSongRef}
 						/>
 					</div>
 					<div className={['grid-two', 'filter-query'].join(' ')} >
-						<SunburstPlotFilter target='genre' onChange={this.onSelectPlot} />
+						<SunburstPlotFilter target='title' onChange={this.onSelectPlot} />
 						<div style={{marginTop:'10%'}}>
 							<p className='bold'>Explore more filters:</p>
 							<QueryFilter 
