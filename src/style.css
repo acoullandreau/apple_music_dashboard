@@ -35,7 +35,7 @@ a {
 }
 
 .title {
-	font-size: 7vh;
+	font-size: 5vw;
 }
 
 .subtitle {
@@ -43,7 +43,8 @@ a {
 }
 
 .paragraph {
-	font-size: 2vh;
+	font-size: 1.2vw;
+	line-height: 1.3vw;
 }
 
 .section-margin {
@@ -295,6 +296,7 @@ a {
 	text-align: center;
 	color: #F7F7ED;
 	font-weight: 300;
+	overflow-wrap: anywhere;
 }
 
 .instruction-block {
