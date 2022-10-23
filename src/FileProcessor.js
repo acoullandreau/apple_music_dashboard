@@ -320,7 +320,7 @@ class FileProcessor {
 						trackInstance.setRating(row['Preference']);
 						if (!trackInstance.hasTitleName(title)) {
 							trackInstance.addTitle(title);
-							if (!processOutput['artistTracksTitles'][artist].includes(title)) {
+							if (artist in processOutput['artistTracksTitles'] === true && !processOutput['artistTracksTitles'][artist].includes(title)) {
 								processOutput['artistTracksTitles'][artist].push(title);
 							} 
 						}
