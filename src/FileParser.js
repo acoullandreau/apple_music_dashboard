@@ -40,6 +40,7 @@ class FileParser {
 				resolve(extractedFilesToParse)
 			})
 		})
+
 		return getFilesPromise;
 	}
 
@@ -157,13 +158,15 @@ class FileParser {
 		var papaConfig = { 
 			delimiter: ",",
 			header: true, 
+			skipEmptyLines: true,
 		}
 
 		return new Promise((resolve) => {
+			let data = [];
 			// papaConfig contains "complete" callback function to execute when parsing is done
-			papaConfig['complete'] = (results) => {
+			papaConfig['complete'] = () => {
 				// parse file
-				var playActivityFile = this.parsePlayActivityContent(results.data);
+				var playActivityFile = this.parsePlayActivityContent(data);
 				parsedFiles['playActivityFile'] = playActivityFile;
 				resolve(playActivityFile);
 			}
@@ -174,6 +177,28 @@ class FileParser {
 					return 'Title';
 				} 
 				return header;
+			}
+			papaConfig['error'] = (err, file, inputElem, reason) => {
+				console.error(err, file, inputElem, reason);
+			}
+			// when the file is too large, Papaparser processes it chunk by chunk
+			// so to be able to access the result of the parsing, we need to pass in this 'step' callback function
+			// moreover, when the file is too big (tested with one of > 500Mo), storing the entire file is way too much!
+			// so we extract here only the columns we need for processing down the line
+			papaConfig['step'] = (results) => {
+				let row = {
+					'Artist':results.data['Artist'],
+					'Title':results.data['Title'],
+					'Play Duration Milliseconds':results.data['Play Duration Milliseconds'],
+					'End Reason Type':results.data['End Reason Type'],
+					'Media Duration In Milliseconds':results.data['Media Duration In Milliseconds'],
+					'Event Start Timestamp':results.data['Event Start Timestamp'],
+					'Event End Timestamp':results.data['Event End Timestamp'],
+					'UTC Offset In Seconds':results.data['UTC Offset In Seconds'],
+					'Activity date time':results.data['Activity date time'],
+					'Feature Name':results.data['Feature Name'],
+				};
+				data.push(row);
 			}
 			Papa.parse(content, papaConfig);
 		})

@@ -193,7 +193,6 @@ class FileProcessor {
 	}
 
 	static processPlayActivity(file, processOutput) {
-
 		for (var elem in file) {
 			var index = elem;
 			var row = file[elem];
